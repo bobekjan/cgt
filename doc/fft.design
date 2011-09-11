@@ -1,0 +1,27 @@
+Tuner FFT processing chain
+===========================
+1. Pull signal.
+2. Run it through FFT.
+3. Find major frequencies using local maximums:
+   a) Compute magnitudes.
+   b) Use magnitude filter:
+       In case a major frequency is exactly aligned with
+       the FFT frequency "zeros" at other frequencies can
+       easily form another spike.
+       Suggested cutoff value: 1e-06 (wild guess)
+   c) Find magnitude spikes (higher than neighbours).
+   d) Determine bound pairs:
+       In case the frequency is near half, the surrounding
+       FFT frequencies can alter in magnitude - mark those
+       for further run-time resolution.
+       It should be possible to mark such pairs based on
+       relative magnitude.
+       Suggested value: -2.0 dB (even wilder guess)
+4. Use marked frequencies for frequency resolution:
+   a) For single frequencies:
+       Just use atan2( sin, cos ).
+   b) For bounded pairs:
+       Use atan2( sin, cos ) for both frequencies. On next
+       frame compute projected frequency - only one should
+       fall into the expected interval.
+5. Should be all, most likely isn't.
