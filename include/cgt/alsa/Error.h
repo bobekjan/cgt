@@ -30,7 +30,7 @@ public:
      *
      * @param[in] code The error code.
      */
-    Error( int code = 0 ) : mCode( code ) {}
+    Error( int code = 0 );
 
     /**
      * @brief Obtains the ALSA error code.
@@ -41,9 +41,11 @@ public:
     /**
      * @brief Obtains an ALSA error description.
      *
+     * Implemented by <code>snd_strerror</code>.
+     *
      * @return A textual error description.
      */
-    const char* what() const { return ::snd_strerror( code() ); }
+    const char* what() const;
 
     /**
      * @brief Determines if an error occurred.
@@ -57,6 +59,9 @@ protected:
     /// The ALSA error code.
     int mCode;
 };
+
+// Simple wrapper, all methods are inlined.
+#include "alsa/Error.inl"
 
 } // namespace alsa
 
