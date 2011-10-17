@@ -9,6 +9,7 @@
 
 #include "cgt.h"
 #include "alsa/Pcm.h"
+#include "fft/Core.h"
 
 // static const char         PCM_DEVICE[] = "plug:hdmi_linein";
 // static const unsigned int PCM_CHANNELS = 1;
@@ -20,11 +21,12 @@
 int main( int argc, char* argv[] )
 {
     // Allocate the necessary classes.
-    ui::Curses ui;
-    fft::Core  core( ui );
+    // ui::Curses ui;
+    fft::Core::IObserver ui;
+    fft::Core            core( ui );
 
     // Initialize the process.
-    if( !core.initPcm( "default", 48000 ) )
+    if( !core.initPcm( "plug:hdmi_linein", 48000, 4096, 1024 ) )
     {
         ::printf( "Failed to initialize PCM\n" );
         return EXIT_FAILURE;

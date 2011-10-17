@@ -10,12 +10,12 @@
 /*************************************************************************/
 /* alsa::Error                                                           */
 /*************************************************************************/
-Error::Error( int code )
+inline Error::Error( int code )
 : mCode( code )
 {
 }
 
-const char* Error::what() const
+inline const char* Error::what() const
 {
     return ::snd_strerror( code() );
 }

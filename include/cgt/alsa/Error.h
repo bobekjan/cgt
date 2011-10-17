@@ -63,6 +63,6 @@ protected:
 // Simple wrapper, all methods are inlined.
 #include "alsa/Error.inl"
 
-} // namespace alsa
+} // alsa
 
 #endif /* !__ALSA__ERROR_H__INCL__ */

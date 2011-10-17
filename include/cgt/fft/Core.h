@@ -38,13 +38,16 @@ public:
     /**
      * @brief Initializes underlying PCM.
      *
-     * @param[in] name Name of the PCM.
-     * @param[in] rate The sample rate to use.
+     * @param[in] name        Name of the PCM.
+     * @param[in] rate        The sample rate to use.
+     * @param[in] bufferSize  The size of the sample buffer.
+     * @param[in] captureSize The sample capture size.
      *
      * @retval true  Initialization succeeded.
      * @retval false Initialization failed.
      */
-    bool initPcm( const char* name, unsigned int rate );
+    bool initPcm( const char* name, unsigned int rate,
+                  unsigned int bufferSize, unsigned int captureSize );
     /**
      * @brief Frees the underlying PCM.
      */
@@ -76,8 +79,24 @@ protected:
 
     // The underlying PCM.
     alsa::Pcm* mPcm;
+
+    // Size of the sample buffer.
+    unsigned int mBufferSize;
+    // The sample capture size.
+    unsigned int mCaptureSize;
+    // The sample buffer.
+    double* mSamples;
 };
 
-}
+/**
+ * @brief An observer of the FFT core.
+ *
+ * @author Bloody.Rabbit
+ */
+class Core::IObserver
+{
+};
+
+} // fft
 
 #endif /* !__FFT__CORE_H__INCL__ */

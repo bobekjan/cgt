@@ -145,6 +145,6 @@ protected:
 // Simple wrapper, all methods are inlined.
 #include "alsa/Pcm.inl"
 
-}
+} // alsa
 
 #endif /* !__ALSA__PCM_H__INCL__ */
