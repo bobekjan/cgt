@@ -54,38 +54,74 @@ public:
     void freePcm();
 
     /**
-     * @brief Runs the first step.
-     *
-     * Can also be used to reset the transform.
+     * @brief Runs a step in the process.
      *
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    bool stepFirst();
+    bool step();
     /**
-     * @brief Runs the next step.
-     *
-     * Keep in mind that <code>stepFirst()</code>
-     * must be called first.
+     * @brief Resets the process.
      *
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    bool stepNext();
+    bool reset();
 
 protected:
+    /**
+     * @brief Fills the buffer entirely.
+     *
+     * Any previous captured content is overwritten.
+     *
+     * @retval true  Step succeeded.
+     * @retval false Step failed.
+     */
+    bool captureFull();
+    /**
+     * @brief Captures only a bit.
+     *
+     * @retval true  Step succeeded.
+     * @retval false Step failed.
+     */
+    bool captureStep();
+    /**
+     * @brief Executes the FFTW plan.
+     *
+     * @retval true  Step succeeded.
+     * @retval false Step failed.
+     */
+    bool executePlan();
+    /**
+     * @brief Computes frequency magnitudes.
+     *
+     * @retval true  Step succeeded.
+     * @retval false Step failed.
+     */
+    bool computeMags();
+
     /// The bound observer.
     IObserver* mObserver;
 
-    // The underlying PCM.
+    /// The underlying PCM.
     alsa::Pcm* mPcm;
 
-    // Size of the sample buffer.
+    /// Pointer to the correct capture routine.
+    bool ( Core::* mCapture )();
+
+    /// Size of the sample buffer.
     unsigned int mBufferSize;
-    // The sample capture size.
+    /// The sample capture size.
     unsigned int mCaptureSize;
-    // The sample buffer.
-    double* mSamples;
+    /// The sample buffer.
+    double*      mSamples;
+    /// Result of the FFT.
+    double*      mFreqs;
+    /// Computed magnitudes.
+    double*      mMags;
+
+    /// Our FFTW plan.
+    fftw_plan mPlan;
 };
 
 /**

@@ -32,17 +32,10 @@ int main( int argc, char* argv[] )
         return EXIT_FAILURE;
     }
 
-    // Run the first step.
-    if( !core.stepFirst() )
-    {
-        ::printf( "An error occurred during processing\n" );
-        return EXIT_FAILURE;
-    }
-
     while( true )
     {
-        // Run the next step.
-        if( !core.stepNext() )
+        // Run the step.
+        if( !core.step() )
         {
             ::printf( "An error occurred during processing\n" );
             return EXIT_FAILURE;
