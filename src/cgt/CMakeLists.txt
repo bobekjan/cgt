@@ -14,6 +14,7 @@ SET( TARGET_SOURCE_DIR  "${PROJECT_SOURCE_DIR}/src/${TARGET_NAME}" )
 
 SET( TARGET_INCLUDE_DIRS
      ${ALSA_INCLUDE_DIRS}
+     ${FFTW3_INCLUDE_DIRS}
      "${TARGET_INCLUDE_DIR}" )
 
 # Export the include directories
@@ -70,4 +71,5 @@ TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_INCLUDE_DIR}/cgt.h"
                   "${TARGET_SOURCE_DIR}/cgt.cpp" )
 TARGET_LINK_LIBRARIES( "${TARGET_NAME}"
-                       ${ALSA_LIBRARIES} )
+                       ${ALSA_LIBRARIES}
+                       ${FFTW3_LIBRARIES} )

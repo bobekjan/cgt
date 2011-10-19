@@ -23,6 +23,7 @@ SET( CMAKE_MODULE_PATH
 # Dependencies #
 ################
 FIND_PACKAGE( "ALSA" REQUIRED )
+FIND_PACKAGE( "FFTW3" REQUIRED )
 
 ###########
 # Targets #

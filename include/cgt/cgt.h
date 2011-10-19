@@ -19,6 +19,9 @@
 // ALSA library
 #include <asoundlib.h>
 
+// fftw3 library
+#include <fftw3.h>
+
 // Our stuff
 #include "util/SafeMem.h"
 
