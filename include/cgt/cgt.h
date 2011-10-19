@@ -19,4 +19,7 @@
 // ALSA library
 #include <asoundlib.h>
 
+// Our stuff
+#include "util/SafeMem.h"
+
 #endif /* !__CGT_H__INCL__ */
