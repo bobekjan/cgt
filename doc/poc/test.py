@@ -7,11 +7,11 @@
 def normalize_angle( angle, period ):
     wrap = angle + period
     if numpy.abs( wrap ) < numpy.abs( angle ):
-        angle = wrap
-    else:
-        wrap = angle - period
-        if numpy.abs( wrap ) < numpy.abs( angle ):
-            angle = wrap
+        return wrap
+
+    wrap = angle - period
+    if numpy.abs( wrap ) < numpy.abs( angle ):
+        return wrap
 
     return angle
 
