@@ -42,9 +42,10 @@ SET( fft_SOURCE
      "${TARGET_SOURCE_DIR}/fft/Core.cpp" )
 
 SET( util_INCLUDE
+     "${TARGET_INCLUDE_DIR}/util/Misc.h"
      "${TARGET_INCLUDE_DIR}/util/SafeMem.h" )
 SET( util_SOURCE
-     "" )
+     "${TARGET_SOURCE_DIR}/util/Misc.cpp" )
 
 ########################
 # Setup the executable #
