@@ -10,23 +10,50 @@
 #include "cgt.h"
 #include "alsa/Pcm.h"
 #include "fft/Core.h"
+#include "util/Misc.h"
 
-// static const char         PCM_DEVICE[] = "plug:hdmi_linein";
-// static const unsigned int PCM_CHANNELS = 1;
-// static const unsigned int PCM_RATE     = 48000;
-// static const unsigned int PCM_LATENCY  = 100 * 1000; /* 100 ms */
+const char         PCM_DEVICE[] = "plug:hdmi_linein";
+const unsigned int PCM_RATE     = 48000;
+// const unsigned int PCM_CHANNELS = 1;
+// const unsigned int PCM_LATENCY  = 100 * 1000; /* 100 ms */
 
-// static const unsigned int BUFFER_SIZE = 4096;
+const unsigned int BUFFER_SIZE      = 4096;
+const unsigned int CAPTURE_SIZE     = 1024;
+const double       AMPLITUDE_CUTOFF = 2.0;
+const double       BIND_CUTOFF      = -2.0;
+
+class DebugObserver
+: public fft::Core::IObserver
+{
+public:
+    void add( double freq )
+    {
+        // Generate the name
+        util::nameFreq( freq, mName, sizeof( mName ) );
+
+        // Print it
+        ::printf( "%10s [%10.4f Hz]\n", mName, freq );
+    }
+    void clear()
+    {
+        // Print a line as a separator.
+        ::puts( "----------" );
+    }
+
+protected:
+    char mName[ 0x20 ];
+};
+
 
 int main( int argc, char* argv[] )
 {
     // Allocate the necessary classes.
-    // ui::Curses ui;
-    fft::Core::IObserver ui;
-    fft::Core            core( ui );
+    // ui::Curses obs;
+    DebugObserver obs;
+    fft::Core     core( obs, AMPLITUDE_CUTOFF, BIND_CUTOFF );
 
     // Initialize the process.
-    if( !core.initPcm( "plug:hdmi_linein", 48000, 4096, 1024 ) )
+    if( !core.initPcm( "plug:hdmi_linein", PCM_RATE, BUFFER_SIZE, CAPTURE_SIZE ) )
     {
         ::printf( "Failed to initialize PCM\n" );
         return EXIT_FAILURE;
