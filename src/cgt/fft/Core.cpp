@@ -26,6 +26,9 @@ Core::Core( IObserver& observer, double ampCutoff, double bindCutoff )
 : mObserver( &observer ),
   mPcm( NULL ),
   mPlan( NULL ),
+#ifdef DEBUG_FFT
+  mStep( 0 ),
+#endif /* DEBUG_FFT */
   mCapture( CAPTURE_FULL ),
   mSampleRate( 0 ),
   mBufferSize( 0 ),
@@ -103,6 +106,10 @@ void Core::freePcm()
     mBufferSize  = 0;
     mCaptureSize = 0;
 
+#ifdef DEBUG_FFT
+    mStep = 0;
+#endif /* DEBUG_FFT */
+
     util::safeRelease( mSamples, ::fftw_free );
     util::safeRelease( mFreqs,   ::fftw_free );
 
@@ -151,8 +158,42 @@ bool Core::reset()
     return true;
 }
 
+double Core::getFreq( size_t index ) const
+{
+    return (double)index * (double)mSampleRate / (double)mBufferSize;
+}
+
+bool Core::checkAmplitude( size_t index ) const
+{
+    return amplitudeCutoff() <= getMag( index );
+}
+
+bool Core::checkLocalMax( size_t index ) const
+{
+    if( 0 == index )
+        // Ignore DC entirely
+        return false;
+    else if( mBufferSize - 1 == index )
+        // Ignore Nyquist entirely
+        // TODO: might not be always Nyquist!
+        return false;
+
+    if( 1 == index )
+        // Don't consider DC
+        return getMag( index + 1 ) < getMag( index );
+    else if( mBufferSize - 2 == index )
+        // Don't consider Nyquist
+        // TODO: might not be always Nyquist!
+        return getMag( index - 1 ) < getMag( index );
+
+    // Consider both previous and next frequency
+    return getMag( index - 1 ) < getMag( index )
+        && getMag( index + 1 ) < getMag( index );
+}
+
 bool Core::captureFull()
 {
+#ifndef DEBUG_FFT
     // Fill the buffer entirely.
     void* buf[] = { &mSamples[ 0 ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, mBufferSize );
@@ -163,6 +204,10 @@ bool Core::captureFull()
     // Have we read too little?
     else if( mBufferSize > code )
         return false;
+#else /* DEBUG_FFT */
+    for( size_t i = 0; i < mBufferSize; ++i, ++mStep )
+        mSamples[ i ] = ::cos( 3.1 * 2.0d * M_PI * mStep / mBufferSize );
+#endif /* DEBUG_FFT */
 
     // Next time, run only a step capture
     mCapture = CAPTURE_STEP;
@@ -174,8 +219,9 @@ bool Core::captureStep()
 {
     // We want to get only the capture size, shift the buffer first.
     ::memmove( &mSamples[ 0 ], &mSamples[ mCaptureSize ],
-               mBufferSize - mCaptureSize );
+               sizeof( double ) * ( mBufferSize - mCaptureSize ) );
 
+#ifndef DEBUG_FFT
     // Capture only the capture size.
     void* buf[] = { &mSamples[ mBufferSize - mCaptureSize ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, mCaptureSize );
@@ -186,6 +232,10 @@ bool Core::captureStep()
     // Have we read too little?
     else if( mCaptureSize > code )
         return false;
+#else /* DEBUG_FFT */
+    for( size_t i = mBufferSize - mCaptureSize; i < mBufferSize; ++i, ++mStep )
+        mSamples[ i ] = ::cos( 3.1 * 2.0d * M_PI * mStep / mBufferSize );
+#endif /* DEBUG_FFT */
 
     return true;
 }
@@ -200,6 +250,7 @@ bool Core::executePlan()
 
 bool Core::processFreqs()
 {
+    // Clear the observer.
     observer().clear();
 
     // Ignore DC and Nyquist frequency.
@@ -208,24 +259,31 @@ bool Core::processFreqs()
     // Compute magnitude for each frequency.
     for( size_t i = 0; i < size; ++i )
     {
-        const double real = mFreqs[ i + 1 ];
-        const double img  = mFreqs[ mBufferSize - ( i + 1 ) ];
+        const double real = getReal( i + 1 );
+        const double img  = getImg( i + 1 );
 
         mMags[ i ] = ::sqrt( real * real + img * img );
 
         // -------------------------------------------
-        const double freq =
-            (double)( i + 1 )
-            * (double)mSampleRate
-            / (double)mBufferSize;
+        const double freq = getFreq( i + 1 );
+        Angle&       ang  = getAngle( i + 1 );
 
-        Angle& ang = mAngles[ i ];
-
-        if( amplitudeCutoff() <= mMags[ i ] )
+        // TODO: local max fails; mags not computed yet!
+        if( checkAmplitude( i + 1 ) && checkLocalMax( i + 1 ) )
         {
             ang.update( ::atan2( img, real ) );
 
-            observer().add( freq + ang.frequency() );
+            if( ang.active() )
+            {
+// #           ifdef DEBUG_FFT
+//                 double corr = ang.frequency();
+//                 ::printf( "(%lu) %g | ", i + 1, corr );
+
+//                 observer().add( freq + corr );
+// #           else /* !DEBUG_FFT */
+                observer().add( freq + ang.frequency() );
+// #           endif /* !DEBUG_FFT */
+            }
         }
         else
         {
@@ -377,19 +435,33 @@ Core::Angle::Angle()
 
 double Core::Angle::frequency() const
 {
-    return mAvSum / ( 2.0 * M_PI * mSamples );
+// #ifdef DEBUG_FFT
+//     double result = mAvSum / ( 2.0 * M_PI * ( mSamples - 1 ) );
+//     ::printf( "%g / %u = %g | ", mAvSum, mSamples, result );
+
+//     return result;
+// #else /* !DEBUG_FFT */
+    return mAvSum / ( 2.0 * M_PI * ( mSamples - 1 ) );
+// #endif /* DEBUG_FFT */
 }
 
 void Core::Angle::update( double angle )
 {
-    // Compute angular velocity and normalize it
-    const double av = util::normalizeAngle( angle - mAngle, 2.0 * M_PI );
+    if( 0 < mSamples )
+    {
+        // Compute angular velocity and normalize it
+        const double av = util::normalizeAngle( angle - mAngle, 2.0 * M_PI );
 
-    // Update the angle and angular velocity sum
-    mAngle  = angle;
-    mAvSum += av;
+// #   ifdef DEBUG_FFT
+//         ::printf( "%g -> %g = %g | ", mAngle, angle, av );
+// #   endif /* DEBUG_FFT */
 
-    // Increment number of samples.
+        // Update angular velocity sum
+        mAvSum += av;
+    }
+
+    // Update the angle and number of samples.
+    mAngle = angle;
     ++mSamples;
 }
 

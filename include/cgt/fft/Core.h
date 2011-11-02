@@ -14,6 +14,8 @@
 
 namespace fft {
 
+#define DEBUG_FFT 1
+
 /**
  * @brief Core class of FFT.
  *
@@ -22,7 +24,32 @@ namespace fft {
 class Core
 {
 public:
-    class IObserver;
+    /**
+     * @brief An observer of the FFT core.
+     *
+     * @author Bloody.Rabbit
+     */
+    class IObserver
+    {
+    public:
+        /**
+         * @brief Adds a frequency.
+         *
+         * Called whenever a frequency is successfully
+         * detected in the incoming signal.
+         *
+         * @param[in] freq The detected frequency [Hz].
+         */
+        virtual void add( double freq ) = 0;
+        /**
+         * @brief Clears frequencies.
+         *
+         * Called when new analysis begins; callee
+         * should consider all previously detected
+         * frequencies invalid.
+         */
+        virtual void clear() = 0;
+    };
 
     /**
      * @brief Performs basic initialization.
@@ -109,7 +136,57 @@ public:
     bool reset();
 
 protected:
-    class Angle;
+    /**
+     * @brief Helper class of fft::Core.
+     *
+     * Holds information about a particular frequency.
+     *
+     * @author Bloody.Rabbit
+     */
+    class Angle
+    {
+    public:
+        /**
+         * @brief Primary constructor.
+         */
+        Angle();
+
+        /**
+         * @brief Checks if the object is active.
+         *
+         * It basically means that calling frequency() will
+         * yield reasonable value, not division by zero.
+         *
+         * @retval true  Object is active.
+         * @retval false Object is inactive.
+         */
+        bool active() const { return 2 <= mSamples; }
+        /**
+         * @brief Computes approximate fractional frequency.
+         *
+         * @return The frequency.
+         */
+        double frequency() const;
+
+        /**
+         * @brief Updates the information with new data.
+         *
+         * @param[in] angle The angle to update with.
+         */
+        void update( double angle );
+        /**
+         * @brief Resets all the information.
+         */
+        void reset();
+
+    protected:
+        /// Current angle.
+        double       mAngle;
+        /// Sum of all computed angle velocities.
+        double       mAvSum;
+        /// Number of samples so far.
+        unsigned int mSamples;
+    };
 
     /**
      * @brief Describes current capture state.
@@ -121,6 +198,66 @@ protected:
         CAPTURE_FULL, //< A full capture pending.
         CAPTURE_STEP  //< A step capture pending.
     };
+
+    /**
+     * @brief Obtains real part of a frequency.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @return The real part of the frequency.
+     */
+    double getReal( size_t index ) const { return mFreqs[ index ]; }
+    /**
+     * @brief Obtains imaginary part of a frequency.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @return The imaginary part of the frequency.
+     */
+    double getImg( size_t index ) const { return mFreqs[ mBufferSize - index ]; }
+    /**
+     * @brief Obtains magnitude of a frequency.
+     *
+     * @param[in] index Index of the frequency
+     *
+     * @return Magnitude of the frequency.
+     */
+    double getMag( size_t index ) const { return mMags[ index - 1 ]; }
+    /**
+     * @brief Obtains Angle object of a frequency.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @return The Angle object of the frequency.
+     */
+    Angle& getAngle( size_t index ) const { return mAngles[ index - 1 ]; }
+
+    /**
+     * @brief Obtains actual frequency of a frequency index.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @return The actual frequency.
+     */
+    double getFreq( size_t index ) const;
+    /**
+     * @brief Check if the frequency amplitude is large enough.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @retval true  The amplitude is large enough.
+     * @retval false The amplitude is not large enough.
+     */
+    bool checkAmplitude( size_t index ) const;
+    /**
+     * @brief Checks if the frequency is a local maximum.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @retval true  The frequency is a local maximum.
+     * @retval false The frequency is not a local maximum.
+     */
+    bool checkLocalMax( size_t index ) const;
 
     /**
      * @brief Fills the buffer entirely.
@@ -181,6 +318,11 @@ protected:
     /// Our FFTW plan.
     fftw_plan  mPlan;
 
+#ifdef DEBUG_FFT
+    /// Current sin step.
+    unsigned short mStep;
+#endif /* DEBUG_FFT */
+
     /// Current capture state.
     Capture mCapture;
 
@@ -206,85 +348,6 @@ protected:
 
     /// Capture state routine table.
     static bool ( Core::* CAPTURE_ROUTINES[] )();
-};
-
-/**
- * @brief An observer of the FFT core.
- *
- * @author Bloody.Rabbit
- */
-class Core::IObserver
-{
-public:
-    /**
-     * @brief Adds a frequency.
-     *
-     * Called whenever a frequency is successfully
-     * detected in the incoming signal.
-     *
-     * @param[in] freq The detected frequency [Hz].
-     */
-    virtual void add( double freq ) = 0;
-    /**
-     * @brief Clears frequencies.
-     *
-     * Called when new analysis begins; callee
-     * should consider all previously detected
-     * frequencies invalid.
-     */
-    virtual void clear() = 0;
-};
-
-/**
- * @brief Helper class of fft::Core.
- *
- * Holds information about a particular frequency.
- *
- * @author Bloody.Rabbit
- */
-class Core::Angle
-{
-public:
-    /**
-     * @brief Primary constructor.
-     */
-    Angle();
-
-    /**
-     * @brief Checks if the object is active.
-     *
-     * It basically means that calling frequency() will
-     * yield reasonable value, not division by zero.
-     *
-     * @retval true  Object is active.
-     * @retval false Object is inactive.
-     */
-    bool active() const { return 0 != mSamples; }
-    /**
-     * @brief Computes approximate fractional frequency.
-     *
-     * @return The frequency.
-     */
-    double frequency() const;
-
-    /**
-     * @brief Updates the information with new data.
-     *
-     * @param[in] angle The angle to update with.
-     */
-    void update( double angle );
-    /**
-     * @brief Resets all the information.
-     */
-    void reset();
-
-protected:
-    /// Current angle.
-    double       mAngle;
-    /// Sum of all computed angle velocities.
-    double       mAvSum;
-    /// Number of samples so far.
-    unsigned int mSamples;
 };
 
 } // fft
