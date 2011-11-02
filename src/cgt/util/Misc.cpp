@@ -30,7 +30,7 @@ const double util::A4_FREQ  = 440.0;
 
 double util::normalizeAngle( double angle, double period )
 {
-    int k = ( angle / period ) * ( 1 + period / ( 2 * ::fabs( angle ) ) );
+    int k = ( angle + ::copysign( period / 2, angle ) ) / period;
     return angle -= k * period;
 }
 
@@ -44,7 +44,7 @@ void util::nameFreq( double freq, char* name, size_t len )
     int k      = 0;
 
     // Wrap cents
-    k = ( cents / CENTS_PER_NOTE ) * ( 1 + CENTS_PER_NOTE / ( 2 * ::fabs( cents ) ) );
+    k = ( cents + ::copysign( CENTS_PER_NOTE / 2, cents ) ) / CENTS_PER_NOTE;
 
     note  += k;
     cents -= k * CENTS_PER_NOTE;
