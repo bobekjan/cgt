@@ -30,7 +30,7 @@ const double util::A4_FREQ  = 440.0;
 
 double util::normalizeAngle( double angle, double period )
 {
-    int k = ::floor( angle / period );
+    int k = ( angle / period ) * ( 1 + period / ( 2 * ::fabs( angle ) ) );
     return angle -= k * period;
 }
 
