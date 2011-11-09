@@ -30,7 +30,8 @@ FIND_PACKAGE( "FFTW3" REQUIRED )
 ###########
 INCLUDE( "TargetBuildPCH" )
 
-ADD_SUBDIRECTORY( "src/cgt" )
+ADD_SUBDIRECTORY( "src/cgt-common" )
+ADD_SUBDIRECTORY( "src/cgt-cli" )
 
 ###############
 # CPack setup #

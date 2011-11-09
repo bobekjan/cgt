@@ -7,7 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#include "cgt.h"
+#include "cgt-common.h"
+
 #include "util/Misc.h"
 
 using namespace util;

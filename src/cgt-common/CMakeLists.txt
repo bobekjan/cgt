@@ -8,7 +8,7 @@
 ##############
 # Initialize #
 ##############
-SET( TARGET_NAME        "cgt" )
+SET( TARGET_NAME        "cgt-common" )
 SET( TARGET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/${TARGET_NAME}" )
 SET( TARGET_SOURCE_DIR  "${PROJECT_SOURCE_DIR}/src/${TARGET_NAME}" )
 
@@ -24,9 +24,9 @@ SET( ${TARGET_NAME}_INCLUDE_DIRS ${TARGET_INCLUDE_DIRS} PARENT_SCOPE )
 # Files #
 #########
 SET( INCLUDE
-     "${TARGET_INCLUDE_DIR}/cgt.h" )
+     "${TARGET_INCLUDE_DIR}/cgt-common.h" )
 SET( SOURCE
-     "${TARGET_SOURCE_DIR}/cgt.cpp" )
+     "" )
 
 SET( alsa_INCLUDE
      "${TARGET_INCLUDE_DIR}/alsa/Error.h"
@@ -62,11 +62,11 @@ SOURCE_GROUP( "src\\alsa" FILES ${alsa_SOURCE} )
 SOURCE_GROUP( "src\\fft"  FILES ${fft_SOURCE} )
 SOURCE_GROUP( "src\\util" FILES ${util_SOURCE} )
 
-ADD_EXECUTABLE( "${TARGET_NAME}"
-                ${INCLUDE}      ${SOURCE}
-                ${alsa_INCLUDE} ${alsa_SOURCE}
-                ${fft_INCLUDE}  ${fft_SOURCE}
-                ${util_INCLUDE} ${util_SOURCE} )
+ADD_LIBRARY( "${TARGET_NAME}"
+             ${INCLUDE}      ${SOURCE}
+             ${alsa_INCLUDE} ${alsa_SOURCE}
+             ${fft_INCLUDE}  ${fft_SOURCE}
+             ${util_INCLUDE} ${util_SOURCE} )
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_INCLUDE_DIR}/cgt.h"

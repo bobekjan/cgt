@@ -7,7 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#include "cgt.h"
+#include "cgt-cli.h"
+
 #include "alsa/Pcm.h"
 #include "fft/Core.h"
 #include "util/Misc.h"
