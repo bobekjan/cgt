@@ -10,38 +10,84 @@
 #include "cgt-cli.h"
 
 #include "alsa/Pcm.h"
-#include "fft/Core.h"
+#include "core/FftAnalyser.h"
 #include "util/Misc.h"
+
+#define ANALYSE_HARMONICS 1
 
 const char         PCM_DEVICE[] = "plug:hdmi_linein";
 const unsigned int PCM_RATE     = 48000;
 // const unsigned int PCM_CHANNELS = 1;
 // const unsigned int PCM_LATENCY  = 100 * 1000; /* 100 ms */
 
-const unsigned int BUFFER_SIZE      = 4096;
-const unsigned int CAPTURE_SIZE     = 1024;
+const unsigned int BUFFER_SIZE      = 2048;
+const unsigned int CAPTURE_SIZE     = BUFFER_SIZE;
 const double       AMPLITUDE_CUTOFF = 2.0;
 const double       BIND_CUTOFF      = -2.0;
 
 class DebugObserver
-: public fft::Core::IObserver
+: public core::Analyser::IObserver
 {
 public:
+#ifdef ANALYSE_HARMONICS
+    unsigned int getHarmonic( double freq )
+    {
+        std::vector< double >::const_iterator cur, end;
+        cur = mFundamentals.begin();
+        end = mFundamentals.end();
+        for(; cur != end; ++cur )
+        {
+            // Calculate ratio of the frequencies.
+            double ratio = freq / *cur;
+            // Round it to the nearest integer.
+            int k = ratio + 0.5;
+
+            // If the error is small enough, return the ratio.
+            if( -9.0 > 10 * ::log10( ::fabs( ratio - k ) ) )
+                return k - 1;
+        }
+
+        // Add a new fundamental.
+        mFundamentals.push_back( freq );
+        return 0;
+    }
+    void clearHarmonic()
+    {
+        mFundamentals.clear();
+    }
+#endif /* ANALYSE_HARMONICS */
+
     void add( double freq )
     {
         // Generate the name
         util::nameFreq( freq, mName, sizeof( mName ) );
 
+        // Obtain harmonic index
+        unsigned int harm = getHarmonic( freq );
+
         // Print it
-        ::printf( "%10s [%10.4f Hz]\n", mName, freq );
+#ifndef DEBUG_ANALYSIS_FREQ
+        ::printf( "%10s (%02u) [%10.4f Hz]\n", mName, harm, freq );
+#else /* !DEBUG_ANALYSIS_FREQ */
+        ::printf( "%10s (%02u) [%10.4f Hz] = %10.4f\n", mName, harm, freq, 10 * ::log10( ::fabs( freq - DEBUG_ANALYSIS_FREQ ) ) );
+#endif /* !DEBUG_ANALYSIS_FREQ */
     }
     void clear()
     {
         // Print a line as a separator.
         ::puts( "----------" );
+
+        // Flush harmonics.
+        clearHarmonic();
     }
 
 protected:
+#ifdef ANALYSE_HARMONICS
+    /// A vector of fundamentals.
+    std::vector< double > mFundamentals;
+#endif /* ANALYSE_HARMONICS */
+
+    /// A buffer for note name.
     char mName[ 0x20 ];
 };
 
@@ -50,11 +96,11 @@ int main( int argc, char* argv[] )
 {
     // Allocate the necessary classes.
     // ui::Curses obs;
-    DebugObserver obs;
-    fft::Core     core( obs, AMPLITUDE_CUTOFF, BIND_CUTOFF );
+    DebugObserver     obs;
+    core::FftAnalyser analyser( obs, AMPLITUDE_CUTOFF, BIND_CUTOFF );
 
     // Initialize the process.
-    if( !core.initPcm( "plug:hdmi_linein", PCM_RATE, BUFFER_SIZE, CAPTURE_SIZE ) )
+    if( !analyser.init( "plug:hdmi_linein", PCM_RATE, BUFFER_SIZE, CAPTURE_SIZE ) )
     {
         ::printf( "Failed to initialize PCM\n" );
         return EXIT_FAILURE;
@@ -63,7 +109,7 @@ int main( int argc, char* argv[] )
     while( true )
     {
         // Run the step.
-        if( !core.step() )
+        if( !analyser.step() )
         {
             ::printf( "An error occurred during processing\n" );
             return EXIT_FAILURE;

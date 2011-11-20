@@ -1,5 +1,5 @@
 /**
- * @file fft/Core.h
+ * @file core/FftAnalyser.h
  *
  * Console Guitar Tuner (CGT)
  * Copyright (c) 2011 by Bloody.Rabbit
@@ -7,50 +7,25 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __FFT__CORE_H__INCL__
-#define __FFT__CORE_H__INCL__
+#ifndef __CORE__FFT_ANALYSER_H__INCL__
+#define __CORE__FFT_ANALYSER_H__INCL__
 
-#include "alsa/Pcm.h"
+#include "core/Analyser.h"
+#include "stats/AverageRing.h"
+#include "stats/Derivative.h"
+#include "stats/Periodic.h"
 
-namespace fft {
-
-#define DEBUG_FFT 1
+namespace core {
 
 /**
  * @brief Core class of FFT.
  *
  * @author Bloody.Rabbit
  */
-class Core
+class FftAnalyser
+: public Analyser
 {
 public:
-    /**
-     * @brief An observer of the FFT core.
-     *
-     * @author Bloody.Rabbit
-     */
-    class IObserver
-    {
-    public:
-        /**
-         * @brief Adds a frequency.
-         *
-         * Called whenever a frequency is successfully
-         * detected in the incoming signal.
-         *
-         * @param[in] freq The detected frequency [Hz].
-         */
-        virtual void add( double freq ) = 0;
-        /**
-         * @brief Clears frequencies.
-         *
-         * Called when new analysis begins; callee
-         * should consider all previously detected
-         * frequencies invalid.
-         */
-        virtual void clear() = 0;
-    };
-
     /**
      * @brief Performs basic initialization.
      *
@@ -58,18 +33,8 @@ public:
      * @param[in] ampCutoff  The amplitude cutoff value.
      * @param[in] bindCutoff The bind cutoff value [dB].
      */
-    Core( IObserver& observer, double ampCutoff, double bindCutoff );
-    /**
-     * @brief Releases resources.
-     */
-    ~Core();
+    FftAnalyser( IObserver& observer, double ampCutoff, double bindCutoff );
 
-    /**
-     * @brief Obtains current observer.
-     *
-     * @return Current observer.
-     */
-    IObserver& observer() const { return *mObserver; }
     /**
      * @brief Obtains current amplitude cutoff value.
      *
@@ -84,12 +49,6 @@ public:
     double bindCutoff() const { return mBindCutoff; }
 
     /**
-     * @brief Sets new observer.
-     *
-     * @param[in] observer The new observer.
-     */
-    void setObserver( IObserver& observer ) { mObserver = &observer; }
-    /**
      * @brief Sets new amplitude cutoff value.
      *
      * @param[in] ampCutoff New amplitude cutoff value.
@@ -103,7 +62,7 @@ public:
     void setBindCutoff( double bindCutoff ) { mBindCutoff = bindCutoff; }
 
     /**
-     * @brief Initializes underlying PCM.
+     * @brief Initializes the analyser.
      *
      * @param[in] name        Name of the PCM.
      * @param[in] rate        The sample rate to use.
@@ -113,12 +72,12 @@ public:
      * @retval true  Initialization succeeded.
      * @retval false Initialization failed.
      */
-    bool initPcm( const char* name, unsigned int rate,
-                  unsigned int bufferSize, unsigned int captureSize );
+    bool init( const char* name, unsigned int rate,
+               unsigned int bufferSize, unsigned int captureSize );
     /**
-     * @brief Frees the underlying PCM.
+     * @brief Frees the analyser resources.
      */
-    void freePcm();
+    void free();
 
     /**
      * @brief Runs a step in the process.
@@ -137,7 +96,7 @@ public:
 
 protected:
     /**
-     * @brief Helper class of fft::Core.
+     * @brief Helper class of FftAnalyser.
      *
      * Holds information about a particular frequency.
      *
@@ -150,17 +109,21 @@ protected:
          * @brief Primary constructor.
          */
         Angle();
+        /**
+         * @brief Destroys the counter.
+         */
+        ~Angle();
 
         /**
-         * @brief Checks if the object is active.
+         * @brief Checks if the object is ready.
          *
          * It basically means that calling frequency() will
          * yield reasonable value, not division by zero.
          *
-         * @retval true  Object is active.
-         * @retval false Object is inactive.
+         * @retval true  Object is ready.
+         * @retval false Object is not ready.
          */
-        bool active() const { return 2 <= mSamples; }
+        bool ready() const;
         /**
          * @brief Computes approximate fractional frequency.
          *
@@ -180,23 +143,8 @@ protected:
         void reset();
 
     protected:
-        /// Current angle.
-        double       mAngle;
-        /// Sum of all computed angle velocities.
-        double       mAvSum;
-        /// Number of samples so far.
-        unsigned int mSamples;
-    };
-
-    /**
-     * @brief Describes current capture state.
-     *
-     * @author Bloody.Rabbit
-     */
-    enum Capture
-    {
-        CAPTURE_FULL, //< A full capture pending.
-        CAPTURE_STEP  //< A step capture pending.
+        /// The statistics counter.
+        stats::ICounter< double, double >* mCounter;
     };
 
     /**
@@ -239,7 +187,7 @@ protected:
      *
      * @return The actual frequency.
      */
-    double getFreq( size_t index ) const;
+    double getFreq( double index ) const;
     /**
      * @brief Check if the frequency amplitude is large enough.
      *
@@ -258,31 +206,24 @@ protected:
      * @retval false The frequency is not a local maximum.
      */
     bool checkLocalMax( size_t index ) const;
+    /**
+     * @brief Checks if the frequencies are bound.
+     *
+     * @param[in] index      Index of the frequency.
+     * @param[in] boundIndex Index of the other frequency.
+     *
+     * @retval true  The frequencies are bound.
+     * @retval false The frequencies are not bound.
+     */
+    bool checkBound( size_t index, size_t boundIndex );
 
     /**
-     * @brief Fills the buffer entirely.
-     *
-     * Any previous captured content is overwritten.
+     * @brief Compute frequency magnitudes.
      *
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    bool captureFull();
-    /**
-     * @brief Captures only a bit.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
-     */
-    bool captureStep();
-
-    /**
-     * @brief Executes the FFTW plan.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
-     */
-    bool executePlan();
+    bool computeFreqs();
     /**
      * @brief Processes frequencies.
      *
@@ -299,7 +240,7 @@ protected:
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    bool processSingleFreq( size_t index );
+    // bool processSingleFreq( size_t index );
     /**
      * @brief Processes a bound frequency.
      *
@@ -309,47 +250,24 @@ protected:
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    bool processBoundFreq( size_t index, size_t boundIndex );
+    // bool processBoundFreq( size_t index, size_t boundIndex );
 
-    /// The bound observer.
-    IObserver* mObserver;
-    /// The underlying PCM.
-    alsa::Pcm* mPcm;
     /// Our FFTW plan.
-    fftw_plan  mPlan;
+    fftw_plan mPlan;
 
-#ifdef DEBUG_FFT
-    /// Current sin step.
-    unsigned short mStep;
-#endif /* DEBUG_FFT */
-
-    /// Current capture state.
-    Capture mCapture;
-
-    /// Current sample rate.
-    unsigned int mSampleRate;
-    /// Size of the sample buffer.
-    unsigned int mBufferSize;
-    /// The sample capture size.
-    unsigned int mCaptureSize;
     /// The amplitude cutoff.
-    double       mAmplitudeCutoff;
+    double mAmplitudeCutoff;
     /// The bind cutoff [dB].
-    double       mBindCutoff;
+    double mBindCutoff;
 
-    /// The sample buffer.
-    double* mSamples;
     /// Result of the FFT.
     double* mFreqs;
     /// Computed magnitudes.
     double* mMags;
     /// Angle information of each frequency.
     Angle*  mAngles;
-
-    /// Capture state routine table.
-    static bool ( Core::* CAPTURE_ROUTINES[] )();
 };
 
 } // fft
 
-#endif /* !__FFT__CORE_H__INCL__ */
+#endif /* !__CORE__FFT_ANALYSER_H__INCL__ */

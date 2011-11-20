@@ -36,10 +36,22 @@ SET( alsa_INCLUDE
 SET( alsa_SOURCE
      "" )
 
-SET( fft_INCLUDE
-     "${TARGET_INCLUDE_DIR}/fft/Core.h" )
-SET( fft_SOURCE
-     "${TARGET_SOURCE_DIR}/fft/Core.cpp" )
+SET( core_INCLUDE
+     "${TARGET_INCLUDE_DIR}/core/Analyser.h"
+     "${TARGET_INCLUDE_DIR}/core/FftAnalyser.h" )
+SET( core_SOURCE
+     "${TARGET_SOURCE_DIR}/core/Analyser.cpp"
+     "${TARGET_SOURCE_DIR}/core/FftAnalyser.cpp" )
+
+SET( stats_INCLUDE
+     "${TARGET_INCLUDE_DIR}/stats/Derivative.h"
+     "${TARGET_INCLUDE_DIR}/stats/Derivative.inl"
+     "${TARGET_INCLUDE_DIR}/stats/ICounter.h"
+     "${TARGET_INCLUDE_DIR}/stats/IParent.h"
+     "${TARGET_INCLUDE_DIR}/stats/Periodic.h"
+     "${TARGET_INCLUDE_DIR}/stats/Periodic.inl" )
+SET( stats_SOURCE
+     "" )
 
 SET( util_INCLUDE
      "${TARGET_INCLUDE_DIR}/util/Misc.h"
@@ -52,21 +64,24 @@ SET( util_SOURCE
 ########################
 INCLUDE_DIRECTORIES( ${TARGET_INCLUDE_DIRS} )
 
-SOURCE_GROUP( "include"       FILES ${INCLUDE} )
-SOURCE_GROUP( "include\\alsa" FILES ${alsa_INCLUDE} )
-SOURCE_GROUP( "include\\fft"  FILES ${fft_INCLUDE} )
-SOURCE_GROUP( "include\\util" FILES ${util_INCLUDE} )
+SOURCE_GROUP( "include"        FILES ${INCLUDE} )
+SOURCE_GROUP( "include\\alsa"  FILES ${alsa_INCLUDE} )
+SOURCE_GROUP( "include\\core"  FILES ${core_INCLUDE} )
+SOURCE_GROUP( "include\\stats" FILES ${stats_INCLUDE} )
+SOURCE_GROUP( "include\\util"  FILES ${util_INCLUDE} )
 
-SOURCE_GROUP( "src"       FILES ${SOURCE} )
-SOURCE_GROUP( "src\\alsa" FILES ${alsa_SOURCE} )
-SOURCE_GROUP( "src\\fft"  FILES ${fft_SOURCE} )
-SOURCE_GROUP( "src\\util" FILES ${util_SOURCE} )
+SOURCE_GROUP( "src"        FILES ${SOURCE} )
+SOURCE_GROUP( "src\\alsa"  FILES ${alsa_SOURCE} )
+SOURCE_GROUP( "src\\core"  FILES ${core_SOURCE} )
+SOURCE_GROUP( "src\\stats" FILES ${stats_SOURCE} )
+SOURCE_GROUP( "src\\util"  FILES ${util_SOURCE} )
 
 ADD_LIBRARY( "${TARGET_NAME}"
-             ${INCLUDE}      ${SOURCE}
-             ${alsa_INCLUDE} ${alsa_SOURCE}
-             ${fft_INCLUDE}  ${fft_SOURCE}
-             ${util_INCLUDE} ${util_SOURCE} )
+             ${INCLUDE}       ${SOURCE}
+             ${alsa_INCLUDE}  ${alsa_SOURCE}
+             ${core_INCLUDE}  ${core_SOURCE}
+             ${stats_INCLUDE} ${stats_SOURCE}
+             ${util_INCLUDE}  ${util_SOURCE} )
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_INCLUDE_DIR}/cgt.h"

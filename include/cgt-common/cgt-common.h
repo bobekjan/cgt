@@ -16,6 +16,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+// C++ STL
+#include <queue>
+#include <vector>
+
 // ALSA library
 #include <asoundlib.h>
 
