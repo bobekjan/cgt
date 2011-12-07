@@ -50,7 +50,7 @@ public:
     /**
      * @brief Checks if the child is ready.
      */
-    bool ready() const { mChild->ready(); }
+    bool ready() const { return mChild->ready(); }
     /**
      * @brief Obtains a result from the child.
      */

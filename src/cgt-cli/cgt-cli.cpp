@@ -1,5 +1,5 @@
 /**
- * @file cgt.cpp
+ * @file cgt-cli.cpp
  *
  * Console Guitar Tuner (CGT)
  * Copyright (c) 2011 by Bloody.Rabbit
@@ -92,7 +92,7 @@ protected:
 };
 
 
-int main( int argc, char* argv[] )
+int main( void )
 {
     // Allocate the necessary classes.
     // ui::Curses obs;
