@@ -32,6 +32,7 @@ ADD_SUBDIRECTORY( "dep/tinyxml" )
 ###########
 INCLUDE( "TargetBuildPCH" )
 
+ADD_SUBDIRECTORY( "doc" )
 ADD_SUBDIRECTORY( "src/cgt-common" )
 ADD_SUBDIRECTORY( "src/cgt-cli" )
 
