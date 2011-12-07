@@ -25,6 +25,8 @@ SET( CMAKE_MODULE_PATH
 FIND_PACKAGE( "ALSA" REQUIRED )
 FIND_PACKAGE( "FFTW3" REQUIRED )
 
+ADD_SUBDIRECTORY( "dep/tinyxml" )
+
 ###########
 # Targets #
 ###########
