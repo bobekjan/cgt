@@ -10,7 +10,7 @@
 #ifndef __STATS__DERIVATIVE_H__INCL__
 #define __STATS__DERIVATIVE_H__INCL__
 
-#include "stats/IParent.h"
+#include "stats/IFilter.h"
 
 namespace stats
 {
@@ -21,34 +21,34 @@ namespace stats
  */
 template< typename S, typename R >
 class Derivative
-: public IParent< S, R >
+: public IFilter< S, R >
 {
     /// Readability typedef of base.
-    typedef IParent< S, R > Base;
+    typedef IFilter< S, R > Base;
 
 public:
     /// Retain sample type from base.
     typedef typename Base::Sample Sample;
     /// Retain result type from base.
     typedef typename Base::Result Result;
-    /// Retain child type from base.
-    typedef typename Base::Child  Child;
+    /// Retain target type from base.
+    typedef typename Base::Target  Target;
 
     /**
      * @brief The primary constructor.
      *
-     * @param[in] child The child counter.
+     * @param[in] target The target counter.
      */
-    Derivative( Child* child );
+    Derivative( Target* target );
     /**
      * @brief The alternative contructor.
      *
      * Initializes the last sample value at contruction time.
      *
-     * @param[in] child      The child counter.
+     * @param[in] target     The target counter.
      * @param[in] lastSample Value of the last sample.
      */
-    Derivative( Child* child, Sample lastSample );
+    Derivative( Target* target, Sample lastSample );
 
     /**
      * @brief Adds the sample for processing.

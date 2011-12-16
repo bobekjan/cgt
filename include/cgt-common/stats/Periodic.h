@@ -10,7 +10,7 @@
 #ifndef __STATS__PERIODIC_H__INCL__
 #define __STATS__PERIODIC_H__INCL__
 
-#include "stats/IParent.h"
+#include "stats/IFilter.h"
 #include "util/Misc.h"
 
 namespace stats
@@ -22,26 +22,26 @@ namespace stats
  */
 template< typename S, typename R >
 class Periodic
-: public IParent< S, R >
+: public IFilter< S, R >
 {
     /// Readability typedef of base.
-    typedef IParent< S, R > Base;
+    typedef IFilter< S, R > Base;
 
 public:
     /// Retain sample type from base.
     typedef typename Base::Sample Sample;
     /// Retain result type from base.
     typedef typename Base::Result Result;
-    /// Retain child type from base.
-    typedef typename Base::Child  Child;
+    /// Retain target type from base.
+    typedef typename Base::Target  Target;
 
     /**
      * @brief The primary constructor.
      *
-     * @param[in] child  The child counter.
+     * @param[in] target The target counter.
      * @param[in] period The period of the samples.
      */
-    Periodic( Child* child, Sample period );
+    Periodic( Target* target, Sample period );
 
     /**
      * @brief Adds a sample for processing.

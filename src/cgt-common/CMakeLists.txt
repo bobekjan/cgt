@@ -47,7 +47,7 @@ SET( stats_INCLUDE
      "${TARGET_INCLUDE_DIR}/stats/Derivative.h"
      "${TARGET_INCLUDE_DIR}/stats/Derivative.inl"
      "${TARGET_INCLUDE_DIR}/stats/ICounter.h"
-     "${TARGET_INCLUDE_DIR}/stats/IParent.h"
+     "${TARGET_INCLUDE_DIR}/stats/IFilter.h"
      "${TARGET_INCLUDE_DIR}/stats/Periodic.h"
      "${TARGET_INCLUDE_DIR}/stats/Periodic.inl" )
 SET( stats_SOURCE

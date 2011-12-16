@@ -11,8 +11,8 @@
 /* stats::Periodic                                                       */
 /*************************************************************************/
 template< typename S, typename R >
-Periodic< S, R >::Periodic( Child* child, Sample period )
-: Base( child ),
+Periodic< S, R >::Periodic( Target* target, Sample period )
+: Base( target ),
   mPeriod( period )
 {
 }

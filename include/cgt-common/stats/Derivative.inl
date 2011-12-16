@@ -18,15 +18,15 @@ void ( Derivative< S, R >::* Derivative< S, R >::ADD_ROUTINES[] )( Sample ) =
 };
 
 template< typename S, typename R >
-Derivative< S, R >::Derivative( Child* child )
-: Base( child ),
+Derivative< S, R >::Derivative( Target* target )
+: Base( target ),
   mState( STATE_INIT )
 {
 }
 
 template< typename S, typename R >
-Derivative< S, R >::Derivative( Child* child, Sample lastSample )
-: Base( child ),
+Derivative< S, R >::Derivative( Target* target, Sample lastSample )
+: Base( target ),
   mState( STATE_RUNNING ),
   mLastSample( lastSample )
 {
@@ -55,7 +55,7 @@ void Derivative< S, R >::addInit( Sample sample )
 template< typename S, typename R >
 void Derivative< S, R >::addRunning( Sample sample )
 {
-    // Pass the derivative to child.
+    // Pass the derivative to target.
     Base::add( sample - mLastSample );
 
     // Update the last sample value.
