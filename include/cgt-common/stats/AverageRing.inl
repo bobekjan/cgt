@@ -8,7 +8,7 @@
  */
 
 /*************************************************************************/
-/* stats::AverageRing                                                    */
+/* cgt::stats::AverageRing                                               */
 /*************************************************************************/
 template< typename S, typename R >
 AverageRing< S, R >::AverageRing( unsigned int limit )

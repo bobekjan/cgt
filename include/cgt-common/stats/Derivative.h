@@ -12,8 +12,8 @@
 
 #include "stats/IFilter.h"
 
-namespace stats
-{
+namespace cgt { namespace stats {
+
 /**
  * @brief Computes derivative of samples.
  *
@@ -96,6 +96,6 @@ protected:
 // Include the template code.
 #include "stats/Derivative.inl"
 
-} // stats
+}} // cgt::stats
 
 #endif /* !__STATS__DERIVATIVE_H__INCL__ */

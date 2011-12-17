@@ -12,10 +12,11 @@
 #include "core/FftAnalyser.h"
 #include "util/Misc.h"
 
-using namespace core;
+using namespace cgt;
+using namespace cgt::core;
 
 /*************************************************************************/
-/* core::FftAnalyser                                                     */
+/* cgt::core::FftAnalyser                                                */
 /*************************************************************************/
 FftAnalyser::FftAnalyser( IObserver& observer, double ampCutoff, double bindCutoff )
 : core::Analyser( observer ),

@@ -10,6 +10,7 @@
 #ifndef __ALSA__ERROR_H__INCL__
 #define __ALSA__ERROR_H__INCL__
 
+namespace cgt {
 /**
  * @brief Contains ALSA interface utilities.
  *
@@ -63,6 +64,6 @@ protected:
 // Simple wrapper, all methods are inlined.
 #include "alsa/Error.inl"
 
-} // alsa
+}} // cgt::alsa
 
 #endif /* !__ALSA__ERROR_H__INCL__ */

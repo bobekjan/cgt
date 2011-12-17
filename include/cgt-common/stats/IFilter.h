@@ -12,8 +12,8 @@
 
 #include "stats/ICounter.h"
 
-namespace stats
-{
+namespace cgt { namespace stats {
+
 /**
  * @brief A statistics counter filter.
  *
@@ -71,6 +71,6 @@ protected:
     Target* mTarget;
 };
 
-} // stats
+}} // cgt::stats
 
 #endif /* !__STATS__IFILTER_H__INCL__ */

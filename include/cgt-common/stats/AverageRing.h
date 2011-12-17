@@ -12,8 +12,8 @@
 
 #include "stats/ICounter.h"
 
-namespace stats
-{
+namespace cgt { namespace stats {
+
 /**
  * @brief Keeps a running average of last N samples.
  *
@@ -72,6 +72,6 @@ protected:
 // Include the template code.
 #include "stats/AverageRing.inl"
 
-} // stats
+}} // cgt::stats
 
 #endif /* !__STATS__AVERAGE_RING_H__INCL__ */

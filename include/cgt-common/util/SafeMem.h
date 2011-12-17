@@ -26,7 +26,7 @@
 #ifndef __UTIL__SAFE_MEM_H__INCL__
 #define __UTIL__SAFE_MEM_H__INCL__
 
-namespace util {
+namespace cgt { namespace util {
 
 /**
  * @brief Allocates and zero-initializes memory.
@@ -123,6 +123,6 @@ inline void safeRelease( T*& p, F f )
     p = NULL;
 }
 
-} // namespace util
+}} // cgt::util
 
 #endif /* !__UTIL__SAFE_MEM_H__INCL__ */

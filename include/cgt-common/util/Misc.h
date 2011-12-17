@@ -10,7 +10,7 @@
 #ifndef __UTIL__MISC_H__INCL__
 #define __UTIL__MISC_H__INCL__
 
-namespace util {
+namespace cgt { namespace util {
 
 /// Names of notes.
 extern const char* NOTE_NAMES[];
@@ -43,6 +43,6 @@ double normalizeAngle( double angle, double period );
  */
 void nameFreq( double freq, char* name, size_t len );
 
-} // util
+}} // cgt::util
 
 #endif /* !__UTIL__MISC_H__INCL__ */

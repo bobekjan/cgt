@@ -8,7 +8,7 @@
  */
 
 /*************************************************************************/
-/* stats::Periodic                                                       */
+/* cgt::stats::Periodic                                                  */
 /*************************************************************************/
 template< typename S, typename R >
 Periodic< S, R >::Periodic( Target* target, Sample period )

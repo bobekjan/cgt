@@ -15,7 +15,7 @@
 #include "stats/Derivative.h"
 #include "stats/Periodic.h"
 
-namespace core {
+namespace cgt { namespace core {
 
 /**
  * @brief Core class of FFT.
@@ -268,6 +268,6 @@ protected:
     Angle*  mAngles;
 };
 
-} // fft
+}} // cgt::core
 
 #endif /* !__CORE__FFT_ANALYSER_H__INCL__ */

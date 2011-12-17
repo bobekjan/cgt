@@ -13,4 +13,7 @@
 // Include dependencies
 #include "cgt-common.h"
 
+// Use cgt prefix by default
+using namespace cgt;
+
 #endif /* !__CGT_CLI_H__INCL__ */

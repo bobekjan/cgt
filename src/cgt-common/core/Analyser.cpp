@@ -11,10 +11,11 @@
 
 #include "core/Analyser.h"
 
-using namespace core;
+using namespace cgt;
+using namespace cgt::core;
 
 /*************************************************************************/
-/* core::Analyser                                                        */
+/* cgt::core::Analyser                                                   */
 /*************************************************************************/
 bool ( Analyser::* Analyser::CAPTURE_ROUTINES[] )() =
 {

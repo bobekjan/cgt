@@ -12,7 +12,7 @@
 
 #include "alsa/Error.h"
 
-namespace alsa {
+namespace cgt { namespace alsa {
 
 /**
  * @brief An ALSA PCM device.
@@ -145,6 +145,6 @@ protected:
 // Simple wrapper, all methods are inlined.
 #include "alsa/Pcm.inl"
 
-} // alsa
+}} // cgt::alsa
 
 #endif /* !__ALSA__PCM_H__INCL__ */

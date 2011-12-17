@@ -12,6 +12,7 @@
 
 #include "alsa/Pcm.h"
 
+namespace cgt {
 /**
  * @brief Core code of CGT.
  *
@@ -189,6 +190,6 @@ protected:
     static bool ( Analyser::* CAPTURE_ROUTINES[] )();
 };
 
-}
+}} // cgt::core
 
 #endif /* !__CORE__ANALYSER_H__INCL__ */

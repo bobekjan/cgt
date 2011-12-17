@@ -8,7 +8,7 @@
  */
 
 /*************************************************************************/
-/* stats::Derivative                                                     */
+/* cgt::stats::Derivative                                                */
 /*************************************************************************/
 template< typename S, typename R >
 void ( Derivative< S, R >::* Derivative< S, R >::ADD_ROUTINES[] )( Sample ) =

@@ -10,13 +10,14 @@
 #ifndef __STATS__ICOUNTER_H__INCL__
 #define __STATS__ICOUNTER_H__INCL__
 
+namespace cgt {
 /**
  * @brief Utilities related to statistics.
  *
  * @author Bloody.Rabbit
  */
-namespace stats
-{
+namespace stats {
+
 /**
  * @brief An interface of a generic statistics counter.
  *
@@ -60,6 +61,6 @@ public:
     virtual void reset() = 0;
 };
 
-} // stats
+}} // cgt::stats
 
 #endif /* !__STATS__ICOUNTER_H__INCL__ */

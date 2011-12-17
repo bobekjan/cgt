@@ -11,10 +11,11 @@
 
 #include "util/Misc.h"
 
-using namespace util;
+using namespace cgt;
+using namespace cgt::util;
 
 /*************************************************************************/
-/* util                                                                  */
+/* cgt::util                                                             */
 /*************************************************************************/
 const char* util::NOTE_NAMES[] =
 {
@@ -57,6 +58,6 @@ void util::nameFreq( double freq, char* name, size_t len )
     note   -= k * NOTES_PER_OCTAVE;
 
     // Print the name
-    ::snprintf( name, len, "%s%d.%+05.1lf",
+    ::snprintf( name, len, "%s%d.%+05.1f",
                 NOTE_NAMES[ note ], octave, cents );
 }

@@ -13,8 +13,8 @@
 #include "stats/IFilter.h"
 #include "util/Misc.h"
 
-namespace stats
-{
+namespace cgt { namespace stats {
+
 /**
  * @brief A counter to keep the samples in a certain period.
  *
@@ -56,6 +56,6 @@ protected:
 // Include the template code.
 #include "stats/Periodic.inl"
 
-} // stats
+}} // cgt::stats
 
 #endif /* !__STATS__PERIODIC_H__INCL__ */
