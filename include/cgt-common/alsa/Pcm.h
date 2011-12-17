@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __ALSA__PCM_H__INCL__
-#define __ALSA__PCM_H__INCL__
+#ifndef __CGT__ALSA__PCM_H__INCL__
+#define __CGT__ALSA__PCM_H__INCL__
 
 #include "alsa/Error.h"
 
@@ -147,4 +147,4 @@ protected:
 
 }} // cgt::alsa
 
-#endif /* !__ALSA__PCM_H__INCL__ */
+#endif /* !__CGT__ALSA__PCM_H__INCL__ */

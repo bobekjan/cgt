@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __STATS__PERIODIC_H__INCL__
-#define __STATS__PERIODIC_H__INCL__
+#ifndef __CGT__STATS__PERIODIC_H__INCL__
+#define __CGT__STATS__PERIODIC_H__INCL__
 
 #include "stats/IFilter.h"
 #include "util/Misc.h"
@@ -58,4 +58,4 @@ protected:
 
 }} // cgt::stats
 
-#endif /* !__STATS__PERIODIC_H__INCL__ */
+#endif /* !__CGT__STATS__PERIODIC_H__INCL__ */

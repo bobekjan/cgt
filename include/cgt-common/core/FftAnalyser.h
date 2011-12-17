@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __CORE__FFT_ANALYSER_H__INCL__
-#define __CORE__FFT_ANALYSER_H__INCL__
+#ifndef __CGT__CORE__FFT_ANALYSER_H__INCL__
+#define __CGT__CORE__FFT_ANALYSER_H__INCL__
 
 #include "core/Analyser.h"
 #include "stats/AverageRing.h"
@@ -270,4 +270,4 @@ protected:
 
 }} // cgt::core
 
-#endif /* !__CORE__FFT_ANALYSER_H__INCL__ */
+#endif /* !__CGT__CORE__FFT_ANALYSER_H__INCL__ */

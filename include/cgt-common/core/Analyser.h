@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __CORE__ANALYSER_H__INCL__
-#define __CORE__ANALYSER_H__INCL__
+#ifndef __CGT__CORE__ANALYSER_H__INCL__
+#define __CGT__CORE__ANALYSER_H__INCL__
 
 #include "alsa/Pcm.h"
 
@@ -18,8 +18,7 @@ namespace cgt {
  *
  * @author Bloody.Rabbit
  */
-namespace core
-{
+namespace core {
 
 // #define DEBUG_ANALYSIS_FREQ 269.231
 
@@ -192,4 +191,4 @@ protected:
 
 }} // cgt::core
 
-#endif /* !__CORE__ANALYSER_H__INCL__ */
+#endif /* !__CGT__CORE__ANALYSER_H__INCL__ */

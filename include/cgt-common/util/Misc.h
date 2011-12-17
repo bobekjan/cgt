@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __UTIL__MISC_H__INCL__
-#define __UTIL__MISC_H__INCL__
+#ifndef __CGT__UTIL__MISC_H__INCL__
+#define __CGT__UTIL__MISC_H__INCL__
 
 namespace cgt { namespace util {
 
@@ -45,4 +45,4 @@ void nameFreq( double freq, char* name, size_t len );
 
 }} // cgt::util
 
-#endif /* !__UTIL__MISC_H__INCL__ */
+#endif /* !__CGT__UTIL__MISC_H__INCL__ */

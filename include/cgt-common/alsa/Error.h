@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __ALSA__ERROR_H__INCL__
-#define __ALSA__ERROR_H__INCL__
+#ifndef __CGT__ALSA__ERROR_H__INCL__
+#define __CGT__ALSA__ERROR_H__INCL__
 
 namespace cgt {
 /**
@@ -66,4 +66,4 @@ protected:
 
 }} // cgt::alsa
 
-#endif /* !__ALSA__ERROR_H__INCL__ */
+#endif /* !__CGT__ALSA__ERROR_H__INCL__ */

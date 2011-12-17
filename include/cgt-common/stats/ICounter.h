@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __STATS__ICOUNTER_H__INCL__
-#define __STATS__ICOUNTER_H__INCL__
+#ifndef __CGT__STATS__ICOUNTER_H__INCL__
+#define __CGT__STATS__ICOUNTER_H__INCL__
 
 namespace cgt {
 /**
@@ -63,4 +63,4 @@ public:
 
 }} // cgt::stats
 
-#endif /* !__STATS__ICOUNTER_H__INCL__ */
+#endif /* !__CGT__STATS__ICOUNTER_H__INCL__ */

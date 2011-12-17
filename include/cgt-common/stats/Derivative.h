@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __STATS__DERIVATIVE_H__INCL__
-#define __STATS__DERIVATIVE_H__INCL__
+#ifndef __CGT__STATS__DERIVATIVE_H__INCL__
+#define __CGT__STATS__DERIVATIVE_H__INCL__
 
 #include "stats/IFilter.h"
 
@@ -98,4 +98,4 @@ protected:
 
 }} // cgt::stats
 
-#endif /* !__STATS__DERIVATIVE_H__INCL__ */
+#endif /* !__CGT__STATS__DERIVATIVE_H__INCL__ */

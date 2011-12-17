@@ -7,8 +7,8 @@
  * @author Bloody.Rabbit
  */
 
-#ifndef __STATS__AVERAGE_RING_H__INCL__
-#define __STATS__AVERAGE_RING_H__INCL__
+#ifndef __CGT__STATS__AVERAGE_RING_H__INCL__
+#define __CGT__STATS__AVERAGE_RING_H__INCL__
 
 #include "stats/ICounter.h"
 
@@ -74,4 +74,4 @@ protected:
 
 }} // cgt::stats
 
-#endif /* !__STATS__AVERAGE_RING_H__INCL__ */
+#endif /* !__CGT__STATS__AVERAGE_RING_H__INCL__ */
