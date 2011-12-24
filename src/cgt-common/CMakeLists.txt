@@ -59,7 +59,8 @@ SET( core_SOURCE
      "${TARGET_SOURCE_DIR}/core/FftAnalyser.cpp" )
 
 SET( db_INCLUDE
-     "${TARGET_INCLUDE_DIR}/db/IField.h" )
+     "${TARGET_INCLUDE_DIR}/db/IField.h"
+     "${TARGET_INCLUDE_DIR}/db/IParameter.h" )
 SET( db_SOURCE
      "" )
 
