@@ -60,9 +60,11 @@ SET( core_SOURCE
 
 SET( db_INCLUDE
      "${TARGET_INCLUDE_DIR}/db/IField.h"
-     "${TARGET_INCLUDE_DIR}/db/IParameter.h" )
+     "${TARGET_INCLUDE_DIR}/db/IParameter.h"
+     "${TARGET_INCLUDE_DIR}/db/TextValue.h"
+     "${TARGET_INCLUDE_DIR}/db/TextValue.inl" )
 SET( db_SOURCE
-     "" )
+     "${TARGET_SOURCE_DIR}/db/TextValue.cpp" )
 
 SET( stats_INCLUDE
      "${TARGET_INCLUDE_DIR}/stats/Derivative.h"
