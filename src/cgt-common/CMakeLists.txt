@@ -58,6 +58,11 @@ SET( core_SOURCE
      "${TARGET_SOURCE_DIR}/core/Analyser.cpp"
      "${TARGET_SOURCE_DIR}/core/FftAnalyser.cpp" )
 
+SET( db_INCLUDE
+     "${TARGET_INCLUDE_DIR}/db/IField.h" )
+SET( db_SOURCE
+     "" )
+
 SET( stats_INCLUDE
      "${TARGET_INCLUDE_DIR}/stats/Derivative.h"
      "${TARGET_INCLUDE_DIR}/stats/Derivative.inl"
@@ -83,12 +88,14 @@ INCLUDE_DIRECTORIES( ${TARGET_INCLUDE_DIRS} )
 SOURCE_GROUP( "include"        FILES ${INCLUDE} )
 SOURCE_GROUP( "include\\alsa"  FILES ${alsa_INCLUDE} )
 SOURCE_GROUP( "include\\core"  FILES ${core_INCLUDE} )
+SOURCE_GROUP( "include\\db"    FILES ${db_INCLUDE} )
 SOURCE_GROUP( "include\\stats" FILES ${stats_INCLUDE} )
 SOURCE_GROUP( "include\\util"  FILES ${util_INCLUDE} )
 
 SOURCE_GROUP( "src"        FILES ${SOURCE} )
 SOURCE_GROUP( "src\\alsa"  FILES ${alsa_SOURCE} )
 SOURCE_GROUP( "src\\core"  FILES ${core_SOURCE} )
+SOURCE_GROUP( "src\\db"    FILES ${db_SOURCE} )
 SOURCE_GROUP( "src\\stats" FILES ${stats_SOURCE} )
 SOURCE_GROUP( "src\\util"  FILES ${util_SOURCE} )
 
@@ -96,6 +103,7 @@ ADD_LIBRARY( "${TARGET_NAME}"
              ${INCLUDE}       ${SOURCE}
              ${alsa_INCLUDE}  ${alsa_SOURCE}
              ${core_INCLUDE}  ${core_SOURCE}
+             ${db_INCLUDE}    ${db_SOURCE}
              ${stats_INCLUDE} ${stats_SOURCE}
              ${util_INCLUDE}  ${util_SOURCE} )
 
