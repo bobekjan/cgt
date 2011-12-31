@@ -10,20 +10,11 @@
 #include "cgt-cli.h"
 
 #include "alsa/Pcm.h"
+#include "config/ConfigMgr.h"
 #include "core/FftAnalyser.h"
 #include "util/Misc.h"
 
 #define ANALYSE_HARMONICS 1
-
-const char         PCM_DEVICE[] = "plug:hdmi_linein";
-const unsigned int PCM_RATE     = 48000;
-// const unsigned int PCM_CHANNELS = 1;
-// const unsigned int PCM_LATENCY  = 100 * 1000; /* 100 ms */
-
-const unsigned int BUFFER_SIZE      = 2048;
-const unsigned int CAPTURE_SIZE     = BUFFER_SIZE;
-const double       AMPLITUDE_CUTOFF = 2.0;
-const double       BIND_CUTOFF      = -2.0;
 
 class DebugObserver
 : public core::Analyser::IObserver
@@ -94,13 +85,25 @@ protected:
 
 int main( void )
 {
+    // Setup configuration
+    sConfigMgr[ "cgt-cli.pcmDevice"       ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt-cli.pcmRate"         ] = 48000;
+    sConfigMgr[ "cgt-cli.bufferSize"      ] = 2048;
+    sConfigMgr[ "cgt-cli.captureSize"     ] = 2048;
+    sConfigMgr[ "cgt-cli.amplitudeCutoff" ] = 2.0;
+    sConfigMgr[ "cgt-cli.bindCutoff"      ] = -2.0;
+
     // Allocate the necessary classes.
     // ui::Curses obs;
-    DebugObserver     obs;
-    core::FftAnalyser analyser( obs, AMPLITUDE_CUTOFF, BIND_CUTOFF );
+    DebugObserver obs;
+    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.amplitudeCutoff" ],
+                                sConfigMgr[ "cgt-cli.bindCutoff" ] );
 
     // Initialize the process.
-    if( !analyser.init( "plug:hdmi_linein", PCM_RATE, BUFFER_SIZE, CAPTURE_SIZE ) )
+    if( !analyser.init( sConfigMgr[ "cgt-cli.pcmDevice" ],
+                        sConfigMgr[ "cgt-cli.pcmRate" ],
+                        sConfigMgr[ "cgt-cli.bufferSize" ],
+                        sConfigMgr[ "cgt-cli.captureSize" ] ) )
     {
         ::printf( "Failed to initialize PCM\n" );
         return EXIT_FAILURE;
