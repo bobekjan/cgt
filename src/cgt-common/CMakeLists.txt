@@ -5,6 +5,17 @@
 # Author: Bloody.Rabbit
 #
 
+################
+# Dependencies #
+################
+FIND_PACKAGE( "ALSA" REQUIRED )
+FIND_PACKAGE( "FFTW3" REQUIRED )
+
+# As it's not an *actual* subdirectory, CMake forces us
+# to specify the binary directory as well ...
+ADD_SUBDIRECTORY( "${PROJECT_SOURCE_DIR}/dep/tinyxml"
+                  "${PROJECT_BINARY_DIR}/dep/tinyxml" )
+
 ##############
 # Initialize #
 ##############
@@ -15,6 +26,7 @@ SET( TARGET_SOURCE_DIR  "${PROJECT_SOURCE_DIR}/src/${TARGET_NAME}" )
 SET( TARGET_INCLUDE_DIRS
      ${ALSA_INCLUDE_DIRS}
      ${FFTW3_INCLUDE_DIRS}
+     ${tinyxml_INCLUDE_DIRS}
      "${TARGET_INCLUDE_DIR}" )
 
 # Export the include directories
@@ -88,4 +100,5 @@ TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_SOURCE_DIR}/cgt.cpp" )
 TARGET_LINK_LIBRARIES( "${TARGET_NAME}"
                        ${ALSA_LIBRARIES}
-                       ${FFTW3_LIBRARIES} )
+                       ${FFTW3_LIBRARIES}
+                       "tinyxml" )
