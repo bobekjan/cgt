@@ -22,11 +22,22 @@ SET( CMAKE_MODULE_PATH
 ###########
 # Targets #
 ###########
+# Some useful modules
+INCLUDE( "CheckIncludeFile" )
 INCLUDE( "TargetBuildPCH" )
 
+# Definitions for config.h
+ADD_DEFINITIONS( "-DHAVE_CONFIG_H=1" )
+INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" )
+
+# The actual targets
 ADD_SUBDIRECTORY( "doc" )
 ADD_SUBDIRECTORY( "src/cgt-common" )
 ADD_SUBDIRECTORY( "src/cgt-cli" )
+
+# Generate config.h
+CONFIGURE_FILE( "config.h.in" "config.h"
+                ESCAPE_QUOTES )
 
 ###############
 # CPack setup #

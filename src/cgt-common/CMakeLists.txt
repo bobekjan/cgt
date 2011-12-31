@@ -8,6 +8,8 @@
 ################
 # Dependencies #
 ################
+CHECK_INCLUDE_FILE( "inttypes.h" HAVE_INTTYPES_H )
+
 FIND_PACKAGE( "ALSA" REQUIRED )
 FIND_PACKAGE( "FFTW3" REQUIRED )
 
@@ -36,7 +38,8 @@ SET( ${TARGET_NAME}_INCLUDE_DIRS ${TARGET_INCLUDE_DIRS} PARENT_SCOPE )
 # Files #
 #########
 SET( INCLUDE
-     "${TARGET_INCLUDE_DIR}/cgt-common.h" )
+     "${TARGET_INCLUDE_DIR}/cgt-common.h"
+     "${TARGET_INCLUDE_DIR}/cgt-compat.h" )
 SET( SOURCE
      "" )
 
