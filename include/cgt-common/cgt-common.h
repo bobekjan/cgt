@@ -31,6 +31,7 @@
 #include <cstdlib>
 
 // C++ standard library
+#include <memory>
 #include <queue>
 #include <vector>
 
