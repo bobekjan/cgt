@@ -96,8 +96,8 @@ ADD_LIBRARY( "${TARGET_NAME}"
              ${util_INCLUDE}  ${util_SOURCE} )
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
-                  "${TARGET_INCLUDE_DIR}/cgt.h"
-                  "${TARGET_SOURCE_DIR}/cgt.cpp" )
+                  "${TARGET_INCLUDE_DIR}/cgt-common.h"
+                  "${TARGET_SOURCE_DIR}/core/Analyser.cpp" )
 TARGET_LINK_LIBRARIES( "${TARGET_NAME}"
                        ${ALSA_LIBRARIES}
                        ${FFTW3_LIBRARIES}
