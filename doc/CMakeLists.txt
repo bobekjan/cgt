@@ -7,7 +7,12 @@
 ################
 # Dependencies #
 ################
-FIND_PACKAGE( "Doxygen" REQUIRED )
+FIND_PACKAGE( "Doxygen" )
+
+IF( NOT DOXYGEN_FOUND )
+  MESSAGE( STATUS "WARNING: Generated documentation won't be available" )
+  RETURN()
+ENDIF( NOT DOXYGEN_FOUND )
 
 #########
 # Files #
