@@ -51,6 +51,11 @@ SET( alsa_INCLUDE
 SET( alsa_SOURCE
      "" )
 
+SET( config_INCLUDE
+     "${TARGET_INCLUDE_DIR}/config/ConfigMgr.h" )
+SET( config_SOURCE
+     "" )
+
 SET( core_INCLUDE
      "${TARGET_INCLUDE_DIR}/core/Analyser.h"
      "${TARGET_INCLUDE_DIR}/core/FftAnalyser.h" )
@@ -88,27 +93,30 @@ SET( util_SOURCE
 ########################
 INCLUDE_DIRECTORIES( ${TARGET_INCLUDE_DIRS} )
 
-SOURCE_GROUP( "include"        FILES ${INCLUDE} )
-SOURCE_GROUP( "include\\alsa"  FILES ${alsa_INCLUDE} )
-SOURCE_GROUP( "include\\core"  FILES ${core_INCLUDE} )
-SOURCE_GROUP( "include\\db"    FILES ${db_INCLUDE} )
-SOURCE_GROUP( "include\\stats" FILES ${stats_INCLUDE} )
-SOURCE_GROUP( "include\\util"  FILES ${util_INCLUDE} )
+SOURCE_GROUP( "include"         FILES ${INCLUDE} )
+SOURCE_GROUP( "include\\alsa"   FILES ${alsa_INCLUDE} )
+SOURCE_GROUP( "include\\config" FILES ${config_INCLUDE} )
+SOURCE_GROUP( "include\\core"   FILES ${core_INCLUDE} )
+SOURCE_GROUP( "include\\db"     FILES ${db_INCLUDE} )
+SOURCE_GROUP( "include\\stats"  FILES ${stats_INCLUDE} )
+SOURCE_GROUP( "include\\util"   FILES ${util_INCLUDE} )
 
-SOURCE_GROUP( "src"        FILES ${SOURCE} )
-SOURCE_GROUP( "src\\alsa"  FILES ${alsa_SOURCE} )
-SOURCE_GROUP( "src\\core"  FILES ${core_SOURCE} )
-SOURCE_GROUP( "src\\db"    FILES ${db_SOURCE} )
-SOURCE_GROUP( "src\\stats" FILES ${stats_SOURCE} )
-SOURCE_GROUP( "src\\util"  FILES ${util_SOURCE} )
+SOURCE_GROUP( "src"         FILES ${SOURCE} )
+SOURCE_GROUP( "src\\alsa"   FILES ${alsa_SOURCE} )
+SOURCE_GROUP( "src\\config" FILES ${config_SOURCE} )
+SOURCE_GROUP( "src\\core"   FILES ${core_SOURCE} )
+SOURCE_GROUP( "src\\db"     FILES ${db_SOURCE} )
+SOURCE_GROUP( "src\\stats"  FILES ${stats_SOURCE} )
+SOURCE_GROUP( "src\\util"   FILES ${util_SOURCE} )
 
 ADD_LIBRARY( "${TARGET_NAME}"
-             ${INCLUDE}       ${SOURCE}
-             ${alsa_INCLUDE}  ${alsa_SOURCE}
-             ${core_INCLUDE}  ${core_SOURCE}
-             ${db_INCLUDE}    ${db_SOURCE}
-             ${stats_INCLUDE} ${stats_SOURCE}
-             ${util_INCLUDE}  ${util_SOURCE} )
+             ${INCLUDE}        ${SOURCE}
+             ${alsa_INCLUDE}   ${alsa_SOURCE}
+             ${config_INCLUDE} ${config_SOURCE}
+             ${core_INCLUDE}   ${core_SOURCE}
+             ${db_INCLUDE}     ${db_SOURCE}
+             ${stats_INCLUDE}  ${stats_SOURCE}
+             ${util_INCLUDE}   ${util_SOURCE} )
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_INCLUDE_DIR}/cgt-common.h"
