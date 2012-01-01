@@ -26,9 +26,9 @@ bool ( Analyser::* Analyser::CAPTURE_ROUTINES[] )() =
 Analyser::Analyser( IObserver& observer )
 : mObserver( &observer ),
   mPcm( NULL ),
-#ifdef DEBUG_ANALYSIS_FREQ
+#ifdef CGT_DEBUG_ANALYSIS_FREQ
   mPhase( 0 ),
-#endif /* DEBUG_ANALYSIS_FREQ */
+#endif /* CGT_DEBUG_ANALYSIS_FREQ */
   mCapture( CAPTURE_FULL ),
   mSampleRate( 0 ),
   mBufferSize( 0 ),
@@ -81,9 +81,9 @@ void Analyser::free()
     mBufferSize  = 0;
     mCaptureSize = 0;
 
-#ifdef DEBUG_ANALYSIS_FREQ
+#ifdef CGT_DEBUG_ANALYSIS_FREQ
     mPhase = 0;
-#endif /* DEBUG_ANALYSIS_FREQ */
+#endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
     // Reset the state to default
     mCapture = CAPTURE_FULL;
@@ -111,7 +111,7 @@ bool Analyser::reset()
 
 bool Analyser::captureFull()
 {
-#ifndef DEBUG_ANALYSIS_FREQ
+#ifndef CGT_DEBUG_ANALYSIS_FREQ
     // Fill the buffer entirely.
     void* buf[] = { &mSamples[ 0 ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, bufferSize() );
@@ -122,11 +122,11 @@ bool Analyser::captureFull()
     // Have we read too little?
     else if( bufferSize() > code )
         return false;
-#else /* DEBUG_ANALYSIS_FREQ */
+#else /* CGT_DEBUG_ANALYSIS_FREQ */
     for( size_t i = 0; i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
         // mSamples[ i ] = ::cos( 269.5302 * mPhase );
-        mSamples[ i ] = ::cos( DEBUG_ANALYSIS_FREQ * mPhase );
-#endif /* DEBUG_ANALYSIS_FREQ */
+        mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
+#endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
     // Next time, run only a step capture
     mCapture = CAPTURE_STEP;
@@ -140,7 +140,7 @@ bool Analyser::captureStep()
     ::memmove( &mSamples[ 0 ], &mSamples[ captureSize() ],
                sizeof( double ) * ( bufferSize() - captureSize() ) );
 
-#ifndef DEBUG_ANALYSIS_FREQ
+#ifndef CGT_DEBUG_ANALYSIS_FREQ
     // Capture only the capture size.
     void* buf[] = { &mSamples[ bufferSize() - captureSize() ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, captureSize() );
@@ -151,11 +151,11 @@ bool Analyser::captureStep()
     // Have we read too little?
     else if( captureSize() > code )
         return false;
-#else /* DEBUG_ANALYSIS_FREQ */
+#else /* CGT_DEBUG_ANALYSIS_FREQ */
     for( size_t i = bufferSize() - captureSize(); i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
         // mSamples[ i ] = ::cos( 269.5302 * mPhase );
-        mSamples[ i ] = ::cos( DEBUG_ANALYSIS_FREQ * mPhase );
-#endif /* DEBUG_ANALYSIS_FREQ */
+        mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
+#endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
     return true;
 }

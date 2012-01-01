@@ -20,8 +20,6 @@ namespace cgt {
  */
 namespace core {
 
-// #define DEBUG_ANALYSIS_FREQ 269.231
-
 /**
  * @brief Base class for signal analysers.
  *
@@ -167,10 +165,10 @@ protected:
     /// The underlying PCM.
     alsa::Pcm* mPcm;
 
-#ifdef DEBUG_ANALYSIS_FREQ
+#ifdef CGT_DEBUG_ANALYSIS_FREQ
     /// Current phase.
     double mPhase;
-#endif /* DEBUG_ANALYSIS_FREQ */
+#endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
     /// Current capture state.
     Capture mCapture;

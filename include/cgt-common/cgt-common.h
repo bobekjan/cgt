@@ -21,6 +21,10 @@
 // "Explicitly request" fixed-width integer format macros
 #define __STDC_FORMAT_MACROS 1
 
+// Various hacks
+// #define CGT_DEBUG_ANALYSIS_FREQ 269.231
+#define CGT_DEBUG_ANALYSE_HARMONICS 1
+
 /*************************************************************************/
 /* Standard includes                                                     */
 /*************************************************************************/

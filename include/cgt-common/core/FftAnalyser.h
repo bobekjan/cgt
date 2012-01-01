@@ -107,8 +107,10 @@ protected:
     public:
         /**
          * @brief Primary constructor.
+         *
+         * @param[in] limit Number of samples to average from.
          */
-        Angle();
+        Angle( unsigned int limit = 16 );
         /**
          * @brief Destroys the counter.
          */

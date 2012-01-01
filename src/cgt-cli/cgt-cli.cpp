@@ -14,13 +14,11 @@
 #include "core/FftAnalyser.h"
 #include "util/Misc.h"
 
-#define ANALYSE_HARMONICS 1
-
 class DebugObserver
 : public core::Analyser::IObserver
 {
 public:
-#ifdef ANALYSE_HARMONICS
+#ifdef CGT_DEBUG_ANALYSE_HARMONICS
     unsigned int getHarmonic( double freq )
     {
         std::vector< double >::const_iterator cur, end;
@@ -46,7 +44,7 @@ public:
     {
         mFundamentals.clear();
     }
-#endif /* ANALYSE_HARMONICS */
+#endif /* CGT_DEBUG_ANALYSE_HARMONICS */
 
     void add( double freq )
     {
@@ -57,11 +55,14 @@ public:
         unsigned int harm = getHarmonic( freq );
 
         // Print it
-#ifndef DEBUG_ANALYSIS_FREQ
-        ::printf( "%10s (%02u) [%10.4f Hz]\n", mName, harm, freq );
-#else /* !DEBUG_ANALYSIS_FREQ */
-        ::printf( "%10s (%02u) [%10.4f Hz] = %10.4f\n", mName, harm, freq, 10 * ::log10( ::fabs( freq - DEBUG_ANALYSIS_FREQ ) ) );
-#endif /* !DEBUG_ANALYSIS_FREQ */
+#ifndef CGT_DEBUG_ANALYSIS_FREQ
+        ::printf( "[%-*u] %10s (%10.4f Hz)\n",
+                  (int)::log2( harm + 1 ) + 1, harm, mName, freq );
+#else /* !CGT_DEBUG_ANALYSIS_FREQ */
+        ::printf( "[%-*u] %10s (%10.4f Hz) = %10.4f dB\n",
+                  (int)::log2( harm + 1 ) + 1, harm, mName, freq,
+                  10 * ::log10( ::fabs( freq - CGT_DEBUG_ANALYSIS_FREQ ) ) );
+#endif /* !CGT_DEBUG_ANALYSIS_FREQ */
     }
     void clear()
     {
@@ -73,10 +74,10 @@ public:
     }
 
 protected:
-#ifdef ANALYSE_HARMONICS
+#ifdef CGT_DEBUG_ANALYSE_HARMONICS
     /// A vector of fundamentals.
     std::vector< double > mFundamentals;
-#endif /* ANALYSE_HARMONICS */
+#endif /* CGT_DEBUG_ANALYSE_HARMONICS */
 
     /// A buffer for note name.
     char mName[ 0x20 ];
@@ -86,18 +87,19 @@ protected:
 int main( void )
 {
     // Setup configuration
-    sConfigMgr[ "cgt-cli.pcmDevice"       ] = "plug:hdmi_linein";
-    sConfigMgr[ "cgt-cli.pcmRate"         ] = 48000;
-    sConfigMgr[ "cgt-cli.bufferSize"      ] = 2048;
-    sConfigMgr[ "cgt-cli.captureSize"     ] = 2048;
-    sConfigMgr[ "cgt-cli.amplitudeCutoff" ] = 2.0;
-    sConfigMgr[ "cgt-cli.bindCutoff"      ] = -2.0;
+    sConfigMgr[ "cgt-cli.pcmDevice"   ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt-cli.pcmRate"     ] = 48000;
+    sConfigMgr[ "cgt-cli.bufferSize"  ] = 2048;
+    sConfigMgr[ "cgt-cli.captureSize" ] = 2048;
+
+    sConfigMgr[ "cgt-cli.fft.amplitudeCutoff" ] = 2.0;
+    sConfigMgr[ "cgt-cli.fft.bindCutoff"      ] = -1.8;
 
     // Allocate the necessary classes.
     // ui::Curses obs;
     DebugObserver obs;
-    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.amplitudeCutoff" ],
-                                sConfigMgr[ "cgt-cli.bindCutoff" ] );
+    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.fft.amplitudeCutoff" ],
+                                sConfigMgr[ "cgt-cli.fft.bindCutoff" ] );
 
     // Initialize the process.
     if( !analyser.init( sConfigMgr[ "cgt-cli.pcmDevice" ],

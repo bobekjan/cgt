@@ -205,24 +205,34 @@ bool FftAnalyser::processFreqs()
                 //           getFreq( boundIndex + boundAngle.frequency() ) );
 
                 if( angle.ready() )
+                {
                     if( boundAngle.ready() )
+                    {
                         if( 0 < angle.frequency() / boundAngle.frequency() )
+                        {
                             if( 0 < angle.frequency() / signed( boundIndex - index - 1 ) )
                                 observer().add( getFreq( index + 1 + angle.frequency() ) );
                             else
                                 observer().add( getFreq( boundIndex + boundAngle.frequency() ) );
+                        }
                         else
-                            ; // ::printf( "%10.4f X %10.4f => ALIAS\n",
+                        {
+                            // ::printf( "%10.4f X %10.4f => ALIAS\n",
                             //           index + 1 + angle.frequency(),
                             //           boundIndex + boundAngle.frequency() );
+                        }
+                    }
                     else /* !boundAngle.ready() */
                         observer().add( getFreq( index + 1 + angle.frequency() ) );
+                }
                 else /* !angle.ready() */
+                {
                     if( boundAngle.ready() )
                         observer().add( getFreq( boundIndex + boundAngle.frequency() ) );
-                    // ... else neither of the frequencies is ready.
-                    else
-                        ;// ::puts( "NEITHER READY" );
+                    // else
+                    //     // ... else neither of the frequencies is ready.
+                    //     ::puts( "NEITHER READY" );
+                }
             }
             else /* !checkBound( index, boundIndex ) */
             {
@@ -317,10 +327,10 @@ bool FftAnalyser::processFreqs()
 /*************************************************************************/
 /* core::FftAnalyser::Angle                                              */
 /*************************************************************************/
-FftAnalyser::Angle::Angle()
+FftAnalyser::Angle::Angle( unsigned int limit )
 : mCounter( new stats::Derivative< double, double >(
                 new stats::Periodic< double, double >(
-                    new stats::AverageRing< double, double >( 24 ),
+                    new stats::AverageRing< double, double >( limit ),
                     2 * M_PI ) ) )
 {
 }
