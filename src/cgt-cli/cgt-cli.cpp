@@ -89,17 +89,15 @@ int main( void )
     // Setup configuration
     sConfigMgr[ "cgt-cli.pcmDevice"   ] = "plug:hdmi_linein";
     sConfigMgr[ "cgt-cli.pcmRate"     ] = 48000;
-    sConfigMgr[ "cgt-cli.bufferSize"  ] = 2048;
-    sConfigMgr[ "cgt-cli.captureSize" ] = 2048;
+    sConfigMgr[ "cgt-cli.bufferSize"  ] = 1024;
+    sConfigMgr[ "cgt-cli.captureSize" ] = 1024;
 
-    sConfigMgr[ "cgt-cli.fft.amplitudeCutoff" ] = 2.0;
-    sConfigMgr[ "cgt-cli.fft.bindCutoff"      ] = -1.8;
+    sConfigMgr[ "cgt-cli.fft.magnitudeCutoff" ] = 0.5;
 
     // Allocate the necessary classes.
     // ui::Curses obs;
     DebugObserver obs;
-    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.fft.amplitudeCutoff" ],
-                                sConfigMgr[ "cgt-cli.fft.bindCutoff" ] );
+    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.fft.magnitudeCutoff" ] );
 
     // Initialize the process.
     if( !analyser.init( sConfigMgr[ "cgt-cli.pcmDevice" ],

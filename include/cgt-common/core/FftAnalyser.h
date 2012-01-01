@@ -30,36 +30,23 @@ public:
      * @brief Performs basic initialization.
      *
      * @param[in] observer   The observer.
-     * @param[in] ampCutoff  The amplitude cutoff value.
-     * @param[in] bindCutoff The bind cutoff value [dB].
+     * @param[in] magCutoff  The magnitude cutoff value.
      */
-    FftAnalyser( IObserver& observer, double ampCutoff, double bindCutoff );
+    FftAnalyser( IObserver& observer, double magCutoff );
 
     /**
-     * @brief Obtains current amplitude cutoff value.
+     * @brief Obtains current magnitude cutoff value.
      *
-     * @return Current amplitude cutoff value.
+     * @return Current magnitude cutoff value.
      */
-    double amplitudeCutoff() const { return mAmplitudeCutoff; }
-    /**
-     * @brief Obtains current bind cutoff value [dB].
-     *
-     * @return Current bind cutoff value [dB].
-     */
-    double bindCutoff() const { return mBindCutoff; }
+    double magnitudeCutoff() const { return mMagnitudeCutoff; }
 
     /**
-     * @brief Sets new amplitude cutoff value.
+     * @brief Sets new magnitude cutoff value.
      *
-     * @param[in] ampCutoff New amplitude cutoff value.
+     * @param[in] ampCutoff New magnitude cutoff value.
      */
-    void setAmplitudeCutoff( double ampCutoff ) { mAmplitudeCutoff = ampCutoff; }
-    /**
-     * @brief Sets new bind cutoff value [dB].
-     *
-     * @param[in] bindCutoff New bind cutoff value [dB].
-     */
-    void setBindCutoff( double bindCutoff ) { mBindCutoff = bindCutoff; }
+    void setMagnitudeCutoff( double ampCutoff ) { mMagnitudeCutoff = ampCutoff; }
 
     /**
      * @brief Initializes the analyser.
@@ -102,7 +89,7 @@ protected:
      *
      * @author Bloody.Rabbit
      */
-    class Angle
+    class Frequency
     {
     public:
         /**
@@ -110,11 +97,11 @@ protected:
          *
          * @param[in] limit Number of samples to average from.
          */
-        Angle( unsigned int limit = 16 );
+        Frequency( unsigned int limit = 32 );
         /**
          * @brief Destroys the counter.
          */
-        ~Angle();
+        ~Frequency();
 
         /**
          * @brief Checks if the object is ready.
@@ -127,105 +114,73 @@ protected:
          */
         bool ready() const;
         /**
+         * @brief Obtains current magnitude.
+         *
+         * @return The magnitude.
+         */
+        double magnitude() const { return mMagnitude; }
+        /**
          * @brief Computes approximate fractional frequency.
          *
          * @return The frequency.
          */
         double frequency() const;
+        /**
+         * @brief Obtains current local max count.
+         *
+         * @return The local max count.
+         */
+        unsigned int localMax() const { return mLocalMaxCount; }
 
+        /**
+         * @brief Updates the magnitude with new data.
+         *
+         * @param[in] real Real part of the FFT output.
+         * @param[in] img  Imaginary part of the FFT output.
+         */
+        void updateMagnitude( double real, double img ) { mMagnitude = ::sqrt( real * real + img * img ); }
         /**
          * @brief Updates the information with new data.
          *
-         * @param[in] angle The angle to update with.
+         * @param[in] real Real part of the FFT output.
+         * @param[in] img  Imaginary part of the FFT output.
          */
-        void update( double angle );
+        void updateFrequency( double real, double img );
+        /**
+         * @brief Update the local max.
+         */
+        void updateLocalMax() { ++mLocalMaxCount; }
+
         /**
          * @brief Resets all the information.
          */
         void reset();
 
     protected:
-        /// The statistics counter.
+        /// Current magnitude.
+        double mMagnitude;
+
+        /// The statistics counter for frequency correction.
         stats::ICounter< double, double >* mCounter;
+        /// Number of times this has been a local max.
+        unsigned int mLocalMaxCount;
     };
 
     /**
-     * @brief Obtains real part of a frequency.
+     * @brief Obtains Frequency object of a frequency.
      *
      * @param[in] index Index of the frequency.
      *
-     * @return The real part of the frequency.
+     * @return The Frequency object of the frequency.
      */
-    double getReal( size_t index ) const { return mFreqs[ index ]; }
+    Frequency& frequency( size_t index ) const { return mFreqs[ index ]; }
     /**
-     * @brief Obtains imaginary part of a frequency.
+     * @brief Obtains number of frequencies.
      *
-     * @param[in] index Index of the frequency.
-     *
-     * @return The imaginary part of the frequency.
+     * @return The number of frequencies.
      */
-    double getImg( size_t index ) const { return mFreqs[ mBufferSize - index ]; }
-    /**
-     * @brief Obtains magnitude of a frequency.
-     *
-     * @param[in] index Index of the frequency
-     *
-     * @return Magnitude of the frequency.
-     */
-    double getMag( size_t index ) const { return mMags[ index - 1 ]; }
-    /**
-     * @brief Obtains Angle object of a frequency.
-     *
-     * @param[in] index Index of the frequency.
-     *
-     * @return The Angle object of the frequency.
-     */
-    Angle& getAngle( size_t index ) const { return mAngles[ index - 1 ]; }
+    size_t frequencyCount() const { return ( bufferSize() - 1 ) / 2; }
 
-    /**
-     * @brief Obtains actual frequency of a frequency index.
-     *
-     * @param[in] index Index of the frequency.
-     *
-     * @return The actual frequency.
-     */
-    double getFreq( double index ) const;
-    /**
-     * @brief Check if the frequency amplitude is large enough.
-     *
-     * @param[in] index Index of the frequency.
-     *
-     * @retval true  The amplitude is large enough.
-     * @retval false The amplitude is not large enough.
-     */
-    bool checkAmplitude( size_t index ) const;
-    /**
-     * @brief Checks if the frequency is a local maximum.
-     *
-     * @param[in] index Index of the frequency.
-     *
-     * @retval true  The frequency is a local maximum.
-     * @retval false The frequency is not a local maximum.
-     */
-    bool checkLocalMax( size_t index ) const;
-    /**
-     * @brief Checks if the frequencies are bound.
-     *
-     * @param[in] index      Index of the frequency.
-     * @param[in] boundIndex Index of the other frequency.
-     *
-     * @retval true  The frequencies are bound.
-     * @retval false The frequencies are not bound.
-     */
-    bool checkBound( size_t index, size_t boundIndex );
-
-    /**
-     * @brief Compute frequency magnitudes.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
-     */
-    bool computeFreqs();
     /**
      * @brief Processes frequencies.
      *
@@ -233,41 +188,31 @@ protected:
      * @retval false Step failed.
      */
     bool processFreqs();
-
     /**
-     * @brief Processes a single frequency.
-     *
-     * @param[in] index Index of the frequency.
+     * @brief Processes local maxes.
      *
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    // bool processSingleFreq( size_t index );
+    bool processLocalMax();
     /**
-     * @brief Processes a bound frequency.
-     *
-     * @param[in] index      Index of the frequency.
-     * @param[in] boundIndex Index of the bound frequency.
+     * @brief Processes output.
      *
      * @retval true  Step succeeded.
      * @retval false Step failed.
      */
-    // bool processBoundFreq( size_t index, size_t boundIndex );
+    bool processOutput();
 
     /// Our FFTW plan.
     fftw_plan mPlan;
 
-    /// The amplitude cutoff.
-    double mAmplitudeCutoff;
-    /// The bind cutoff [dB].
-    double mBindCutoff;
+    /// The magnitude cutoff.
+    double mMagnitudeCutoff;
 
     /// Result of the FFT.
-    double* mFreqs;
-    /// Computed magnitudes.
-    double* mMags;
-    /// Angle information of each frequency.
-    Angle*  mAngles;
+    double*    mFftOutput;
+    /// Information of each frequency.
+    Frequency* mFreqs;
 };
 
 }} // cgt::core
