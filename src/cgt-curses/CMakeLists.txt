@@ -8,7 +8,7 @@
 ##############
 # Initialize #
 ##############
-SET( TARGET_NAME        "cgt-cli" )
+SET( TARGET_NAME        "cgt-curses" )
 SET( TARGET_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include/${TARGET_NAME}" )
 SET( TARGET_SOURCE_DIR  "${PROJECT_SOURCE_DIR}/src/${TARGET_NAME}" )
 
@@ -23,9 +23,9 @@ SET( ${TARGET_NAME}_INCLUDE_DIRS ${TARGET_INCLUDE_DIRS} PARENT_SCOPE )
 # Files #
 #########
 SET( INCLUDE
-     "${TARGET_INCLUDE_DIR}/cgt-cli.h" )
+     "${TARGET_INCLUDE_DIR}/cgt-curses.h" )
 SET( SOURCE
-     "${TARGET_SOURCE_DIR}/cgt-cli.cpp" )
+     "${TARGET_SOURCE_DIR}/cgt-curses.cpp" )
 
 ########################
 # Setup the executable #
@@ -39,7 +39,7 @@ ADD_EXECUTABLE( "${TARGET_NAME}"
                 ${INCLUDE} ${SOURCE} )
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
-                  "${TARGET_INCLUDE_DIR}/cgt-cli.h"
-                  "${TARGET_SOURCE_DIR}/cgt-cli.cpp" )
+                  "${TARGET_INCLUDE_DIR}/cgt-curses.h"
+                  "${TARGET_SOURCE_DIR}/cgt-curses.cpp" )
 TARGET_LINK_LIBRARIES( "${TARGET_NAME}"
                        "cgt-common" )

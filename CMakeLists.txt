@@ -19,23 +19,25 @@ SET( CMAKE_MODULE_PATH
      "${PROJECT_SOURCE_DIR}/cmake"
      "${CMAKE_MODULE_PATH}" )
 
-###########
-# Targets #
-###########
-# Some useful modules
+##############
+# Pre-target #
+##############
 INCLUDE( "CheckIncludeFile" )
 INCLUDE( "TargetBuildPCH" )
 
-# Definitions for config.h
 ADD_DEFINITIONS( "-DHAVE_CONFIG_H=1" )
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" )
 
-# The actual targets
+###########
+# Targets #
+###########
 ADD_SUBDIRECTORY( "doc" )
 ADD_SUBDIRECTORY( "src/cgt-common" )
-ADD_SUBDIRECTORY( "src/cgt-cli" )
+ADD_SUBDIRECTORY( "src/cgt-curses" )
 
-# Generate config.h
+###############
+# Post-target #
+###############
 CONFIGURE_FILE( "config.h.in" "config.h"
                 ESCAPE_QUOTES )
 

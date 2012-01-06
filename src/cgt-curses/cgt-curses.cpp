@@ -1,5 +1,5 @@
 /**
- * @file cgt-cli.cpp
+ * @file cgt-curses.cpp
  *
  * Console Guitar Tuner (CGT)
  * Copyright (c) 2011 by Bloody.Rabbit
@@ -7,7 +7,7 @@
  * @author Bloody.Rabbit
  */
 
-#include "cgt-cli.h"
+#include "cgt-curses.h"
 
 #include "alsa/Pcm.h"
 #include "config/ConfigMgr.h"
@@ -87,23 +87,23 @@ protected:
 int main( void )
 {
     // Setup configuration
-    sConfigMgr[ "cgt-cli.pcmDevice"   ] = "plug:hdmi_linein";
-    sConfigMgr[ "cgt-cli.pcmRate"     ] = 48000;
-    sConfigMgr[ "cgt-cli.bufferSize"  ] = 1024;
-    sConfigMgr[ "cgt-cli.captureSize" ] = 1024;
+    sConfigMgr[ "cgt-curses.pcmDevice"   ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt-curses.pcmRate"     ] = 48000;
+    sConfigMgr[ "cgt-curses.bufferSize"  ] = 1024;
+    sConfigMgr[ "cgt-curses.captureSize" ] = 1024;
 
-    sConfigMgr[ "cgt-cli.fft.magnitudeCutoff" ] = 0.5;
+    sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] = 0.5;
 
     // Allocate the necessary classes.
     // ui::Curses obs;
     DebugObserver obs;
-    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-cli.fft.magnitudeCutoff" ] );
+    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] );
 
     // Initialize the process.
-    if( !analyser.init( sConfigMgr[ "cgt-cli.pcmDevice" ],
-                        sConfigMgr[ "cgt-cli.pcmRate" ],
-                        sConfigMgr[ "cgt-cli.bufferSize" ],
-                        sConfigMgr[ "cgt-cli.captureSize" ] ) )
+    if( !analyser.init( sConfigMgr[ "cgt-curses.pcmDevice" ],
+                        sConfigMgr[ "cgt-curses.pcmRate" ],
+                        sConfigMgr[ "cgt-curses.bufferSize" ],
+                        sConfigMgr[ "cgt-curses.captureSize" ] ) )
     {
         ::printf( "Failed to initialize PCM\n" );
         return EXIT_FAILURE;
