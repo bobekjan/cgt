@@ -168,8 +168,8 @@ bool FftAnalyser::processOutput()
     // Ignore DC and Nyquist frequency.
     const size_t size = frequencyCount();
 
-    // Clear the observer.
-    observer().clear();
+    // Start the observer.
+    observer().start();
 
     // Handle special case of first frequency.
     {
@@ -206,6 +206,9 @@ bool FftAnalyser::processOutput()
             observer().add( ( size + cur.frequency() )
                             * sampleRate() / bufferSize() );
     }
+
+    // End observer.
+    observer().end();
 
     return true;
 }

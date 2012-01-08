@@ -37,6 +37,13 @@ public:
     {
     public:
         /**
+         * @brief Start a new analysis run.
+         *
+         * Callee should consider all previously
+         * detected frequencies invalid.
+         */
+        virtual void start() = 0;
+        /**
          * @brief Adds a frequency.
          *
          * Called whenever a frequency is successfully
@@ -46,13 +53,12 @@ public:
          */
         virtual void add( double freq ) = 0;
         /**
-         * @brief Clears frequencies.
+         * @brief Ends a new analysis run.
          *
-         * Called when new analysis begins; callee
-         * should consider all previously detected
-         * frequencies invalid.
+         * No new data will be added until another
+         * call to start().
          */
-        virtual void clear() = 0;
+        virtual void end() = 0;
     };
 
     /**

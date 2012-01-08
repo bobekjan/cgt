@@ -10,10 +10,21 @@
 #ifndef __CGT_CURSES_H__INCL__
 #define __CGT_CURSES_H__INCL__
 
-// Include dependencies
+/*************************************************************************/
+/* cgt-common                                                            */
+/*************************************************************************/
 #include "cgt-common.h"
 
-// Use cgt prefix by default
+#include "alsa/Pcm.h"
+#include "config/ConfigMgr.h"
+#include "core/FftAnalyser.h"
+#include "util/Misc.h"
+
+/*************************************************************************/
+/* cgt-curses                                                            */
+/*************************************************************************/
+#include <curses.h>
+
 using namespace cgt;
 
 #endif /* !__CGT_CURSES_H__INCL__ */
