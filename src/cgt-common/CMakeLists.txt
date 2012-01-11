@@ -52,9 +52,10 @@ SET( alsa_SOURCE
      "" )
 
 SET( config_INCLUDE
+     "${TARGET_INCLUDE_DIR}/config/ArgvParser.h"
      "${TARGET_INCLUDE_DIR}/config/ConfigMgr.h" )
 SET( config_SOURCE
-     "" )
+     "${TARGET_SOURCE_DIR}/config/ArgvParser.cpp" )
 
 SET( core_INCLUDE
      "${TARGET_INCLUDE_DIR}/core/Analyser.h"
