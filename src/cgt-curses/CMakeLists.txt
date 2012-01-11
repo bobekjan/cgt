@@ -34,6 +34,7 @@ SET( SOURCE
      "${TARGET_SOURCE_DIR}/cgt-curses.cpp" )
 
 SET( curses_INCLUDE
+     "${TARGET_INCLUDE_DIR}/curses/LibInit.h"
      "${TARGET_INCLUDE_DIR}/curses/Observer.h" )
 SET( curses_SOURCE
      "${TARGET_SOURCE_DIR}/curses/Observer.cpp" )

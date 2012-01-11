@@ -16,6 +16,7 @@
 #include "cgt-common.h"
 
 #include "alsa/Pcm.h"
+#include "config/ArgvParser.h"
 #include "config/ConfigMgr.h"
 #include "core/FftAnalyser.h"
 #include "util/Misc.h"

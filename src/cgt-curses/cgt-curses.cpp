@@ -9,6 +9,7 @@
 
 #include "cgt-curses.h"
 
+#include "curses/LibInit.h"
 #include "curses/Observer.h"
 
 void loadDefaultCfg()
@@ -21,17 +22,22 @@ void loadDefaultCfg()
     sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] = 0.5;
 }
 
-int main( void )
+int main( int argc, char* argv[] )
 {
     // Setup configuration
     loadDefaultCfg();
 
+    // Load config
+    config::ArgvParser argvParser( sConfigMgr );
+    if( !argvParser.parse( argc, argv ) )
+        return EXIT_FAILURE;
+
     // Init curses screen
-    ::initscr();
-    ::curs_set( 0 );
-    ::cbreak();
-    ::noecho();
-    ::timeout( 0 );
+    curses::LibInit curs;
+    curs.cBreak();
+    curs.noEcho();
+    curs.setCursor( 0 );
+    curs.setTimeout( 0 );
 
     // Allocate the necessary classes
     curses::Observer  obs;
@@ -57,9 +63,6 @@ int main( void )
             return EXIT_FAILURE;
         }
     }
-
-    // End curses mode
-    ::endwin();
 
     return EXIT_SUCCESS;
 }
