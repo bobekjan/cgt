@@ -30,27 +30,36 @@ public:
     ArgvParser( ConfigMgr& configMgr );
 
     /**
-     * @brief Parser the arguments.
+     * @brief Parses the arguments.
      *
      * @param[in] argc Number of arguments.
      * @param[in] argv The array of arguments.
      *
-     * @retval true  Parsing successful.
-     * @retval false Parsing failed.
+     * @return Number of consumed args; negative means error.
      */
-    bool parse( int argc, char* argv[] );
+    int parse( int argc, char* argv[] );
 
 protected:
     /**
-     * @brief Parses short option.
+     * @brief Parses a short option.
      *
-     * @param[in] key The key character.
-     * @param[in] val Value of the option
+     * @param[in] key  The key character.
+     * @param[in] argc Number of arguments.
+     * @param[in] argv The array of arguments.
      *
-     * @retval true  Parsing successful.
-     * @retval false Parsing failed.
+     * @return Number of consumed args; negative means error.
      */
-    bool parseShort( char key, char* val );
+    int parse( char key, int argc, char* argv[] );
+    /**
+     * @brief Parses a long option.
+     *
+     * @param[in] key  The key string.
+     * @param[in] argc Number of arguments.
+     * @param[in] argv The array of arguments.
+     *
+     * @return Number of consumed args; negative means error.
+     */
+    int parse( char* key, int argc, char* argv[] );
 
     /// Where the parsed options will be stored.
     ConfigMgr& mConfigMgr;

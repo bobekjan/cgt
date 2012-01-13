@@ -35,6 +35,7 @@
 #include <cstdlib>
 
 // C++ standard library
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <queue>
