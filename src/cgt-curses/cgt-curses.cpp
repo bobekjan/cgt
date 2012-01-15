@@ -16,10 +16,10 @@ void loadDefaultCfg()
 {
     sConfigMgr[ "cgt-curses.pcmDevice"   ] = "plug:hdmi_linein";
     sConfigMgr[ "cgt-curses.pcmRate"     ] = 48000;
-    sConfigMgr[ "cgt-curses.bufferSize"  ] = 1024;
+    sConfigMgr[ "cgt-curses.bufferSize"  ] = 4096;
     sConfigMgr[ "cgt-curses.captureSize" ] = 1024;
 
-    sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] = 0.5;
+    sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] = 7.5;
 }
 
 int main( int argc, char* argv[] )
@@ -29,8 +29,13 @@ int main( int argc, char* argv[] )
 
     // Load config
     config::ArgvParser argvParser( sConfigMgr );
-    if( !argvParser.parse( argc, argv ) )
+    int code = argvParser.parse( argc, argv );
+    if( 0 > code )
         return EXIT_FAILURE;
+
+    // Shift arg vector
+    argc -= code;
+    argv += code;
 
     // Init curses screen
     curses::LibInit curs;
