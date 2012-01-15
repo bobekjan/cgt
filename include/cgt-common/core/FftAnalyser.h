@@ -97,7 +97,7 @@ protected:
          *
          * @param[in] limit Number of samples to average from.
          */
-        Frequency( unsigned int limit = 32 );
+        Frequency( unsigned int limit = 64 );
         /**
          * @brief Destroys the counter.
          */
@@ -142,10 +142,9 @@ protected:
         /**
          * @brief Updates the information with new data.
          *
-         * @param[in] real Real part of the FFT output.
-         * @param[in] img  Imaginary part of the FFT output.
+         * @param[in] angle Angle of the frequency.
          */
-        void updateFrequency( double real, double img );
+        void updateFrequency( double angle );
         /**
          * @brief Update the local max.
          */

@@ -124,7 +124,6 @@ bool Analyser::captureFull()
         return false;
 #else /* CGT_DEBUG_ANALYSIS_FREQ */
     for( size_t i = 0; i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
-        // mSamples[ i ] = ::cos( 269.5302 * mPhase );
         mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
 #endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
@@ -153,7 +152,6 @@ bool Analyser::captureStep()
         return false;
 #else /* CGT_DEBUG_ANALYSIS_FREQ */
     for( size_t i = bufferSize() - captureSize(); i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
-        // mSamples[ i ] = ::cos( 269.5302 * mPhase );
         mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
 #endif /* CGT_DEBUG_ANALYSIS_FREQ */
 

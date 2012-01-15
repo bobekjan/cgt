@@ -30,10 +30,6 @@ FftAnalyser::FftAnalyser( IObserver& observer, double magCutoff )
 bool FftAnalyser::init( const char* name, unsigned int rate,
                         unsigned int bufferSize, unsigned int captureSize )
 {
-    // Make sure sizes are valid.
-    if( bufferSize != captureSize )
-        return false;
-
     // Initialize parent first.
     if( !Analyser::init( name, rate, bufferSize, captureSize ) )
         return false;
@@ -111,9 +107,10 @@ bool FftAnalyser::processFreqs()
         freq.updateMagnitude( real, img );
 
         // Check if the magnitude is large enough.
-        if( magnitudeCutoff() <= freq.magnitude() )
+        if( magnitudeCutoff() <= 10 * ::log10( freq.magnitude() ) )
             // Update the angle.
-            freq.updateFrequency( real, img );
+            freq.updateFrequency( ::atan2( img, real ) / ( 2 * M_PI )
+                                  * bufferSize() / captureSize() );
         else
             // Doesn't fulfill the requirements.
             freq.reset();
@@ -221,7 +218,7 @@ FftAnalyser::Frequency::Frequency( unsigned int limit )
   mCounter( new stats::Derivative< double, double >(
                 new stats::Periodic< double, double >(
                     new stats::AverageRing< double, double >( limit ),
-                    2 * M_PI ) ) ),
+                    1.0 ) ) ),
   mLocalMaxCount( 0 )
 {
 }
@@ -238,12 +235,12 @@ bool FftAnalyser::Frequency::ready() const
 
 double FftAnalyser::Frequency::frequency() const
 {
-    return mCounter->result() / ( 2 * M_PI );
+    return mCounter->result();
 }
 
-void FftAnalyser::Frequency::updateFrequency( double real, double img )
+void FftAnalyser::Frequency::updateFrequency( double angle )
 {
-    mCounter->add( ::atan2( img, real ) );
+    mCounter->add( angle );
 }
 
 void FftAnalyser::Frequency::reset()
