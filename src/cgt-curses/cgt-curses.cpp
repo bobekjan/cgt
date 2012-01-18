@@ -29,6 +29,25 @@ int main( int argc, char* argv[] )
 
     // Load config
     config::ArgvParser argvParser;
+    argvParser.add( new config::ArgvParser::ValueOption(
+                        'D', "device", "cgt-curses.pcmDevice",
+                        "Name of ALSA device to use" ) );
+    argvParser.add( new config::ArgvParser::ValueOption(
+                        'r', "rate", "cgt-curses.pcmRate",
+                        "Sample rate to use" ) );
+    argvParser.add( new config::ArgvParser::ValueOption(
+                        'B', "buffer-size", "cgt-curses.bufferSize",
+                        "Buffer size to use" ) );
+    argvParser.add( new config::ArgvParser::ValueOption(
+                        'C', "capture-size", "cgt-curses.captureSize",
+                        "Capture size to use" ) );
+    argvParser.add( new config::ArgvParser::ValueOption(
+                        'm', "mag-cutoff", "cgt-curses.fft.magnitudeCutoff",
+                        "Magnitude cutoff value when using FFT" ) );
+    argvParser.add( new config::ArgvParser::HelpOption(
+                        argvParser ) );
+
+    // Parse arg vector
     int code = argvParser.parse( argc, argv );
     if( 0 > code )
         return EXIT_FAILURE;
