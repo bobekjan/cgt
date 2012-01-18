@@ -10,6 +10,7 @@
 #include "cgt-common.h"
 
 #include "config/ArgvParser.h"
+#include "config/ConfigMgr.h"
 
 using namespace cgt;
 using namespace cgt::config;
@@ -216,4 +217,25 @@ ArgvParser::Option::Option( char shortKey, const char* longKey,
   mLongKey( longKey ),
   mDescription( description )
 {
+}
+
+/*************************************************************************/
+/* cgt::config::ArgvParser::FlagOption                                   */
+/*************************************************************************/
+ArgvParser::FlagOption::FlagOption( const char* configKey, char shortKey,
+                                    const char* longKey, const char* description,
+                                    bool value )
+: ArgvParser::Option( shortKey, longKey, description ),
+  mConfigKey( configKey ),
+  mValue( value )
+{
+}
+
+int ArgvParser::FlagOption::parse( int, char*[] )
+{
+    // Set the flag
+    sConfigMgr[ mConfigKey ] = mValue;
+
+    // No arguments to consume
+    return 0;
 }

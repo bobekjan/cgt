@@ -232,6 +232,46 @@ protected:
     const char* mDescription;
 };
 
+/**
+ * @brief A simple flag option.
+ *
+ * Flips a config value on/off upon encountering
+ * the flag.
+ *
+ * @author Bloody.Rabbit
+ */
+class ArgvParser::FlagOption
+: public ArgvParser::Option
+{
+public:
+    /**
+     * @brief Initializes the flag option.
+     *
+     * All strings are assumed to be statically allocated and
+     * thus NOT freed.
+     *
+     * @param[in] configKey   The flag's configuration key.
+     * @param[in] shortKey    The short key of the option.
+     * @param[in] longKey     The long key of the option.
+     * @param[in] description Description of the option.
+     * @param[in] value       The value to set.
+     */
+    FlagOption( const char* configKey, char shortKey,
+                const char* longKey, const char* description,
+                bool value );
+
+    /**
+     * @brief Parses the arguments.
+     */
+    int parse( int argc, char* argv[] );
+
+protected:
+    /// The configuration key.
+    const char* mConfigKey;
+    /// The boolean value to set.
+    bool mValue;
+};
+
 }} // cgt::config
 
 #endif /* !__CGT__CONFIG__ARGV_PARSER_H__INCL__ */
