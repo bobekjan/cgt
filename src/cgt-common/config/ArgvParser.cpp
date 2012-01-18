@@ -10,7 +10,6 @@
 #include "cgt-common.h"
 
 #include "config/ArgvParser.h"
-#include "config/ConfigMgr.h"
 
 using namespace cgt;
 using namespace cgt::config;
@@ -18,9 +17,81 @@ using namespace cgt::config;
 /*************************************************************************/
 /* cgt::config::ArgvParser                                               */
 /*************************************************************************/
-ArgvParser::ArgvParser( ConfigMgr& configMgr )
-: mConfigMgr( configMgr )
+void ArgvParser::add( IOption* opt )
 {
+    // Add it to the global register
+    mOptions.insert( opt );
+
+    // Add it to shortopts
+    if( opt->hasShortKey() )
+    {
+        // Remove any previous option with identical key
+        remove( opt->shortKey() );
+        // Insert it to the map
+        mShortopts[ opt->shortKey() ] = opt;
+    }
+
+    // Add it to longopts
+    if( opt->hasLongKey() )
+    {
+        // Remove any previous option with identical key
+        remove( opt->longKey() );
+        // Insert it to the map
+        mLongopts[ opt->longKey() ] = opt;
+    }
+}
+
+void ArgvParser::remove( IOption* opt )
+{
+    // Remove it from shortopts
+    if( opt->hasShortKey() )
+        mShortopts.erase( opt->shortKey() );
+
+    // Remove it from longopts
+    if( opt->hasLongKey() )
+        mLongopts.erase( opt->longKey() );
+
+    // Remove it from the global register
+    mOptions.erase( opt );
+    // Delete it
+    util::safeDelete( opt );
+}
+
+void ArgvParser::remove( char key )
+{
+    // Lookup the option
+    ShortoptMap::const_iterator itr = mShortopts.find( key );
+    if( mShortopts.end() != itr )
+        // Remove it
+        remove( itr->second );
+}
+
+void ArgvParser::remove( const char* key )
+{
+    // Lookup the option
+    LongoptMap::const_iterator itr = mLongopts.find( key );
+    if( mLongopts.end() != itr )
+        // Remove it
+        remove( itr->second );
+}
+
+void ArgvParser::clear()
+{
+    // Clear all shortopts
+    mShortopts.clear();
+    // Clear all longopts
+    mLongopts.clear();
+
+    // Iterate over the global register
+    OptionSet::iterator cur, end;
+    cur = mOptions.begin();
+    end = mOptions.end();
+    for(; cur != end; ++cur )
+        // Delete the option
+        delete *cur;
+
+    // Clear the global register
+    mOptions.clear();
 }
 
 int ArgvParser::parse( int argc, char* argv[] )
@@ -98,21 +169,51 @@ int ArgvParser::parse( char key, int argc, char* argv[] )
         }
     }
 
-    // Print an error message
-    ::printf( "Unknown option '-%c'\n", key );
-    return -1;
+    // Find appropriate parser
+    ShortoptMap::const_iterator itr = mShortopts.find( key );
+    if( mShortopts.end() == itr )
+    {
+        // Print an error message
+        ::printf( "Unknown shortopt '-%c'\n", key );
+        return -1;
+    }
+
+    // Check first string
+    if( '\0' == **argv )
+    {
+        // It has been consumed, shift arguments
+        int code = itr->second->parse( argc - 1, argv + 1 );
+
+        // Check return value
+        return 0 > code ? code : code + 1;
+    }
+    else
+        // Parse as-is
+        return itr->second->parse( argc, argv );
 }
 
 int ArgvParser::parse( char* key, int argc, char* argv[] )
 {
-    // Check if we have a value
-    if( 0 == argc )
+    // Find appropriate parser
+    LongoptMap::const_iterator itr = mLongopts.find( key );
+    if( mLongopts.end() == itr )
     {
-        ::printf( "No value for option '--%s'\n", key );
+        // Print an error message
+        ::printf( "Unknown longopt '--%s'\n", key );
         return -1;
     }
 
-    // Set the option
-    mConfigMgr[ key ] = *argv;
-    return 1;
+    // Parse as-is
+    return itr->second->parse( argc, argv );
+}
+
+/*************************************************************************/
+/* cgt::config::ArgvParser::Option                                       */
+/*************************************************************************/
+ArgvParser::Option::Option( char shortKey, const char* longKey,
+                            const char* description )
+: mShortKey( shortKey ),
+  mLongKey( longKey ),
+  mDescription( description )
+{
 }

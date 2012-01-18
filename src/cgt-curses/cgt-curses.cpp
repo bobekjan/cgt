@@ -28,7 +28,7 @@ int main( int argc, char* argv[] )
     loadDefaultCfg();
 
     // Load config
-    config::ArgvParser argvParser( sConfigMgr );
+    config::ArgvParser argvParser;
     int code = argvParser.parse( argc, argv );
     if( 0 > code )
         return EXIT_FAILURE;
