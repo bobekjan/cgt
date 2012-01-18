@@ -272,6 +272,41 @@ protected:
     bool mValue;
 };
 
+/**
+ * @brief A simple value option.
+ *
+ * Sets a config value to a supplied argument.
+ *
+ * @author Bloody.Rabbit
+ */
+class ArgvParser::ValueOption
+: public ArgvParser::Option
+{
+public:
+    /**
+     * @brief Initializes the value option.
+     *
+     * All strings are assumed to be statically allocated and
+     * thus NOT freed.
+     *
+     * @param[in] shortKey    The short key of the option.
+     * @param[in] longKey     The long key of the option.
+     * @param[in] configKey   The flag's configuration key.
+     * @param[in] description Description of the option.
+     */
+    ValueOption( char shortKey, const char* longKey,
+                 const char* configKey, const char* description );
+
+    /**
+     * @brief Parses the arguments.
+     */
+    int parse( int argc, char* argv[] );
+
+protected:
+    /// The configuration key.
+    const char* mConfigKey;
+};
+
 }} // cgt::config
 
 #endif /* !__CGT__CONFIG__ARGV_PARSER_H__INCL__ */

@@ -239,3 +239,42 @@ int ArgvParser::FlagOption::parse( int, char*[] )
     // No arguments to consume
     return 0;
 }
+
+/*************************************************************************/
+/* cgt::config::ArgvParser::ValueOption                                  */
+/*************************************************************************/
+ArgvParser::ValueOption::ValueOption( char shortKey, const char* longKey,
+                                      const char* configKey, const char* description )
+: ArgvParser::Option( shortKey, longKey, description ),
+  mConfigKey( configKey )
+{
+}
+
+int ArgvParser::ValueOption::parse( int argc, char* argv[] )
+{
+    // Check if we have the required argument
+    if( 1 > argc )
+    {
+        if( !hasShortKey() )
+            // Print error message with long key only
+            ::printf( "No value supplied for option '--%s'\n",
+                      longKey() );
+        else if( !hasLongKey() )
+            // Print error message with short key only
+            ::printf( "No value supplied for option '-%c'\n",
+                      shortKey() );
+        else
+            // Print error message with both keys
+            ::printf( "No value supplied for option '-%c/--%s'\n",
+                      shortKey(), longKey() );
+
+        // Return with an error
+        return -1;
+    }
+
+    // Use the argument as a value
+    sConfigMgr[ mConfigKey ] = *argv;
+
+    // 1 argument consumed
+    return 1;
+}
