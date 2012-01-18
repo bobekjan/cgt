@@ -241,6 +241,46 @@ int ArgvParser::FlagOption::parse( int, char*[] )
 }
 
 /*************************************************************************/
+/* cgt::config::ArgvParser::HelpOption                                   */
+/*************************************************************************/
+ArgvParser::HelpOption::HelpOption( ArgvParser& parser )
+: ArgvParser::Option( 'h', "help", "Print all available options" ),
+  mParser( parser )
+{
+}
+
+int ArgvParser::HelpOption::parse( int, char*[] )
+{
+    // Print initial line
+    ::puts( "Available options:" );
+
+    // Iterate over all options of the parser
+    OptionSet::const_iterator cur, end;
+    cur = mParser.mOptions.begin();
+    end = mParser.mOptions.end();
+    for(; cur != end; ++cur )
+    {
+        IOption* opt = *cur;
+
+        if( !opt->hasShortKey() )
+            // Print only with long key
+            ::printf( "      --%s\t\t%s\n",
+                      opt->longKey(), opt->description() );
+        else if( !opt->hasLongKey() )
+            // Print only with short key
+            ::printf( "  -%c\t\t\t%s\n",
+                      opt->shortKey(), opt->description() );
+        else
+            // Print with both keys
+            ::printf( "  -%c, --%s\t\t%s\n", opt->shortKey(),
+                      opt->longKey(), opt->description() );
+    }
+
+    // Return with failure to stop processing
+    return -1;
+}
+
+/*************************************************************************/
 /* cgt::config::ArgvParser::ValueOption                                  */
 /*************************************************************************/
 ArgvParser::ValueOption::ValueOption( char shortKey, const char* longKey,

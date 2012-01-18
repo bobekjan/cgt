@@ -19,9 +19,6 @@ namespace cgt { namespace config {
  */
 class ArgvParser
 {
-    // Enables inspection for registered options.
-    friend class HelpOption;
-
 public:
     // An options' interface.
     class IOption;
@@ -270,6 +267,34 @@ protected:
     const char* mConfigKey;
     /// The boolean value to set.
     bool mValue;
+};
+
+/**
+ * @brief A print-help option.
+ *
+ * Prints all available options.
+ *
+ * @author Bloody.Rabbit
+ */
+class ArgvParser::HelpOption
+: public ArgvParser::Option
+{
+public:
+    /**
+     * @brief Initializes the help option.
+     *
+     * @param[in] parser The bound ArgvParser.
+     */
+    HelpOption( ArgvParser& parser );
+
+    /**
+     * @brief Parses the arguments.
+     */
+    int parse( int argc, char* argv[] );
+
+protected:
+    /// The bound ArgvParser.
+    ArgvParser& mParser;
 };
 
 /**
