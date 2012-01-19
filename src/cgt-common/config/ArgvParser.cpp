@@ -55,6 +55,11 @@ void ArgvParser::addValue( char shortKey, const char* longKey,
     add( new ValueOption( shortKey, longKey, configKey, description ) );
 }
 
+void ArgvParser::addConfig()
+{
+    add( new ConfigOption() );
+}
+
 void ArgvParser::addHelp()
 {
     add( new HelpOption( *this ) );
@@ -235,6 +240,38 @@ ArgvParser::Option::Option( char shortKey, const char* longKey,
   mLongKey( longKey ),
   mDescription( description )
 {
+}
+
+/*************************************************************************/
+/* cgt::config::ArgvParser::ConfigOption                                 */
+/*************************************************************************/
+ArgvParser::ConfigOption::ConfigOption()
+: ArgvParser::Option( 'c', "config", "Loads an XML-based configuration file" )
+{
+}
+
+int ArgvParser::ConfigOption::parse( int argc, char* argv[] )
+{
+    if( 1 > argc )
+    {
+        // Print an error message
+        ::printf( "No filename given to option '-%c/--%s'\n", shortKey(), longKey() );
+        // Return with an error
+        return -1;
+    }
+
+    // Try to load the document
+    TiXmlDocument doc;
+    if( !doc.LoadFile( *argv ) )
+    {
+        // Print an error message
+        ::printf( "Failed to load config file '%s': %s\n", *argv, doc.ErrorDesc() );
+        // Return with an error
+        return -1;
+    }
+
+    // Parse the document
+    return doc.Accept( &mParser ) ? 1 : -1;
 }
 
 /*************************************************************************/

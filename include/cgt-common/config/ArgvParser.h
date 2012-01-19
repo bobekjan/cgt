@@ -10,6 +10,8 @@
 #ifndef __CGT__CONFIG__ARGV_PARSER_H__INCL__
 #define __CGT__CONFIG__ARGV_PARSER_H__INCL__
 
+#include "config/XmlParser.h"
+
 namespace cgt { namespace config {
 
 /**
@@ -73,6 +75,11 @@ public:
      */
     void addValue( char shortKey, const char* longKey,
                    const char* configKey, const char* description );
+
+    /**
+     * @brief Adds a new config option.
+     */
+    void addConfig();
     /**
      * @brief Adds a new help option.
      */
@@ -254,6 +261,32 @@ protected:
     const char* mLongKey;
     /// The description.
     const char* mDescription;
+};
+
+/**
+ * @brief A config file option.
+ *
+ * Parses an XML-based config file.
+ *
+ * @author Bloody.Rabbit
+ */
+class ArgvParser::ConfigOption
+: public ArgvParser::Option
+{
+public:
+    /**
+     * @brief Initializes the config option.
+     */
+    ConfigOption();
+
+    /**
+     * @brief Parses the arguments.
+     */
+    int parse( int argc, char* argv[] );
+
+protected:
+    /// The config file parser.
+    XmlParser mParser;
 };
 
 /**
