@@ -20,6 +20,6 @@
 /* Configuration                                                         */
 /*************************************************************************/
 
-// TINYXML_USE_STL
+// TIXML_USE_STL
 // Define this if tinyxml should use native STL.
-#cmakedefine TINYXML_USE_STL 1
+#cmakedefine TIXML_USE_STL 1

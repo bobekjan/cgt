@@ -20,9 +20,13 @@ SET( ${TARGET_NAME}_INCLUDE_DIRS ${TARGET_INCLUDE_DIRS} PARENT_SCOPE )
 #################
 # Configuration #
 #################
-SET( TINYXML_USE_STL ON
+SET( TIXML_USE_STL ON
      CACHE BOOL "tinyxml will use native STL." )
-MARK_AS_ADVANCED( TINYXML_USE_STL )
+MARK_AS_ADVANCED( TIXML_USE_STL )
+
+IF( TIXML_USE_STL )
+  ADD_DEFINITIONS( "-DTIXML_USE_STL=1" )
+ENDIF( TIXML_USE_STL )
 
 #########
 # Files #
