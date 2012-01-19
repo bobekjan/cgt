@@ -52,6 +52,33 @@ public:
      */
     void add( IOption* opt );
     /**
+     * @brief Adds a new flag option.
+     *
+     * @param[in] shortKey    The short key of the option.
+     * @param[in] longKey     The long key of the option.
+     * @param[in] configKey   The flag's configuration key.
+     * @param[in] description Description of the option.
+     * @param[in] value       The value to set.
+     */
+    void addFlag( char shortKey, const char* longKey,
+                  const char* configKey, const char* description,
+                  bool value );
+    /**
+     * @brief Adds a new value option.
+     *
+     * @param[in] shortKey    The short key of the option.
+     * @param[in] longKey     The long key of the option.
+     * @param[in] configKey   The flag's configuration key.
+     * @param[in] description Description of the option.
+     */
+    void addValue( char shortKey, const char* longKey,
+                   const char* configKey, const char* description );
+    /**
+     * @brief Adds a new help option.
+     */
+    void addHelp();
+
+    /**
      * @brief Removes an option.
      *
      * @param[in] opt The option to remove.

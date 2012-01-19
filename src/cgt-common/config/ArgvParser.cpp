@@ -42,6 +42,24 @@ void ArgvParser::add( IOption* opt )
     }
 }
 
+void ArgvParser::addFlag( char shortKey, const char* longKey,
+                          const char* configKey, const char* description,
+                          bool value )
+{
+    add( new FlagOption( shortKey, longKey, configKey, description, value ) );
+}
+
+void ArgvParser::addValue( char shortKey, const char* longKey,
+                           const char* configKey, const char* description )
+{
+    add( new ValueOption( shortKey, longKey, configKey, description ) );
+}
+
+void ArgvParser::addHelp()
+{
+    add( new HelpOption( *this ) );
+}
+
 void ArgvParser::remove( IOption* opt )
 {
     // Remove it from shortopts
