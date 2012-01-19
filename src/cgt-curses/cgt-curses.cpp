@@ -12,43 +12,41 @@
 #include "curses/LibInit.h"
 #include "curses/Observer.h"
 
-void loadDefaultCfg()
+int loadConfig( int argc, char* argv[] )
 {
-    sConfigMgr[ "cgt-curses.pcmDevice"   ] = "plug:hdmi_linein";
-    sConfigMgr[ "cgt-curses.pcmRate"     ] = 48000;
-    sConfigMgr[ "cgt-curses.bufferSize"  ] = 4096;
-    sConfigMgr[ "cgt-curses.captureSize" ] = 1024;
+    // Load default configuration
+    sConfigMgr[ "cgt.pcmDevice"   ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt.pcmRate"     ] = 48000;
+    sConfigMgr[ "cgt.bufferSize"  ] = 4096;
+    sConfigMgr[ "cgt.captureSize" ] = 1024;
 
-    sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] = 7.5;
+    sConfigMgr[ "cgt.fft.magnitudeCutoff" ] = 7.5;
+
+    // Load config
+    config::ArgvParser argvParser;
+    argvParser.addConfig();
+    argvParser.addHelp();
+
+    // Define value options
+    argvParser.addValue( 'D', "device", "cgt.pcmDevice",
+                         "Name of ALSA device to use" );
+    argvParser.addValue( 'r', "rate", "cgt.pcmRate",
+                         "Sample rate to use" );
+    argvParser.addValue( 'B', "buffer-size", "cgt.bufferSize",
+                         "Buffer size to use" );
+    argvParser.addValue( 'C', "capture-size", "cgt.captureSize",
+                         "Capture size to use" );
+    argvParser.addValue( 'm', "mag-cutoff", "cgt.fft.magnitudeCutoff",
+                         "Magnitude cutoff value when using FFT" );
+
+    // Parse arg vector
+    return argvParser.parse( argc, argv );
 }
 
 int main( int argc, char* argv[] )
 {
     // Setup configuration
-    loadDefaultCfg();
-
-    // Load config
-    config::ArgvParser argvParser;
-    argvParser.add( new config::ArgvParser::ValueOption(
-                        'D', "device", "cgt-curses.pcmDevice",
-                        "Name of ALSA device to use" ) );
-    argvParser.add( new config::ArgvParser::ValueOption(
-                        'r', "rate", "cgt-curses.pcmRate",
-                        "Sample rate to use" ) );
-    argvParser.add( new config::ArgvParser::ValueOption(
-                        'B', "buffer-size", "cgt-curses.bufferSize",
-                        "Buffer size to use" ) );
-    argvParser.add( new config::ArgvParser::ValueOption(
-                        'C', "capture-size", "cgt-curses.captureSize",
-                        "Capture size to use" ) );
-    argvParser.add( new config::ArgvParser::ValueOption(
-                        'm', "mag-cutoff", "cgt-curses.fft.magnitudeCutoff",
-                        "Magnitude cutoff value when using FFT" ) );
-    argvParser.add( new config::ArgvParser::HelpOption(
-                        argvParser ) );
-
-    // Parse arg vector
-    int code = argvParser.parse( argc, argv );
+    int code = loadConfig( argc, argv );
     if( 0 > code )
         return EXIT_FAILURE;
 
@@ -65,13 +63,13 @@ int main( int argc, char* argv[] )
 
     // Allocate the necessary classes
     curses::Observer  obs;
-    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt-curses.fft.magnitudeCutoff" ] );
+    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
 
     // Initialize the process
-    if( !analyser.init( sConfigMgr[ "cgt-curses.pcmDevice" ],
-                        sConfigMgr[ "cgt-curses.pcmRate" ],
-                        sConfigMgr[ "cgt-curses.bufferSize" ],
-                        sConfigMgr[ "cgt-curses.captureSize" ] ) )
+    if( !analyser.init( sConfigMgr[ "cgt.pcmDevice" ],
+                        sConfigMgr[ "cgt.pcmRate" ],
+                        sConfigMgr[ "cgt.bufferSize" ],
+                        sConfigMgr[ "cgt.captureSize" ] ) )
     {
         ::puts( "Failed to initialize PCM" );
         return EXIT_FAILURE;
