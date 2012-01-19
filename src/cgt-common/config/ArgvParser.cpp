@@ -222,8 +222,8 @@ ArgvParser::Option::Option( char shortKey, const char* longKey,
 /*************************************************************************/
 /* cgt::config::ArgvParser::FlagOption                                   */
 /*************************************************************************/
-ArgvParser::FlagOption::FlagOption( const char* configKey, char shortKey,
-                                    const char* longKey, const char* description,
+ArgvParser::FlagOption::FlagOption( char shortKey, const char* longKey,
+                                    const char* configKey, const char* description,
                                     bool value )
 : ArgvParser::Option( shortKey, longKey, description ),
   mConfigKey( configKey ),

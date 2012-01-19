@@ -247,14 +247,14 @@ public:
      * All strings are assumed to be statically allocated and
      * thus NOT freed.
      *
-     * @param[in] configKey   The flag's configuration key.
      * @param[in] shortKey    The short key of the option.
      * @param[in] longKey     The long key of the option.
+     * @param[in] configKey   The flag's configuration key.
      * @param[in] description Description of the option.
      * @param[in] value       The value to set.
      */
-    FlagOption( const char* configKey, char shortKey,
-                const char* longKey, const char* description,
+    FlagOption( char shortKey, const char* longKey,
+                const char* configKey, const char* description,
                 bool value );
 
     /**
