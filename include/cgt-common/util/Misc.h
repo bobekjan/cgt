@@ -25,14 +25,17 @@ extern const int    A4_INDEX;
 extern const double A4_FREQ;
 
 /**
- * @brief Normalizes angle to some given period.
+ * @brief Normalizes a value to some given period.
  *
- * @param[in] angle  The angle to normalize.
- * @param[in] period The period of the angle.
+ * The returned value is guaranteed to be from
+ * the period of [-period/2; period/2].
  *
- * @return The normalized angle.
+ * @param[in] value  The value to normalize.
+ * @param[in] period The period of the value.
+ *
+ * @return The normalized value.
  */
-double normalizeAngle( double angle, double period );
+double normalize( double value, double period );
 
 /**
  * @brief Generates a name for some given frequency.

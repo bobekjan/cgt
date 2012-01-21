@@ -30,10 +30,10 @@ const int util::CENTS_PER_NOTE   = 100;
 const int    util::A4_INDEX = 4 * NOTES_PER_OCTAVE + 9;
 const double util::A4_FREQ  = 440.0;
 
-double util::normalizeAngle( double angle, double period )
+double util::normalize( double value, double period )
 {
-    int k = ( angle + ::copysign( period / 2, angle ) ) / period;
-    return angle -= k * period;
+    int k = ( value + ::copysign( period / 2, value ) ) / period;
+    return value -= k * period;
 }
 
 void util::nameFreq( double freq, char* name, size_t len )

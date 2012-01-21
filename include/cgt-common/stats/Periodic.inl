@@ -20,5 +20,5 @@ Periodic< S, R >::Periodic( Target* target, Sample period )
 template< typename S, typename R >
 void Periodic< S, R >::add( Sample sample )
 {
-    Base::add( util::normalizeAngle( sample, mPeriod ) );
+    Base::add( util::normalize( sample, mPeriod ) );
 }
