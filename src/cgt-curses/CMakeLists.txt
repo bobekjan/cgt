@@ -34,10 +34,14 @@ SET( SOURCE
      "${TARGET_SOURCE_DIR}/cgt-curses.cpp" )
 
 SET( curses_INCLUDE
+     "${TARGET_INCLUDE_DIR}/curses/ConfigList.h"
      "${TARGET_INCLUDE_DIR}/curses/LibInit.h"
-     "${TARGET_INCLUDE_DIR}/curses/Observer.h" )
+     "${TARGET_INCLUDE_DIR}/curses/NoteList.h"
+     "${TARGET_INCLUDE_DIR}/curses/Screen.h" )
 SET( curses_SOURCE
-     "${TARGET_SOURCE_DIR}/curses/Observer.cpp" )
+     "${TARGET_SOURCE_DIR}/curses/ConfigList.cpp"
+     "${TARGET_SOURCE_DIR}/curses/NoteList.cpp"
+     "${TARGET_SOURCE_DIR}/curses/Screen.cpp" )
 
 ########################
 # Setup the executable #
