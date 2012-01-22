@@ -34,6 +34,16 @@ public:
     ~LibInit() { ::endwin(); }
 
     /**
+     * @brief Obtains color capability of the host terminal.
+     *
+     * Implemented by <code>has_colors</code>.
+     *
+     * @retval true  Colors available.
+     * @retval false Colors unavailable.
+     */
+    bool hasColors() const { return ::has_colors(); }
+
+    /**
      * @brief Disables line buffering.
      *
      * Implemented by <code>cbreak</code>.
@@ -45,6 +55,19 @@ public:
      * Implemented by <code>noecho</code>.
      */
     void noEcho() { ::noecho(); }
+    /**
+     * @brief Starts color mode.
+     *
+     * Implemented by <code>start_color</code>.
+     */
+    void startColor() { ::start_color(); }
+    /**
+     * @brief Binds default colors to value -1.
+     *
+     * Implemented by <code>use_default_colors</code>.
+     */
+    void useDefaultColors() { ::use_default_colors(); }
+
     /**
      * @brief Sets cursor behavior.
      *
