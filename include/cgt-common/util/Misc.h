@@ -12,6 +12,27 @@
 
 namespace cgt { namespace util {
 
+/**
+ * @brief Enumeration of notes.
+ *
+ * @author Bloody.Rabbit
+ */
+enum Note
+{
+    NOTE_C,
+    NOTE_C_SHARP,
+    NOTE_D,
+    NOTE_E_FLAT,
+    NOTE_E,
+    NOTE_F,
+    NOTE_F_SHARP,
+    NOTE_G,
+    NOTE_G_SHARP,
+    NOTE_A,
+    NOTE_B_FLAT,
+    NOTE_B
+};
+
 /// Names of notes.
 extern const char* NOTE_NAMES[];
 /// Number of notes per octave.
@@ -40,11 +61,24 @@ double normalize( double value, double period );
 /**
  * @brief Generates a name for some given frequency.
  *
- * @param[in]  freq The frequency.
- * @param[out] name The name buffer.
- * @param[out] len  Length of the name buffer.
+ * @param[in]  freq   The frequency.
+ * @param[out] octave Output variable for octave.
+ * @param[out] cents  Output variable for cents.
+ *
+ * @return The note name.
  */
-void nameFreq( double freq, char* name, size_t len );
+Note noteName( double freq, int& octave, double& cents );
+/**
+ * @brief Generates a string for a given note.
+ *
+ * @param[in]  note   The note.
+ * @param[in]  octave Octave of the note.
+ * @param[in]  cents  Cents of the note.
+ * @param[out] name   Where to print the string.
+ * @param[out] len    Length of the name buffer.
+ */
+void noteStr( Note note, int octave, double cents,
+              char* name, size_t len );
 
 }} // cgt::util
 

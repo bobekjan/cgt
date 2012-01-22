@@ -30,8 +30,14 @@ void Observer::start()
 
 void Observer::add( double freq )
 {
+    // Obtain name of the note
+    int octave;
+    double cents;
+    util::Note note = util::noteName( freq, octave, cents );
+
     // Generate the name
-    util::nameFreq( freq, mName, sizeof( mName ) );
+    util::noteStr( note, octave, cents,
+                   mName, sizeof( mName ) );
 
     // Obtain harmonic index
     unsigned int harm = getHarmonic( freq );
