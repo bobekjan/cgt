@@ -15,12 +15,13 @@
 int loadConfig( int argc, char* argv[] )
 {
     // Load default configuration
-    sConfigMgr[ "cgt.pcm.device"  ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt.pcm.device"  ] = "hw:0,0";
     sConfigMgr[ "cgt.pcm.rate"    ] = 48000;
-    sConfigMgr[ "cgt.bufferSize"  ] = 4096;
-    sConfigMgr[ "cgt.captureSize" ] = 1024;
+    sConfigMgr[ "cgt.bufferSize"  ] = 8192;
+    sConfigMgr[ "cgt.captureSize" ] = 2048;
 
-    sConfigMgr[ "cgt.fft.magnitudeCutoff" ] = 7.5;
+    sConfigMgr[ "cgt.fft.magnitudeCutoff" ]   = 10.0;
+    sConfigMgr[ "cgt.fft.harmonicTolerance" ] = -6.0;
 
     // Load config
     config::ArgvParser argvParser;
@@ -38,6 +39,8 @@ int loadConfig( int argc, char* argv[] )
                          "Capture size to use" );
     argvParser.addValue( 'm', "mag-cutoff", "cgt.fft.magnitudeCutoff",
                          "Magnitude cutoff value when using FFT" );
+    argvParser.addValue( 'H', "harm-tol", "cgt.fft.harmonicTolerance",
+                         "Harmonic tolerance value" );
 
     // Parse arg vector
     return argvParser.parse( argc, argv );
@@ -62,7 +65,7 @@ int main( int argc, char* argv[] )
     curs.setTimeout( 0 );
 
     // Allocate the necessary classes
-    curses::Observer  obs;
+    curses::Observer  obs( sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
     core::FftAnalyser analyser( obs, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
 
     // Initialize the process
