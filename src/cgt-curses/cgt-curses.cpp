@@ -15,8 +15,8 @@
 int loadConfig( int argc, char* argv[] )
 {
     // Load default configuration
-    sConfigMgr[ "cgt.pcmDevice"   ] = "plug:hdmi_linein";
-    sConfigMgr[ "cgt.pcmRate"     ] = 48000;
+    sConfigMgr[ "cgt.pcm.device"  ] = "plug:hdmi_linein";
+    sConfigMgr[ "cgt.pcm.rate"    ] = 48000;
     sConfigMgr[ "cgt.bufferSize"  ] = 4096;
     sConfigMgr[ "cgt.captureSize" ] = 1024;
 
@@ -28,9 +28,9 @@ int loadConfig( int argc, char* argv[] )
     argvParser.addHelp();
 
     // Define value options
-    argvParser.addValue( 'D', "device", "cgt.pcmDevice",
+    argvParser.addValue( 'D', "device", "cgt.pcm.device",
                          "Name of ALSA device to use" );
-    argvParser.addValue( 'r', "rate", "cgt.pcmRate",
+    argvParser.addValue( 'r', "rate", "cgt.pcm.rate",
                          "Sample rate to use" );
     argvParser.addValue( 'B', "buffer-size", "cgt.bufferSize",
                          "Buffer size to use" );
@@ -66,8 +66,8 @@ int main( int argc, char* argv[] )
     core::FftAnalyser analyser( obs, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
 
     // Initialize the process
-    if( !analyser.init( sConfigMgr[ "cgt.pcmDevice" ],
-                        sConfigMgr[ "cgt.pcmRate" ],
+    if( !analyser.init( sConfigMgr[ "cgt.pcm.device" ],
+                        sConfigMgr[ "cgt.pcm.rate" ],
                         sConfigMgr[ "cgt.bufferSize" ],
                         sConfigMgr[ "cgt.captureSize" ] ) )
     {
