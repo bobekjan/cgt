@@ -59,7 +59,7 @@ bool Analyser::init( const char* name, unsigned int rate,
     // We want doubles of one channel at the given rate.
     if( mPcm->setParams( SND_PCM_FORMAT_FLOAT64,
                          SND_PCM_ACCESS_RW_NONINTERLEAVED,
-                         1, rate, 0, 100 * 1000 ) )
+                         1, rate, 0, -1 ) )
         return false;
 
     // Setup the buffers.
