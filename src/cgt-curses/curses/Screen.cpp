@@ -16,12 +16,14 @@ using namespace cgt::curses;
 /*************************************************************************/
 /* cgt::curses::Screen                                                   */
 /*************************************************************************/
-Screen::Screen( double harmTol, int row, int col, int width, int height )
+Screen::Screen( int row, int col, int width, int height )
 : mWidth( 0 ),
   mHeight( 0 ),
-  mHarmonics( harmTol ),
-  mConfig( height - 6, col ),
-  mNotes( row, col )
+  // Pull the value from the config manager
+  mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
+  // Carefully positioned elements
+  mConfig( height - 7, col + 1 ),
+  mNotes( row + height / 2, col + ( width - 40 ) / 2 )
 {
 }
 

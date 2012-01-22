@@ -27,13 +27,12 @@ public:
     /**
      * @brief Initializes the observer.
      *
-     * @param[in] harmTol The harmonic tolerance.
-     * @param[in] row     Row number of the top left corner.
-     * @param[in] col     Column number of the top left corner.
-     * @param[in] width   Width of the screen.
-     * @param[in] heigth  Height of the screen.
+     * @param[in] row    Row number of the top left corner.
+     * @param[in] col    Column number of the top left corner.
+     * @param[in] width  Width of the screen.
+     * @param[in] height Height of the screen.
      */
-    Screen( double harmTol, int row, int col, int width, int height );
+    Screen( int row, int col, int width, int height );
     /**
      * @brief Deinitializes the observer.
      */

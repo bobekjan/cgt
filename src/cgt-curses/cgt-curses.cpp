@@ -71,8 +71,7 @@ int main( int argc, char* argv[] )
     getmaxyx( stdscr, height, width );
 
     // Allocate the necessary classes
-    curses::Screen scr( sConfigMgr[ "cgt.fft.harmonicTolerance" ],
-                        0, 0, width, height );
+    curses::Screen scr( 0, 0, width, height );
     core::FftAnalyser analyser( scr, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
 
     // Initialize the process
