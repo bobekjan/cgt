@@ -10,7 +10,7 @@
 #include "cgt-curses.h"
 
 #include "curses/LibInit.h"
-#include "curses/Observer.h"
+#include "curses/Screen.h"
 
 int loadConfig( int argc, char* argv[] )
 {
@@ -61,12 +61,19 @@ int main( int argc, char* argv[] )
     curses::LibInit curs;
     curs.cBreak();
     curs.noEcho();
+    curs.startColor();
+    curs.useDefaultColors();
     curs.setCursor( 0 );
     curs.setTimeout( 0 );
 
+    // Obtain screen parameters
+    int width, height;
+    getmaxyx( stdscr, height, width );
+
     // Allocate the necessary classes
-    curses::Observer  obs( sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
-    core::FftAnalyser analyser( obs, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
+    curses::Screen scr( sConfigMgr[ "cgt.fft.harmonicTolerance" ],
+                        0, 0, width, height );
+    core::FftAnalyser analyser( scr, sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
 
     // Initialize the process
     if( !analyser.init( sConfigMgr[ "cgt.pcm.device" ],
