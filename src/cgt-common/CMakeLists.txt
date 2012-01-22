@@ -85,10 +85,12 @@ SET( stats_SOURCE
      "" )
 
 SET( util_INCLUDE
+     "${TARGET_INCLUDE_DIR}/util/Harmonics.h"
      "${TARGET_INCLUDE_DIR}/util/Misc.h"
      "${TARGET_INCLUDE_DIR}/util/SafeMem.h"
      "${TARGET_INCLUDE_DIR}/util/Singleton.h" )
 SET( util_SOURCE
+     "${TARGET_SOURCE_DIR}/util/Harmonics.cpp"
      "${TARGET_SOURCE_DIR}/util/Misc.cpp" )
 
 ########################
