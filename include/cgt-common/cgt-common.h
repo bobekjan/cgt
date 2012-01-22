@@ -23,7 +23,6 @@
 
 // Various hacks
 // #define CGT_DEBUG_ANALYSIS_FREQ 269.231
-#define CGT_DEBUG_ANALYSE_HARMONICS 1
 
 /*************************************************************************/
 /* Standard includes                                                     */
