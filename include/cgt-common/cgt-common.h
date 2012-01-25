@@ -39,6 +39,7 @@
 #include <memory>
 #include <queue>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
