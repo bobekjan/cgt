@@ -41,7 +41,7 @@ SET( INCLUDE
      "${TARGET_INCLUDE_DIR}/cgt-common.h"
      "${TARGET_INCLUDE_DIR}/cgt-compat.h" )
 SET( SOURCE
-     "" )
+     "${TARGET_SOURCE_DIR}/cgt-compat.cpp" )
 
 SET( alsa_INCLUDE
      "${TARGET_INCLUDE_DIR}/alsa/Error.h"
@@ -125,7 +125,7 @@ ADD_LIBRARY( "${TARGET_NAME}"
 
 TARGET_BUILD_PCH( "${TARGET_NAME}"
                   "${TARGET_INCLUDE_DIR}/cgt-common.h"
-                  "${TARGET_SOURCE_DIR}/core/Analyser.cpp" )
+                  "${TARGET_SOURCE_DIR}/cgt-compat.cpp" )
 TARGET_LINK_LIBRARIES( "${TARGET_NAME}"
                        ${ALSA_LIBRARIES}
                        ${FFTW3_LIBRARIES}

@@ -99,4 +99,43 @@ typedef unsigned __int64 uint64;
 #   define SCNx64 "I64x"
 #endif /* !HAVE_INTTYPES_H */
 
+/*************************************************************************/
+/* Text processing                                                       */
+/*************************************************************************/
+/**
+ * @brief sprintf for std::string.
+ *
+ * @param[in] fmt Format string.
+ * @param[in] ... Arguments.
+ *
+ * @return The resulting string.
+ */
+std::string ssprintf( const char* fmt, ... );
+/**
+ * @brief vsprintf for std::string.
+ *
+ * @param[in] fmt Format string.
+ * @param[in] ap  Arguments.
+ *
+ * @return The resulting string.
+ */
+std::string vssprintf( const char* fmt, va_list ap );
+
+/**
+ * @brief sprintf for std::string.
+ *
+ * @param[out] str Where to store the result.
+ * @param[in]  fmt Format string.
+ * @param[in]  ... Arguments.
+ */
+void ssprintf( std::string& str, const char* fmt, ... );
+/**
+ * @brief vsprintf for std::string.
+ *
+ * @param[out] str Where to store the result.
+ * @param[in]  fmt Format string.
+ * @param[in]  ap  Arguments.
+ */
+void vssprintf( std::string& str, const char* fmt, va_list ap );
+
 #endif /* !__CGT_COMPAT_H__INCL__ */
