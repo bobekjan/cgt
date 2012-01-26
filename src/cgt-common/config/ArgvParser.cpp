@@ -118,13 +118,13 @@ void ArgvParser::clear()
     mOptions.clear();
 }
 
-int ArgvParser::parse( int argc, char* argv[] )
+unsigned int ArgvParser::parse( unsigned int argc, char* argv[] )
 {
     // Offset in argv, also return code
-    int off = 0;
+    unsigned int off = 0;
 
     // Skip the first element (executable name)
-    for( int idx = 1; idx < argc; ++idx )
+    for( unsigned int idx = 1; idx < argc; ++idx )
     {
         // This has to be a reference
         char*& opt = argv[ idx ];
@@ -132,7 +132,7 @@ int ArgvParser::parse( int argc, char* argv[] )
         if( '-' == *opt++ )
         {
             // Parser return code
-            int code = 0;
+            unsigned int code;
 
             do
             {
@@ -140,10 +140,7 @@ int ArgvParser::parse( int argc, char* argv[] )
                 code = parse( *opt++, argc - idx, argv + idx );
 
                 // Check the return value
-                if( 0 > code )
-                    // Negative error
-                    return code;
-                else if( '\0' == *opt )
+                if( 0 == code && '\0' == *opt )
                     // No more options to process
                     code = 1;
 
@@ -163,7 +160,7 @@ int ArgvParser::parse( int argc, char* argv[] )
     return off;
 }
 
-int ArgvParser::parse( char key, int argc, char* argv[] )
+unsigned int ArgvParser::parse( char key, unsigned int argc, char* argv[] )
 {
     // Check for longopt
     if( '-' == key )
@@ -176,10 +173,7 @@ int ArgvParser::parse( char key, int argc, char* argv[] )
         if( NULL == val )
         {
             // Parse it, skipping entire name
-            int code = parse( name, argc - 1, argv + 1 );
-
-            // Check the return value
-            return 0 > code ? code : code + 1;
+            return 1 + parse( name, argc - 1, argv + 1 );
         }
         else
         {
@@ -196,36 +190,27 @@ int ArgvParser::parse( char key, int argc, char* argv[] )
     // Find appropriate parser
     ShortoptMap::const_iterator itr = mShortopts.find( key );
     if( mShortopts.end() == itr )
-    {
-        // Print an error message
-        ::printf( "Unknown shortopt '-%c'\n", key );
-        return -1;
-    }
+        // Throw an exception
+        throw std::runtime_error(
+            ::ssprintf( "Unknown shortopt '-%c'", key ) );
 
     // Check first string
     if( '\0' == **argv )
-    {
         // It has been consumed, shift arguments
-        int code = itr->second->parse( argc - 1, argv + 1 );
-
-        // Check return value
-        return 0 > code ? code : code + 1;
-    }
+        return 1 + itr->second->parse( argc - 1, argv + 1 );
     else
         // Parse as-is
         return itr->second->parse( argc, argv );
 }
 
-int ArgvParser::parse( char* key, int argc, char* argv[] )
+unsigned int ArgvParser::parse( char* key, unsigned int argc, char* argv[] )
 {
     // Find appropriate parser
     LongoptMap::const_iterator itr = mLongopts.find( key );
     if( mLongopts.end() == itr )
-    {
-        // Print an error message
-        ::printf( "Unknown longopt '--%s'\n", key );
-        return -1;
-    }
+        // Throw an exception
+        throw std::runtime_error(
+            ::ssprintf( "Unknown longopt '--%s'", key ) );
 
     // Parse as-is
     return itr->second->parse( argc, argv );
@@ -250,28 +235,32 @@ ArgvParser::ConfigOption::ConfigOption()
 {
 }
 
-int ArgvParser::ConfigOption::parse( int argc, char* argv[] )
+unsigned int ArgvParser::ConfigOption::parse( unsigned int argc, char* argv[] )
 {
+    // Check we have a filename
     if( 1 > argc )
-    {
-        // Print an error message
-        ::printf( "No filename given to option '-%c/--%s'\n", shortKey(), longKey() );
-        // Return with an error
-        return -1;
-    }
+        // Throw an exception
+        throw std::runtime_error(
+            ::ssprintf( "No filename given to option '-%c/--%s'",
+                        shortKey(), longKey() ) );
 
     // Try to load the document
     TiXmlDocument doc;
     if( !doc.LoadFile( *argv ) )
-    {
-        // Print an error message
-        ::printf( "Failed to load config file '%s': %s\n", *argv, doc.ErrorDesc() );
-        // Return with an error
-        return -1;
-    }
+        // Throw an exception
+        throw std::runtime_error(
+            ::ssprintf( "Failed to load config file '%s': %s",
+                        *argv, doc.ErrorDesc() ) );
 
     // Parse the document
-    return doc.Accept( &mParser ) ? 1 : -1;
+    if( !doc.Accept( &mParser ) )
+        // Throw an exception
+        throw std::runtime_error(
+            ::ssprintf( "Failed to load config file '%s'",
+                        *argv ) );
+
+    // Consumed 1 argument (config filename)
+    return 1;
 }
 
 /*************************************************************************/
@@ -286,7 +275,7 @@ ArgvParser::FlagOption::FlagOption( char shortKey, const char* longKey,
 {
 }
 
-int ArgvParser::FlagOption::parse( int, char*[] )
+unsigned int ArgvParser::FlagOption::parse( unsigned int, char*[] )
 {
     // Set the flag
     sConfigMgr[ mConfigKey ] = mValue;
@@ -304,7 +293,7 @@ ArgvParser::HelpOption::HelpOption( ArgvParser& parser )
 {
 }
 
-int ArgvParser::HelpOption::parse( int, char*[] )
+unsigned int ArgvParser::HelpOption::parse( unsigned int, char*[] )
 {
     // Print initial line
     ::puts( "Available options:" );
@@ -331,8 +320,8 @@ int ArgvParser::HelpOption::parse( int, char*[] )
                       opt->longKey(), opt->description() );
     }
 
-    // Return with failure to stop processing
-    return -1;
+    // Throw an exception to stop processing
+    throw std::runtime_error( "Help requested" );
 }
 
 /*************************************************************************/
@@ -345,26 +334,26 @@ ArgvParser::ValueOption::ValueOption( char shortKey, const char* longKey,
 {
 }
 
-int ArgvParser::ValueOption::parse( int argc, char* argv[] )
+unsigned int ArgvParser::ValueOption::parse( unsigned int argc, char* argv[] )
 {
     // Check if we have the required argument
     if( 1 > argc )
     {
         if( !hasShortKey() )
-            // Print error message with long key only
-            ::printf( "No value supplied for option '--%s'\n",
-                      longKey() );
+            // Throw an error message with long key only
+            throw std::runtime_error(
+                ::ssprintf( "No value supplied for option '--%s'",
+                            longKey() ) );
         else if( !hasLongKey() )
-            // Print error message with short key only
-            ::printf( "No value supplied for option '-%c'\n",
-                      shortKey() );
+            // Throw an error message with short key only
+            throw std::runtime_error(
+                ::ssprintf( "No value supplied for option '-%c'",
+                            shortKey() ) );
         else
-            // Print error message with both keys
-            ::printf( "No value supplied for option '-%c/--%s'\n",
-                      shortKey(), longKey() );
-
-        // Return with an error
-        return -1;
+            // Throw an error message with both keys
+            throw std::runtime_error(
+                ::ssprintf( "No value supplied for option '-%c/--%s'",
+                            shortKey(), longKey() ) );
     }
 
     // Use the argument as a value

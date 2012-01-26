@@ -114,9 +114,9 @@ public:
      * @param[in] argc Number of arguments.
      * @param[in] argv The array of arguments.
      *
-     * @return Number of consumed args; negative means error.
+     * @return Number of consumed args.
      */
-    int parse( int argc, char* argv[] );
+    unsigned int parse( unsigned int argc, char* argv[] );
 
 protected:
     /**
@@ -126,9 +126,9 @@ protected:
      * @param[in] argc Number of arguments.
      * @param[in] argv The array of arguments.
      *
-     * @return Number of consumed args; negative means error.
+     * @return Number of consumed args.
      */
-    int parse( char key, int argc, char* argv[] );
+    unsigned int parse( char key, unsigned int argc, char* argv[] );
     /**
      * @brief Parses a long option.
      *
@@ -136,9 +136,9 @@ protected:
      * @param[in] argc Number of arguments.
      * @param[in] argv The array of arguments.
      *
-     * @return Number of consumed args; negative means error.
+     * @return Number of consumed args.
      */
-    int parse( char* key, int argc, char* argv[] );
+    unsigned int parse( char* key, unsigned int argc, char* argv[] );
 
     /// A set of registered options.
     OptionSet   mOptions;
@@ -201,9 +201,9 @@ public:
      * @param[in] argc Number of available arguments.
      * @param[in] argv Vector of the arguments.
      *
-     * @return Number of consumed args; negative on error.
+     * @return Number of consumed args.
      */
-    virtual int parse( int argc, char* argv[] ) = 0;
+    virtual unsigned int parse( unsigned int argc, char* argv[] ) = 0;
 };
 
 /**
@@ -282,7 +282,7 @@ public:
     /**
      * @brief Parses the arguments.
      */
-    int parse( int argc, char* argv[] );
+    unsigned int parse( unsigned int argc, char* argv[] );
 
 protected:
     /// The config file parser.
@@ -320,7 +320,7 @@ public:
     /**
      * @brief Parses the arguments.
      */
-    int parse( int argc, char* argv[] );
+    unsigned int parse( unsigned int argc, char* argv[] );
 
 protected:
     /// The configuration key.
@@ -350,7 +350,7 @@ public:
     /**
      * @brief Parses the arguments.
      */
-    int parse( int argc, char* argv[] );
+    unsigned int parse( unsigned int argc, char* argv[] );
 
 protected:
     /// The bound ArgvParser.
@@ -385,7 +385,7 @@ public:
     /**
      * @brief Parses the arguments.
      */
-    int parse( int argc, char* argv[] );
+    unsigned int parse( unsigned int argc, char* argv[] );
 
 protected:
     /// The configuration key.
