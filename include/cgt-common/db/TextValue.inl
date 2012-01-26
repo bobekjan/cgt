@@ -33,8 +33,7 @@ inline TextValue::TextValue( const TextValue& oth )
 inline TextValue::~TextValue()
 {
     // Bind NULL, deleting the value.
-    bool success = bindNull();
-    assert( success );
+    bindNull();
 }
 
 inline TextValue::operator const uint8*() const
@@ -43,28 +42,26 @@ inline TextValue::operator const uint8*() const
     return reinterpret_cast< const uint8* >( as< const char* >() );
 }
 
-inline bool TextValue::bind( const char* value )
+inline void TextValue::bind( const char* value )
 {
     // Pretend it's a binary value, don't forget the terminating \0.
-    return bind( reinterpret_cast< const uint8* >( value ),
-                 NULL != value ? ::strlen( value ) + 1 : 0 );
+    bind( reinterpret_cast< const uint8* >( value ),
+          NULL != value ? ::strlen( value ) + 1 : 0 );
 }
 
 template< typename T >
 inline TextValue& TextValue::operator=( const T& value )
 {
     // Redirect the assignment to proper overload of bind.
-    bool success = bind( value );
-    assert( success );
-
+    bind( value );
+    // Return itself
     return *this;
 }
 
 inline TextValue& TextValue::operator=( const TextValue& value )
 {
     // Use bind for the assignment.
-    bool success = bind( value.mValue );
-    assert( success );
-
+    bind( value.mValue );
+    // Return itself
     return *this;
 }

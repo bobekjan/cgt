@@ -22,143 +22,98 @@ class IParameter
 public:
     /**
      * @brief Binds NULL to the parameter.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bindNull() = 0;
+    virtual void bindNull() = 0;
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( bool value ) = 0;
+    virtual void bind( bool value ) = 0;
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( int8 value ) = 0;
+    virtual void bind( int8 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( int16 value ) = 0;
+    virtual void bind( int16 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( int32 value ) = 0;
+    virtual void bind( int32 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( int64 value ) = 0;
+    virtual void bind( int64 value ) = 0;
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( uint8 value ) = 0;
+    virtual void bind( uint8 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( uint16 value ) = 0;
+    virtual void bind( uint16 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( uint32 value ) = 0;
+    virtual void bind( uint32 value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( uint64 value ) = 0;
+    virtual void bind( uint64 value ) = 0;
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( float value ) = 0;
+    virtual void bind( float value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( double value ) = 0;
+    virtual void bind( double value ) = 0;
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
      * @param[in] len   Length of the value.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( const uint8* value, size_t len ) = 0;
+    virtual void bind( const uint8* value, size_t len ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( const char* value ) = 0;
+    virtual void bind( const char* value ) = 0;
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    virtual bool bind( const std::string& value ) = 0;
+    virtual void bind( const std::string& value ) = 0;
 
     /**
      * @brief Binds a value to the parameter.
@@ -170,9 +125,9 @@ public:
     template< typename T >
     IParameter& operator=( const T& value )
     {
-        bool success = bind( value );
-        assert( success );
-
+        // Bind the value
+        bind( value );
+        // Return itself
         return *this;
     }
 };

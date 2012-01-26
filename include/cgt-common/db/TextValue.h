@@ -144,143 +144,98 @@ public:
 
     /**
      * @brief Binds NULL to the parameter.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bindNull() { return bind( NULL, 0 ); }
+    void bindNull() { return bind( NULL, 0 ); }
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( bool value ) { return bind( static_cast< int8 >( value ) ); }
+    void bind( bool value ) { return bind( static_cast< int8 >( value ) ); }
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( int8 value ) { return bind( static_cast< int16 >( value ) ); }
+    void bind( int8 value ) { return bind( static_cast< int16 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( int16 value ) { return bind( static_cast< int32 >( value ) ); }
+    void bind( int16 value ) { return bind( static_cast< int32 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( int32 value ) { return bind( static_cast< int64 >( value ) ); }
+    void bind( int32 value ) { return bind( static_cast< int64 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( int64 value );
+    void bind( int64 value );
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( uint8 value ) { return bind( static_cast< uint16 >( value ) ); }
+    void bind( uint8 value ) { return bind( static_cast< uint16 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( uint16 value ) { return bind( static_cast< uint32 >( value ) ); }
+    void bind( uint16 value ) { return bind( static_cast< uint32 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( uint32 value ) { return bind( static_cast< uint64 >( value ) ); }
+    void bind( uint32 value ) { return bind( static_cast< uint64 >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( uint64 value );
+    void bind( uint64 value );
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( float value ) { return bind( static_cast< double >( value ) ); }
+    void bind( float value ) { return bind( static_cast< double >( value ) ); }
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( double value );
+    void bind( double value );
 
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
      * @param[in] len   Length of the value.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( const uint8* value, size_t len );
+    void bind( const uint8* value, size_t len );
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( const char* value );
+    void bind( const char* value );
     /**
      * @brief Binds a value to the parameter.
      *
      * @param[in] value The value to bind.
-     *
-     * @retval true  Bind successful.
-     * @retval false Bind failed.
      */
-    bool bind( const std::string& value ) { return bind( value.c_str() ); }
+    void bind( const std::string& value ) { return bind( value.c_str() ); }
 
     /**
      * @brief Binds a value to the parameter.

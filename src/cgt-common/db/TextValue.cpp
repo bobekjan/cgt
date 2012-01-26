@@ -62,52 +62,46 @@ TextValue::operator double() const
     return v;
 }
 
-bool TextValue::bind( int64 value )
+void TextValue::bind( int64 value )
 {
     // More than enough, just to be on the safe side.
     char str[ 0x20 ];
 
     // Print the value.
     int code = ::sprintf( str, "%"PRId64, value );
-    if( 0 > code )
-        // An error occurred.
-        return false;
+    assert( 0 <= code );
 
     // Pretend it's a binary value, don't forget the terminating \0.
     return bind( reinterpret_cast< const uint8* >( str ), code + 1 );
 }
 
-bool TextValue::bind( uint64 value )
+void TextValue::bind( uint64 value )
 {
     // More than enough, just to be on the safe side.
     char str[ 0x20 ];
 
     // Print the value.
     int code = ::sprintf( str, "%"PRIu64, value );
-    if( 0 > code )
-        // An error occurred.
-        return false;
+    assert( 0 <= code );
 
     // Pretend it's a binary value, don't forget the terminating \0.
     return bind( reinterpret_cast< const uint8* >( str ), code + 1 );
 }
 
-bool TextValue::bind( double value )
+void TextValue::bind( double value )
 {
     // More than enough, just to be on the safe side.
     char str[ 0x200 ];
 
     // Print the value.
     int code = ::sprintf( str, "%f", value );
-    if( 0 > code )
-        // An error occurred.
-        return false;
+    assert( 0 <= code );
 
     // Pretend it's a binary value, don't forget the terminating \0.
     return bind( reinterpret_cast< const uint8* >( str ), code + 1 );
 }
 
-bool TextValue::bind( const uint8* value, size_t len )
+void TextValue::bind( const uint8* value, size_t len )
 {
     // Check if we have anything to do.
     if( !isNull() || 0 != len )
@@ -117,6 +111,4 @@ bool TextValue::bind( const uint8* value, size_t len )
         // Copy the value.
         ::memcpy( mValue, value, len );
     }
-
-    return true;
 }
