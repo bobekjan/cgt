@@ -27,12 +27,11 @@ FftAnalyser::FftAnalyser( IObserver& observer, double magCutoff )
 {
 }
 
-bool FftAnalyser::init( const char* name, unsigned int rate,
+void FftAnalyser::init( const char* name, unsigned int rate,
                         unsigned int bufferSize, unsigned int captureSize )
 {
     // Initialize parent first.
-    if( !Analyser::init( name, rate, bufferSize, captureSize ) )
-        return false;
+    Analyser::init( name, rate, bufferSize, captureSize );
 
     // Allocate the array for frequencies.
     mFftOutput = (double*)::fftw_malloc( sizeof( double ) * this->bufferSize() );
@@ -43,10 +42,9 @@ bool FftAnalyser::init( const char* name, unsigned int rate,
     // Setup the plan.
     mPlan = ::fftw_plan_r2r_1d( this->bufferSize(), mSamples, mFftOutput,
                                 FFTW_R2HC, FFTW_MEASURE );
+    // Check for error
     if( NULL == mPlan )
-        return false;
-
-    return true;
+        throw std::runtime_error( "Failed to prepare FFTW plan" );
 }
 
 void FftAnalyser::free()
@@ -61,35 +59,26 @@ void FftAnalyser::free()
     Analyser::free();
 }
 
-bool FftAnalyser::step()
+void FftAnalyser::step()
 {
     // Let parent process first
-    if( !Analyser::step() )
-        return false;
+    Analyser::step();
 
     // Execute the plan
     ::fftw_execute( mPlan );
 
     // Process the frequencies
-    if( !processFreqs() )
-        return false;
-
-    if( !processLocalMax() )
-        return false;
-
-    if( !processOutput() )
-        return false;
-
-    return true;
+    processFreqs();
+    processLocalMax();
+    processOutput();
 }
 
-bool FftAnalyser::reset()
+void FftAnalyser::reset()
 {
     // TODO: reset all angles.
-    return true;
 }
 
-bool FftAnalyser::processFreqs()
+void FftAnalyser::processFreqs()
 {
     // Ignore DC and Nyquist frequency.
     const size_t size = frequencyCount();
@@ -115,11 +104,9 @@ bool FftAnalyser::processFreqs()
             // Doesn't fulfill the requirements.
             freq.reset();
     }
-
-    return true;
 }
 
-bool FftAnalyser::processLocalMax()
+void FftAnalyser::processLocalMax()
 {
     // Ignore DC and Nyquist frequency.
     const size_t size = frequencyCount();
@@ -156,11 +143,9 @@ bool FftAnalyser::processLocalMax()
             && prev.magnitude() < cur.magnitude() )
             cur.updateLocalMax();
     }
-
-    return true;
 }
 
-bool FftAnalyser::processOutput()
+void FftAnalyser::processOutput()
 {
     // Ignore DC and Nyquist frequency.
     const size_t size = frequencyCount();
@@ -206,8 +191,6 @@ bool FftAnalyser::processOutput()
 
     // End observer.
     observer().end();
-
-    return true;
 }
 
 /*************************************************************************/

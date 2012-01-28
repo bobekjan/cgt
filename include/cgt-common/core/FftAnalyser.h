@@ -55,11 +55,8 @@ public:
      * @param[in] rate        The sample rate to use.
      * @param[in] bufferSize  The size of the sample buffer.
      * @param[in] captureSize The sample capture size.
-     *
-     * @retval true  Initialization succeeded.
-     * @retval false Initialization failed.
      */
-    bool init( const char* name, unsigned int rate,
+    void init( const char* name, unsigned int rate,
                unsigned int bufferSize, unsigned int captureSize );
     /**
      * @brief Frees the analyser resources.
@@ -68,18 +65,12 @@ public:
 
     /**
      * @brief Runs a step in the process.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool step();
+    void step();
     /**
      * @brief Resets the process.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool reset();
+    void reset();
 
 protected:
     /**
@@ -182,25 +173,16 @@ protected:
 
     /**
      * @brief Processes frequencies.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool processFreqs();
+    void processFreqs();
     /**
      * @brief Processes local maxes.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool processLocalMax();
+    void processLocalMax();
     /**
      * @brief Processes output.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool processOutput();
+    void processOutput();
 
     /// Our FFTW plan.
     fftw_plan mPlan;

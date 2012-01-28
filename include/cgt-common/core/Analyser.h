@@ -111,11 +111,8 @@ public:
      * @param[in] rate        The sample rate to use.
      * @param[in] bufferSize  The size of the sample buffer.
      * @param[in] captureSize The sample capture size.
-     *
-     * @retval true  Initialization succeeded.
-     * @retval false Initialization failed.
      */
-    virtual bool init( const char* name, unsigned int rate,
+    virtual void init( const char* name, unsigned int rate,
                        unsigned int bufferSize, unsigned int captureSize );
     /**
      * @brief Frees the analyser resources.
@@ -124,18 +121,12 @@ public:
 
     /**
      * @brief Runs a step in the process.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    virtual bool step();
+    virtual void step() { ( this->* ( CAPTURE_ROUTINES[ mCapture ] ) )(); }
     /**
      * @brief Resets the process.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    virtual bool reset();
+    virtual void reset();
 
 protected:
     /**
@@ -153,18 +144,12 @@ protected:
      * @brief Fills the buffer entirely.
      *
      * Any previous captured content is overwritten.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool captureFull();
+    void captureFull();
     /**
      * @brief Captures only a bit.
-     *
-     * @retval true  Step succeeded.
-     * @retval false Step failed.
      */
-    bool captureStep();
+    void captureStep();
 
     /// The bound observer.
     IObserver* mObserver;
@@ -190,7 +175,7 @@ protected:
     double* mSamples;
 
     /// Capture state routine table.
-    static bool ( Analyser::* CAPTURE_ROUTINES[] )();
+    static void ( Analyser::* CAPTURE_ROUTINES[] )();
 };
 
 }} // cgt::core

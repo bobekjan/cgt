@@ -17,7 +17,7 @@ using namespace cgt::core;
 /*************************************************************************/
 /* cgt::core::Analyser                                                   */
 /*************************************************************************/
-bool ( Analyser::* Analyser::CAPTURE_ROUTINES[] )() =
+void ( Analyser::* Analyser::CAPTURE_ROUTINES[] )() =
 {
     &Analyser::captureFull, // CAPTURE_FULL
     &Analyser::captureStep  // CAPTURE_STEP
@@ -43,12 +43,14 @@ Analyser::~Analyser()
     free();
 }
 
-bool Analyser::init( const char* name, unsigned int rate,
+void Analyser::init( const char* name, unsigned int rate,
                      unsigned int bufferSize, unsigned int captureSize )
 {
     // Make sure the sizes are valid.
     if( bufferSize < captureSize )
-        return false;
+        throw std::logic_error(
+            ::ssprintf( "Capture size (%u) larger than buffer size (%u)",
+                        captureSize, bufferSize ) );
 
     // Make sure all resources are freed first.
     free();
@@ -57,10 +59,9 @@ bool Analyser::init( const char* name, unsigned int rate,
     mPcm = new alsa::Pcm( name, SND_PCM_STREAM_CAPTURE, 0 );
 
     // We want doubles of one channel at the given rate.
-    if( mPcm->setParams( SND_PCM_FORMAT_FLOAT64,
-                         SND_PCM_ACCESS_RW_NONINTERLEAVED,
-                         1, rate, 0, -1 ) )
-        return false;
+    mPcm->setParams( SND_PCM_FORMAT_FLOAT64,
+                     SND_PCM_ACCESS_RW_NONINTERLEAVED,
+                     1, rate, 0, -1 );
 
     // Setup the buffers.
     mSampleRate  = rate;
@@ -68,8 +69,6 @@ bool Analyser::init( const char* name, unsigned int rate,
     mCaptureSize = captureSize;
 
     mSamples = new double[ this->bufferSize() ];
-
-    return true;
 }
 
 void Analyser::free()
@@ -92,48 +91,37 @@ void Analyser::free()
     util::safeDelete( mPcm );
 }
 
-bool Analyser::step()
-{
-    // Do the capture
-    if( !( this->* ( CAPTURE_ROUTINES[ mCapture ] ) )() )
-        return false;
-
-    return true;
-}
-
-bool Analyser::reset()
+void Analyser::reset()
 {
     // Refill the buffer entirely
     mCapture = CAPTURE_FULL;
-
-    return true;
 }
 
-bool Analyser::captureFull()
+void Analyser::captureFull()
 {
 #ifndef CGT_DEBUG_ANALYSIS_FREQ
     // Fill the buffer entirely.
     void* buf[] = { &mSamples[ 0 ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, bufferSize() );
 
-    // Has an error occurred?
-    if( 0 > code )
-        return false;
     // Have we read too little?
-    else if( bufferSize() > code )
-        return false;
+    if( code < bufferSize() )
+        // Throw an error message
+        throw std::runtime_error(
+            ::ssprintf( "Read only %ld non-interleaved samples (expected %u)",
+                        code, bufferSize() ) );
 #else /* CGT_DEBUG_ANALYSIS_FREQ */
-    for( size_t i = 0; i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
+    for( size_t i = 0;
+         i < bufferSize();
+         ++i, mPhase += 2.0 * M_PI / sampleRate() )
         mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
 #endif /* CGT_DEBUG_ANALYSIS_FREQ */
 
     // Next time, run only a step capture
     mCapture = CAPTURE_STEP;
-
-    return true;
 }
 
-bool Analyser::captureStep()
+void Analyser::captureStep()
 {
     // We want to get only the capture size, shift the buffer first.
     ::memmove( &mSamples[ 0 ], &mSamples[ captureSize() ],
@@ -144,17 +132,16 @@ bool Analyser::captureStep()
     void* buf[] = { &mSamples[ bufferSize() - captureSize() ] };
     snd_pcm_sframes_t code = mPcm->readNonint( buf, captureSize() );
 
-    // Has an error occurred?
-    if( 0 > code )
-        return false;
     // Have we read too little?
-    else if( captureSize() > code )
-        return false;
+    if( code < captureSize() )
+        // Throw an error message
+        throw std::runtime_error(
+            ::ssprintf( "Read only %ld non-interleaved samples (expected %u)",
+                        code, captureSize() ) );
 #else /* CGT_DEBUG_ANALYSIS_FREQ */
-    for( size_t i = bufferSize() - captureSize(); i < bufferSize(); ++i, mPhase += 2.0 * M_PI / sampleRate() )
+    for( size_t i = bufferSize() - captureSize();
+         i < bufferSize();
+         ++i, mPhase += 2.0 * M_PI / sampleRate() )
         mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
 #endif /* CGT_DEBUG_ANALYSIS_FREQ */
-
-    return true;
 }
-
