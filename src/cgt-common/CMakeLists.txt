@@ -44,8 +44,6 @@ SET( SOURCE
      "${TARGET_SOURCE_DIR}/cgt-compat.cpp" )
 
 SET( alsa_INCLUDE
-     "${TARGET_INCLUDE_DIR}/alsa/Error.h"
-     "${TARGET_INCLUDE_DIR}/alsa/Error.inl"
      "${TARGET_INCLUDE_DIR}/alsa/Pcm.h"
      "${TARGET_INCLUDE_DIR}/alsa/Pcm.inl" )
 SET( alsa_SOURCE
