@@ -72,6 +72,9 @@ int main( int argc, char* argv[] )
         curs.setCursor( 0 );
         curs.setTimeout( 0 );
 
+        // Apply configuration
+        ::refresh();
+
         // Obtain screen parameters
         int width, height;
         getmaxyx( stdscr, height, width );

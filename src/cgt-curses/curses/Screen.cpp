@@ -16,15 +16,15 @@ using namespace cgt::curses;
 /*************************************************************************/
 /* cgt::curses::Screen                                                   */
 /*************************************************************************/
-Screen::Screen( int row, int col, int width, int height )
-: mWidth( 0 ),
-  mHeight( 0 ),
+Screen::Screen( int xpos, int ypos, int width, int height )
   // Pull the value from the config manager
-  mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
-  // Carefully positioned elements
-  mConfig( height - 7, col + 1 ),
-  mNotes( row + height / 2, col + ( width - 40 ) / 2 )
+: mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
+   // Carefully positioned elements
+  mConfig( xpos + 1, ypos + height - 7 ),
+  mNotes( xpos + ( width - 40 ) / 2, ypos + height / 2 )
 {
+    // Print config
+    mConfig.refresh();
 }
 
 Screen::~Screen()
@@ -33,14 +33,8 @@ Screen::~Screen()
 
 void Screen::start()
 {
-    // Wipe the screen
-    ::clear();
-
     // Flush harmonics.
     mHarmonics.clear();
-
-    // Print config
-    mConfig.print();
     // Clear note list
     mNotes.clear();
 }
@@ -51,11 +45,11 @@ void Screen::add( double freq, double )
     unsigned int harm = mHarmonics.get( freq );
 
     // Add the note to the list
-    mNotes.add( freq, harm );
+    mNotes.print( freq, harm );
 }
 
 void Screen::end()
 {
-    // Print the buffer
-    ::refresh();
+    // Print the notes
+    mNotes.refresh();
 }

@@ -27,12 +27,12 @@ public:
     /**
      * @brief Initializes the observer.
      *
-     * @param[in] row    Row number of the top left corner.
-     * @param[in] col    Column number of the top left corner.
-     * @param[in] width  Width of the screen.
-     * @param[in] height Height of the screen.
+     * @param[in] xpos   Position in X-axis.
+     * @param[in] ypos   Position in Y-axis.
+     * @param[in] width  Size in X-axis.
+     * @param[in] height Size in Y-axis.
      */
-    Screen( int row, int col, int width, int height );
+    Screen( int xpos, int ypos, int width, int height );
     /**
      * @brief Deinitializes the observer.
      */
@@ -52,9 +52,6 @@ public:
     void end();
 
 protected:
-    /// Screen parameters.
-    int mWidth, mHeight;
-
     /// Harmonics analyser.
     util::Harmonics mHarmonics;
     /// Configuration list.
