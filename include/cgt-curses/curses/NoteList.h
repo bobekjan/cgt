@@ -10,6 +10,8 @@
 #ifndef __CGT__CURSES__NOTE_LIST_H__INCL__
 #define __CGT__CURSES__NOTE_LIST_H__INCL__
 
+#include "curses/Window.h"
+
 namespace cgt { namespace curses {
 
 /**
@@ -18,17 +20,16 @@ namespace cgt { namespace curses {
  * @author Bloody.Rabbit
  */
 class NoteList
+: protected Window
 {
 public:
     /**
      * @brief Initializes the note list.
      *
-     * @param[in] row    Row number of top left corner.
-     * @param[in] col    Column number of top left corner.
-     * @param[in] width  Width of the list.
-     * @param[in] height Height of the list.
+     * @param[in] xpos Position in X-axis.
+     * @param[in] ypos Position in Y-axis.
      */
-    NoteList( int row, int col );
+    NoteList( int xpos, int ypos );
 
     /**
      * @brief Adds a note to the list.
@@ -36,7 +37,11 @@ public:
      * @param[in] freq Frequency of the note.
      * @param[in] harm Harmonic index of the note.
      */
-    void add( double freq, unsigned int harm );
+    void print( double freq, unsigned int harm );
+    /**
+     * @brief Prints the note list.
+     */
+    void refresh();
     /**
      * @brief Clears the note list.
      */
@@ -45,9 +50,6 @@ public:
 protected:
     /// A buffer for note name.
     char mName[ 0x20 ];
-
-    /// Position on the screen.
-    int mRow, mCol;
 };
 
 }} // cgt::curses

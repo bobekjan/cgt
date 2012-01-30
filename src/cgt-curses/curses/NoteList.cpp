@@ -17,15 +17,14 @@ using namespace cgt::curses;
 /*************************************************************************/
 /* cgt::curses::NoteList                                                 */
 /*************************************************************************/
-NoteList::NoteList( int row, int col )
-: mRow( row ),
-  mCol( col )
+NoteList::NoteList( int xpos, int ypos )
+: Window( xpos, ypos, 60, 15 )
 {
     // Init our color pair
     ::init_pair( PAIR_FUNDAMENTAL, COLOR_RED, -1 );
 }
 
-void NoteList::add( double freq, unsigned int harm )
+void NoteList::print( double freq, unsigned int harm )
 {
     // Obtain name of the note
     int octave;
@@ -40,38 +39,47 @@ void NoteList::add( double freq, unsigned int harm )
 
     if( 0 == harm )
         // Fundamental, turn on color
-        ::attron( COLOR_PAIR( PAIR_FUNDAMENTAL ) );
+        attrOn( COLOR_PAIR( PAIR_FUNDAMENTAL ) );
 
     // Print it
 #ifndef CGT_DEBUG_ANALYSIS_FREQ
-    ::printw( "[%-*u] ", off, harm );
+    printw( "[%-*u] ", off, harm );
 
-    ::attron( A_BOLD );
-    ::printw( "%10s ", mName );
-    ::attroff( A_BOLD );
+    attrOn( A_BOLD );
+    printw( "%10s ", mName );
+    attrOff( A_BOLD );
 
-    ::printw( "(%10.4f Hz)\n", freq );
+    printw( "(%10.4f Hz)\n", freq );
 #else /* !CGT_DEBUG_ANALYSIS_FREQ */
-    ::printw( "[%-*u] ", off, harm );
+    printw( "[%-*u] ", off, harm );
 
-    ::attron( A_BOLD );
-    ::printw( "%10s ", mName );
-    ::attroff( A_BOLD );
+    attrOn( A_BOLD );
+    printw( "%10s ", mName );
+    attrOff( A_BOLD );
 
-    ::printw( "(%10.4f Hz) = ", freq );
+    printw( "(%10.4f Hz) = ", freq );
 
-    ::attron( A_BOLD );
-    ::printw( "%10.4f dB\n", 10 * ::log10( ::fabs( freq - CGT_DEBUG_ANALYSIS_FREQ ) ) );
-    ::attroff( A_BOLD );
+    attrOn( A_BOLD );
+    printw( "%10.4f dB\n", 10 * ::log10( ::fabs( freq - CGT_DEBUG_ANALYSIS_FREQ ) ) );
+    attrOff( A_BOLD );
 #endif /* !CGT_DEBUG_ANALYSIS_FREQ */
 
     if( 0 == harm )
         // Fundamental, turn off color
-        ::attroff( COLOR_PAIR( PAIR_FUNDAMENTAL ) );
+        attrOff( COLOR_PAIR( PAIR_FUNDAMENTAL ) );
+}
+
+void NoteList::refresh()
+{
+    // Refresh content of the window
+    Window::refresh();
 }
 
 void NoteList::clear()
 {
+    // Clear the window
+    Window::clear();
+
     // Move cursor to the default position
-    ::move( mRow, mCol );
+    move( 0, 0 );
 }
