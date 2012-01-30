@@ -10,6 +10,8 @@
 #ifndef __CGT__CURSES__CONFIG_LIST_H__INCL__
 #define __CGT__CURSES__CONFIG_LIST_H__INCL__
 
+#include "curses/Window.h"
+
 namespace cgt { namespace curses {
 
 /**
@@ -18,20 +20,21 @@ namespace cgt { namespace curses {
  * @author Bloody.Rabbit
  */
 class ConfigList
+: protected Window
 {
 public:
     /**
      * @brief Initializes the config list.
      *
-     * @param[in] row Row number of top left corner.
-     * @param[in] col Column number of top left corner.
+     * @param[in] xpos Position in X-axis.
+     * @param[in] ypos Position in Y-axis.
      */
-    ConfigList( int row, int col );
+    ConfigList( int xpos, int ypos );
 
     /**
      * @brief Prints the config list.
      */
-    void print();
+    void refresh();
 
 protected:
     /**
@@ -42,9 +45,6 @@ protected:
      * @param[in] value Value of the parameter.
      */
     void print( int line, const char* title, const char* value );
-
-    /// Position on the screen.
-    int mRow, mCol;
 };
 
 }} // cgt::curses
