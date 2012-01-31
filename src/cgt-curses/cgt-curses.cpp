@@ -49,7 +49,12 @@ int main( int argc, char* argv[] )
         argc -= code;
         argv += code;
     }
-    catch( const std::exception& e )
+    catch( const except::GracefulExit& e )
+    {
+        // Gracefully exit, easy enough :-)
+        return EXIT_SUCCESS;
+    }
+    catch( const except::Exception& e )
     {
         // Print an error message
         ::fprintf( stderr, "Failed to setup configuration: %s\n", e.what() );
@@ -86,7 +91,7 @@ int main( int argc, char* argv[] )
             // Run the step
             analyser.step();
     }
-    catch( const std::exception& e )
+    catch( const except::Exception& e )
     {
         // Print an error message
         ::fprintf( stderr, "Fatal error: %s\n", e.what() );

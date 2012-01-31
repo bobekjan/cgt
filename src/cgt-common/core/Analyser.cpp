@@ -48,7 +48,7 @@ void Analyser::init( const char* name, unsigned int rate,
 {
     // Make sure the sizes are valid.
     if( bufferSize < captureSize )
-        throw std::logic_error(
+        throw except::LogicError(
             ::ssprintf( "Capture size (%u) larger than buffer size (%u)",
                         captureSize, bufferSize ) );
 
@@ -107,7 +107,7 @@ void Analyser::captureFull()
     // Have we read too little?
     if( code < bufferSize() )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Read only %ld non-interleaved samples (expected %u)",
                         code, bufferSize() ) );
 #else /* CGT_DEBUG_ANALYSIS_FREQ */
@@ -135,7 +135,7 @@ void Analyser::captureStep()
     // Have we read too little?
     if( code < captureSize() )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Read only %ld non-interleaved samples (expected %u)",
                         code, captureSize() ) );
 #else /* CGT_DEBUG_ANALYSIS_FREQ */

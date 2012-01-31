@@ -44,7 +44,7 @@ void FftAnalyser::init( const char* name, unsigned int rate,
                                 FFTW_R2HC, FFTW_MEASURE );
     // Check for error
     if( NULL == mPlan )
-        throw std::runtime_error( "Failed to prepare FFTW plan" );
+        throw except::RuntimeError( "Failed to prepare FFTW plan" );
 }
 
 void FftAnalyser::free()

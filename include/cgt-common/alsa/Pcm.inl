@@ -36,7 +36,7 @@ inline void Pcm::open( const char* name, snd_pcm_stream_t stream, int mode )
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to open PCM device '%s': %s",
                         name, ::snd_strerror( code ) ) );
 }
@@ -49,7 +49,7 @@ inline void Pcm::close()
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to close PCM device: %s",
                         ::snd_strerror( code ) ) );
 }
@@ -64,7 +64,7 @@ inline void Pcm::setParams( snd_pcm_format_t format, snd_pcm_access_t access,
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to set parameters of PCM device: %s",
                         ::snd_strerror( code ) ) );
 }
@@ -77,7 +77,7 @@ inline void Pcm::recover( int err, int silent )
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to recover PCM device: %s",
                         ::snd_strerror( code ) ) );
 }
@@ -90,7 +90,7 @@ inline snd_pcm_sframes_t Pcm::readInt( void* buffer, snd_pcm_uframes_t size )
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to read interleaved samples: %s",
                         ::snd_strerror( code ) ) );
 
@@ -106,7 +106,7 @@ inline snd_pcm_sframes_t Pcm::writeInt( const void* buffer, snd_pcm_uframes_t si
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to write interleaved samples: %s",
                         ::snd_strerror( code ) ) );
 
@@ -122,7 +122,7 @@ inline snd_pcm_sframes_t Pcm::readNonint( void** buffers, snd_pcm_uframes_t size
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to read non-interleaved samples: %s",
                         ::snd_strerror( code ) ) );
 
@@ -138,7 +138,7 @@ inline snd_pcm_sframes_t Pcm::writeNonint( void** buffers, snd_pcm_uframes_t siz
     // Check for error
     if( 0 > code )
         // Throw an error message
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to write non-interleaved samples: %s",
                         ::snd_strerror( code ) ) );
 

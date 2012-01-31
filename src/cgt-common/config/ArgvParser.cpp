@@ -191,7 +191,7 @@ unsigned int ArgvParser::parse( char key, unsigned int argc, char* argv[] )
     ShortoptMap::const_iterator itr = mShortopts.find( key );
     if( mShortopts.end() == itr )
         // Throw an exception
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Unknown shortopt '-%c'", key ) );
 
     // Check first string
@@ -209,7 +209,7 @@ unsigned int ArgvParser::parse( char* key, unsigned int argc, char* argv[] )
     LongoptMap::const_iterator itr = mLongopts.find( key );
     if( mLongopts.end() == itr )
         // Throw an exception
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Unknown longopt '--%s'", key ) );
 
     // Parse as-is
@@ -240,7 +240,7 @@ unsigned int ArgvParser::ConfigOption::parse( unsigned int argc, char* argv[] )
     // Check we have a filename
     if( 1 > argc )
         // Throw an exception
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "No filename given to option '-%c/--%s'",
                         shortKey(), longKey() ) );
 
@@ -248,14 +248,14 @@ unsigned int ArgvParser::ConfigOption::parse( unsigned int argc, char* argv[] )
     TiXmlDocument doc;
     if( !doc.LoadFile( *argv ) )
         // Throw an exception
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to load config file '%s': %s",
                         *argv, doc.ErrorDesc() ) );
 
     // Parse the document
     if( !doc.Accept( &mParser ) )
         // Throw an exception
-        throw std::runtime_error(
+        throw except::RuntimeError(
             ::ssprintf( "Failed to load config file '%s'",
                         *argv ) );
 
@@ -321,7 +321,7 @@ unsigned int ArgvParser::HelpOption::parse( unsigned int, char*[] )
     }
 
     // Throw an exception to stop processing
-    throw std::runtime_error( "Help requested" );
+    throw except::GracefulExit( "Help requested" );
 }
 
 /*************************************************************************/
@@ -341,17 +341,17 @@ unsigned int ArgvParser::ValueOption::parse( unsigned int argc, char* argv[] )
     {
         if( !hasShortKey() )
             // Throw an error message with long key only
-            throw std::runtime_error(
+            throw except::RuntimeError(
                 ::ssprintf( "No value supplied for option '--%s'",
                             longKey() ) );
         else if( !hasLongKey() )
             // Throw an error message with short key only
-            throw std::runtime_error(
+            throw except::RuntimeError(
                 ::ssprintf( "No value supplied for option '-%c'",
                             shortKey() ) );
         else
             // Throw an error message with both keys
-            throw std::runtime_error(
+            throw except::RuntimeError(
                 ::ssprintf( "No value supplied for option '-%c/--%s'",
                             shortKey(), longKey() ) );
     }
