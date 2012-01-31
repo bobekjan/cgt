@@ -72,6 +72,12 @@ SET( db_INCLUDE
 SET( db_SOURCE
      "${TARGET_SOURCE_DIR}/db/TextValue.cpp" )
 
+SET( except_INCLUDE
+     "${TARGET_INCLUDE_DIR}/except/Except.h"
+     "${TARGET_INCLUDE_DIR}/except/Except.inl" )
+SET( except_SOURCE
+     "" )
+
 SET( stats_INCLUDE
      "${TARGET_INCLUDE_DIR}/stats/Derivative.h"
      "${TARGET_INCLUDE_DIR}/stats/Derivative.inl"
@@ -101,6 +107,7 @@ SOURCE_GROUP( "include\\alsa"   FILES ${alsa_INCLUDE} )
 SOURCE_GROUP( "include\\config" FILES ${config_INCLUDE} )
 SOURCE_GROUP( "include\\core"   FILES ${core_INCLUDE} )
 SOURCE_GROUP( "include\\db"     FILES ${db_INCLUDE} )
+SOURCE_GROUP( "include\\except" FILES ${except_INCLUDE} )
 SOURCE_GROUP( "include\\stats"  FILES ${stats_INCLUDE} )
 SOURCE_GROUP( "include\\util"   FILES ${util_INCLUDE} )
 
@@ -109,6 +116,7 @@ SOURCE_GROUP( "src\\alsa"   FILES ${alsa_SOURCE} )
 SOURCE_GROUP( "src\\config" FILES ${config_SOURCE} )
 SOURCE_GROUP( "src\\core"   FILES ${core_SOURCE} )
 SOURCE_GROUP( "src\\db"     FILES ${db_SOURCE} )
+SOURCE_GROUP( "src\\except" FILES ${except_SOURCE} )
 SOURCE_GROUP( "src\\stats"  FILES ${stats_SOURCE} )
 SOURCE_GROUP( "src\\util"   FILES ${util_SOURCE} )
 
@@ -118,6 +126,7 @@ ADD_LIBRARY( "${TARGET_NAME}"
              ${config_INCLUDE} ${config_SOURCE}
              ${core_INCLUDE}   ${core_SOURCE}
              ${db_INCLUDE}     ${db_SOURCE}
+             ${except_INCLUDE} ${except_SOURCE}
              ${stats_INCLUDE}  ${stats_SOURCE}
              ${util_INCLUDE}   ${util_SOURCE} )
 

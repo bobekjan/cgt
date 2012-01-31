@@ -69,6 +69,8 @@
 // Platform compatibility code
 #include "cgt-compat.h"
 
+// Standard exceptions
+#include "except/Except.h"
 // Safe memory management utilities
 #include "util/SafeMem.h"
 
