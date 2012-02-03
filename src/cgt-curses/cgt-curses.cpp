@@ -45,7 +45,7 @@ int main( int argc, char* argv[] )
                              "Harmonic tolerance value" );
 
         // Parse arg vector
-        int code = argvParser.parse( argc, argv );
+        unsigned int code = argvParser.parse( argc, argv );
         argc -= code;
         argv += code;
     }

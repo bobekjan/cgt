@@ -120,6 +120,8 @@ void ArgvParser::clear()
 
 unsigned int ArgvParser::parse( unsigned int argc, char* argv[] )
 {
+    // Parser return code
+    unsigned int code;
     // Offset in argv, also return code
     unsigned int off = 0;
 
@@ -129,11 +131,12 @@ unsigned int ArgvParser::parse( unsigned int argc, char* argv[] )
         // This has to be a reference
         char*& opt = argv[ idx ];
 
-        if( '-' == *opt++ )
+        if( '-' == *opt )
         {
-            // Parser return code
-            unsigned int code;
+            // Skip the dash
+            ++opt;
 
+            // Loop over remaining options
             do
             {
                 // Process the option
