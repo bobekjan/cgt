@@ -68,6 +68,15 @@ public:
      * @param[in] attr The attribute.
      */
     void attrOff( int attr );
+    /**
+     * @brief Draws a box around the window.
+     *
+     * @param[in] verch Vertical character.
+     * @param[in] horch Horizontal character.
+     *
+     * Implemented by <code>box</code>.
+     */
+    void box( int verch = 0, int horch = 0 );
 
     /**
      * @brief Adds a string to the window.

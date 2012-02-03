@@ -40,6 +40,11 @@ inline void Window::attrOff( int attr )
     ::wattroff( mWindow, attr );
 }
 
+inline void Window::box( int verch, int horch )
+{
+    ::box( mWindow, verch, horch );
+}
+
 inline void Window::addStr( const char* str )
 {
     ::waddstr( mWindow, str );
