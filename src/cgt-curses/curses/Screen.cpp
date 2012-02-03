@@ -45,7 +45,7 @@ void Screen::start()
     mNotes.clear();
 }
 
-void Screen::add( double freq )
+void Screen::add( double freq, double )
 {
     // Obtain harmonic index
     unsigned int harm = mHarmonics.get( freq );

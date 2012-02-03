@@ -160,7 +160,8 @@ void FftAnalyser::processOutput()
 
         if( cur.ready() && next.localMax() < cur.localMax() )
             observer().add( ( cur.frequency() + 1 )
-                            * sampleRate() / bufferSize() );
+                            * sampleRate() / bufferSize(),
+                            cur.magnitude() );
     }
 
     // Find local maxes.
@@ -175,7 +176,8 @@ void FftAnalyser::processOutput()
             && next.localMax() < cur.localMax() )
         {
             observer().add( ( index + cur.frequency() + 1 )
-                            * sampleRate() / bufferSize() );
+                            * sampleRate() / bufferSize(),
+                            cur.magnitude() );
         }
     }
 
@@ -186,7 +188,8 @@ void FftAnalyser::processOutput()
 
         if( cur.ready() && prev.localMax() < cur.localMax() )
             observer().add( ( size + cur.frequency() )
-                            * sampleRate() / bufferSize() );
+                            * sampleRate() / bufferSize(),
+                            cur.magnitude() );
     }
 
     // End observer.

@@ -50,8 +50,9 @@ public:
          * detected in the incoming signal.
          *
          * @param[in] freq The detected frequency [Hz].
+         * @param[in] mag  Magnitude of the frequency.
          */
-        virtual void add( double freq ) = 0;
+        virtual void add( double freq, double mag ) = 0;
         /**
          * @brief Ends a new analysis run.
          *

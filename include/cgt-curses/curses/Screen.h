@@ -45,7 +45,7 @@ public:
     /**
      * @brief Adds a frequency within analysis frame.
      */
-    void add( double freq );
+    void add( double freq, double mag );
     /**
      * @brief Ends analysis frame.
      */
