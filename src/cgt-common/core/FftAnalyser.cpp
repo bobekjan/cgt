@@ -83,14 +83,19 @@ void FftAnalyser::processFreqs()
     // Ignore DC and Nyquist frequency.
     const size_t size = frequencyCount();
 
+    // Scale factors given by FFT.
+    const double scaleMag = 1.0 / bufferSize();
+    const double scaleAng = 1.0 / ( 2 * M_PI )
+                            * bufferSize() / captureSize();
+
     // Compute magnitude for each frequency.
     for( size_t index = 0; index < size; ++index )
     {
         Frequency& freq = frequency( index );
 
         // Obtain FFT output.
-        double real = mFftOutput[ index + 1 ];
-        double img  = mFftOutput[ mBufferSize - index - 1 ];
+        double real = scaleMag * mFftOutput[ index + 1 ];
+        double img  = scaleMag * mFftOutput[ mBufferSize - index - 1 ];
 
         // Update the magnitude.
         freq.updateMagnitude( real, img );
@@ -98,8 +103,7 @@ void FftAnalyser::processFreqs()
         // Check if the magnitude is large enough.
         if( magnitudeCutoff() <= 10 * ::log10( freq.magnitude() ) )
             // Update the angle.
-            freq.updateFrequency( ::atan2( img, real ) / ( 2 * M_PI )
-                                  * bufferSize() / captureSize() );
+            freq.updateFrequency( scaleAng * ::atan2( img, real ) );
         else
             // Doesn't fulfill the requirements.
             freq.reset();
