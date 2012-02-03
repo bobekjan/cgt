@@ -71,6 +71,9 @@ void NoteList::print( double freq, unsigned int harm )
 
 void NoteList::refresh()
 {
+    // Draw a box
+    box();
+
     // Refresh content of the window
     Window::refresh();
 }
@@ -80,6 +83,6 @@ void NoteList::clear()
     // Clear the window
     Window::clear();
 
-    // Move cursor to the default position
-    move( 0, 0 );
+    // Move cursor to the default position (remember our border)
+    move( 1, 1 );
 }

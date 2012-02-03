@@ -19,12 +19,13 @@ using namespace cgt::curses;
 Screen::Screen( int xpos, int ypos, int width, int height )
   // Pull the value from the config manager
 : mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
-   // Carefully positioned elements
-  mConfig( xpos + 1, ypos + height - 7 ),
-  mNotes( xpos + ( width - 40 ) / 2, ypos + height / 2 )
+  // Carefully positioned elements
+  mConfig( xpos, ypos + height - 8 ),
+  mNotes( xpos + ( width - 60 ) / 2, ypos + height / 2 )
 {
-    // Print config
+    // Initial print of all windows
     mConfig.refresh();
+    mNotes.refresh();
 }
 
 Screen::~Screen()
@@ -41,11 +42,8 @@ void Screen::start()
 
 void Screen::add( double freq, double )
 {
-    // Obtain harmonic index
-    unsigned int harm = mHarmonics.get( freq );
-
     // Add the note to the list
-    mNotes.print( freq, harm );
+    mNotes.print( freq, mHarmonics.get( freq ) );
 }
 
 void Screen::end()
