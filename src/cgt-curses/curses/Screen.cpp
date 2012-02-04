@@ -21,7 +21,7 @@ Screen::Screen( int xpos, int ypos, int width, int height )
 : mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
   // Carefully positioned elements
   mConfig( xpos, ypos + height - 8 ),
-  mNotes( xpos + ( width - 60 ) / 2, ypos + height / 2 )
+  mNotes( xpos + ( width - 36 ) / 2, ypos + height / 2 )
 {
     // Initial print of all windows
     mConfig.refresh();

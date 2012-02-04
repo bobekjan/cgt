@@ -18,7 +18,7 @@ using namespace cgt::curses;
 /* cgt::curses::NoteList                                                 */
 /*************************************************************************/
 NoteList::NoteList( int xpos, int ypos )
-: Window( xpos, ypos, 60, 15 )
+: Window( xpos, ypos, 36, 15 )
 {
     // Init our color pair
     ::init_pair( PAIR_FUNDAMENTAL, COLOR_RED, -1 );
