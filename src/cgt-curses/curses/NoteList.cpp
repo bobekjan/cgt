@@ -43,7 +43,7 @@ void NoteList::print( double freq, unsigned int harm )
 
     // Print it
 #ifndef CGT_DEBUG_ANALYSIS_FREQ
-    printw( "[%-*u] ", off, harm );
+    printw( " [%-*u] ", off, harm );
 
     attrOn( A_BOLD );
     printw( "%10s ", mName );
@@ -84,5 +84,5 @@ void NoteList::clear()
     Window::clear();
 
     // Move cursor to the default position (remember our border)
-    move( 1, 1 );
+    move( 1, 0 );
 }
