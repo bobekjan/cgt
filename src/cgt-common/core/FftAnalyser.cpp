@@ -69,13 +69,79 @@ void FftAnalyser::step()
 
     // Process the frequencies
     processFreqs();
-    processLocalMax();
     processOutput();
 }
 
 void FftAnalyser::reset()
 {
     // TODO: reset all angles.
+}
+
+double FftAnalyser::compoundMagnitude( size_t index )
+{
+    Frequency& cur = frequency( index );
+
+    if( !cur.ready() )
+        return cur.magnitude();
+
+    // Ignore DC and Nyquist frequency.
+    const size_t size = frequencyCount();
+    // Obtain cur frequency
+    double curFreq = cur.frequency();
+
+    if( 0 == index )
+    {
+        if( 0 > curFreq )
+            return cur.magnitude();
+        else
+            return ( 1 - curFreq ) * cur.magnitude()
+                + curFreq * frequency( 1 ).magnitude();
+    }
+    else if( index == size - 1 )
+    {
+        if( 0 > curFreq )
+            return ( 1 + curFreq ) * cur.magnitude()
+                - curFreq * frequency( size - 2 ).magnitude();
+        else
+            return cur.magnitude();
+    }
+    else
+    {
+        if( 0 > curFreq )
+            return ( 1 + curFreq ) * cur.magnitude()
+                - curFreq * frequency( index - 1 ).magnitude();
+        else
+            return ( 1 - curFreq ) * cur.magnitude()
+                + curFreq * frequency( index + 1 ).magnitude();
+    }
+}
+
+bool FftAnalyser::checkFrequency( size_t indexCur, size_t indexOther )
+{
+    // Obtain the frequencies
+    Frequency& cur   = frequency( indexCur );
+    Frequency& other = frequency( indexOther );
+
+    // Check readiness of cur
+    if( !cur.ready() )
+        return false;
+    // Check readiness of other
+    else if( !other.ready() )
+        return true;
+    // Compare by compound magnitudes
+    else
+        return compoundMagnitude( indexOther ) < compoundMagnitude( indexCur );
+}
+
+void FftAnalyser::addFrequency( size_t index )
+{
+    // Obtain the frequency
+    Frequency& freq = frequency( index );
+
+    // Pass it to observer
+    observer().add( ( index + freq.frequency() + 1 )
+                    * sampleRate() / bufferSize(),
+                    freq.magnitude() );
 }
 
 void FftAnalyser::processFreqs()
@@ -110,45 +176,6 @@ void FftAnalyser::processFreqs()
     }
 }
 
-void FftAnalyser::processLocalMax()
-{
-    // Ignore DC and Nyquist frequency.
-    const size_t size = frequencyCount();
-
-    // Handle special case of first frequency.
-    {
-        Frequency& cur =  frequency( 0 );
-        Frequency& next = frequency( 1 );
-
-        if( magnitudeCutoff() <= cur.magnitude()
-            && next.magnitude() < cur.magnitude() )
-            cur.updateLocalMax();
-    }
-
-    // Find local maxes.
-    for( size_t index = 1; index < ( size - 1 ); ++index )
-    {
-        Frequency& prev = frequency( index - 1 );
-        Frequency& cur  = frequency( index );
-        Frequency& next = frequency( index + 1 );
-
-        if( magnitudeCutoff() <= cur.magnitude()
-            && prev.magnitude() < cur.magnitude()
-            && next.magnitude() < cur.magnitude() )
-            cur.updateLocalMax();
-    }
-
-    // Handle special case of last frequency.
-    {
-        Frequency& prev = frequency( size - 2 );
-        Frequency& cur  = frequency( size - 1 );
-
-        if( magnitudeCutoff() <= cur.magnitude()
-            && prev.magnitude() < cur.magnitude() )
-            cur.updateLocalMax();
-    }
-}
-
 void FftAnalyser::processOutput()
 {
     // Ignore DC and Nyquist frequency.
@@ -159,41 +186,21 @@ void FftAnalyser::processOutput()
 
     // Handle special case of first frequency.
     {
-        Frequency& cur =  frequency( 0 );
-        Frequency& next = frequency( 1 );
-
-        if( cur.ready() && next.localMax() < cur.localMax() )
-            observer().add( ( cur.frequency() + 1 )
-                            * sampleRate() / bufferSize(),
-                            cur.magnitude() );
+        if( checkFrequency( 0, 1 ) )
+            addFrequency( 0 );
     }
 
     // Find local maxes.
     for( size_t index = 1; index < ( size - 1 ); ++index )
     {
-        Frequency& prev = frequency( index - 1 );
-        Frequency& cur  = frequency( index );
-        Frequency& next = frequency( index + 1 );
-
-        if( cur.ready()
-            && prev.localMax() < cur.localMax()
-            && next.localMax() < cur.localMax() )
-        {
-            observer().add( ( index + cur.frequency() + 1 )
-                            * sampleRate() / bufferSize(),
-                            cur.magnitude() );
-        }
+        if( checkFrequency( index, index - 1 ) && checkFrequency( index, index + 1 ) )
+            addFrequency( index );
     }
 
     // Handle special case of last frequency.
     {
-        Frequency& prev = frequency( size - 2 );
-        Frequency& cur  = frequency( size - 1 );
-
-        if( cur.ready() && prev.localMax() < cur.localMax() )
-            observer().add( ( size + cur.frequency() )
-                            * sampleRate() / bufferSize(),
-                            cur.magnitude() );
+        if( checkFrequency( size - 1, size - 2 ) )
+            addFrequency( size - 1 );
     }
 
     // End observer.
@@ -208,8 +215,7 @@ FftAnalyser::Frequency::Frequency( unsigned int limit )
   mCounter( new stats::Derivative< double, double >(
                 new stats::Periodic< double, double >(
                     new stats::AverageRing< double, double >( limit ),
-                    1.0 ) ) ),
-  mLocalMaxCount( 0 )
+                    1.0 ) ) )
 {
 }
 
@@ -236,5 +242,4 @@ void FftAnalyser::Frequency::updateFrequency( double angle )
 void FftAnalyser::Frequency::reset()
 {
     mCounter->reset();
-    mLocalMaxCount = 0;
 }

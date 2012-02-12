@@ -116,12 +116,6 @@ protected:
          * @return The frequency.
          */
         double frequency() const;
-        /**
-         * @brief Obtains current local max count.
-         *
-         * @return The local max count.
-         */
-        unsigned int localMax() const { return mLocalMaxCount; }
 
         /**
          * @brief Updates the magnitude with new data.
@@ -136,10 +130,6 @@ protected:
          * @param[in] angle Angle of the frequency.
          */
         void updateFrequency( double angle );
-        /**
-         * @brief Update the local max.
-         */
-        void updateLocalMax() { ++mLocalMaxCount; }
 
         /**
          * @brief Resets all the information.
@@ -152,8 +142,6 @@ protected:
 
         /// The statistics counter for frequency correction.
         stats::ICounter< double, double >* mCounter;
-        /// Number of times this has been a local max.
-        unsigned int mLocalMaxCount;
     };
 
     /**
@@ -172,13 +160,34 @@ protected:
     size_t frequencyCount() const { return ( bufferSize() - 1 ) / 2; }
 
     /**
+     * @brief Calculates compound magnitude of a frequency.
+     *
+     * @param[in] index Index of the frequency.
+     *
+     * @return The compound magnitude.
+     */
+    double compoundMagnitude( size_t index );
+    /**
+     * @brief Checks a frequency.
+     *
+     * @param[in] indexCur Index of current frequency.
+     * @param[in] indexOther Index of the other frequency.
+     *
+     * @retval true  Frequency OK.
+     * @retval false Frequency not OK.
+     */
+    bool checkFrequency( size_t indexCur, size_t indexOther );
+    /**
+     * @brief Adds a frequency to the observer.
+     *
+     * @param[in] index Index of the frequency.
+     */
+    void addFrequency( size_t index );
+
+    /**
      * @brief Processes frequencies.
      */
     void processFreqs();
-    /**
-     * @brief Processes local maxes.
-     */
-    void processLocalMax();
     /**
      * @brief Processes output.
      */
