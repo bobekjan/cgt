@@ -21,38 +21,48 @@ Screen::Screen( int xpos, int ypos, int width, int height )
 : mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
   // Carefully positioned elements
   mConfig( xpos, ypos + height - 8,
-           width / 3, 8 ),
+           width / 2, 8 ),
   mMagBar( xpos + width / 16, ypos + height / 8,
            3, 5 * height / 8 ),
   mNotes( xpos + ( width / 3 ) / 2, ypos + height / 2,
-          2 * width / 3, height / 4 )
+          2 * width / 3, height / 4 ),
+  mTuner( xpos + ( width / 3 ) / 2, ypos + height / 16,
+          2 * width / 3, 6 * height / 16 )
 {
     // Initial print of all windows
     mConfig.refresh();
     mMagBar.refresh();
     mNotes.refresh();
-}
-
-Screen::~Screen()
-{
+    mTuner.refresh();
 }
 
 void Screen::start()
 {
     // Flush harmonics.
     mHarmonics.clear();
+
     // Clear magnitude bar.
     mMagBar.clear();
     // Clear note list
     mNotes.clear();
+    // Clear tuner
+    mTuner.clear();
 }
 
 void Screen::add( double freq, double mag )
 {
+    // Obtain harmonic index
+    const int harm = mHarmonics.get( freq );
+
     // Add magnitude to the bar
     mMagBar.add( mag );
     // Add the note to the list
-    mNotes.print( freq, mHarmonics.get( freq ) );
+    mNotes.print( freq, harm );
+
+    // If it's a fundamental ...
+    if( 0 == harm )
+        // .. add to tuner
+        mTuner.add( freq );
 }
 
 void Screen::end()
@@ -61,4 +71,6 @@ void Screen::end()
     mMagBar.refresh();
     // Print the notes
     mNotes.refresh();
+    // Print the tuner
+    mTuner.refresh();
 }

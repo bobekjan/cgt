@@ -51,7 +51,7 @@ void NoteList::print( double freq, unsigned int harm )
 
     printw( "(%10.4f Hz)\n", freq );
 #else /* !CGT_DEBUG_ANALYSIS_FREQ */
-    printw( "[%-*u] ", off, harm );
+    printw( " [%-*u] ", off, harm );
 
     attrOn( A_BOLD );
     printw( "%10s ", mName );

@@ -13,6 +13,7 @@
 #include "curses/ConfigList.h"
 #include "curses/MagnitudeBar.h"
 #include "curses/NoteList.h"
+#include "curses/TunerBar.h"
 
 namespace cgt { namespace curses {
 
@@ -34,10 +35,6 @@ public:
      * @param[in] height Size in Y-axis.
      */
     Screen( int xpos, int ypos, int width, int height );
-    /**
-     * @brief Deinitializes the observer.
-     */
-    ~Screen();
 
     /**
      * @brief Starts analysis frame.
@@ -58,10 +55,12 @@ protected:
 
     /// Configuration list.
     ConfigList   mConfig;
-    /// Magnitude bar
+    /// Magnitude bar.
     MagnitudeBar mMagBar;
     /// Note list.
     NoteList     mNotes;
+    /// Tuner bar.
+    TunerBar     mTuner;
 };
 
 }} // cgt::curses
