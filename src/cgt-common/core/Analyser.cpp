@@ -143,5 +143,7 @@ void Analyser::captureStep()
          i < bufferSize();
          ++i, mPhase += 2.0 * M_PI / sampleRate() )
         mSamples[ i ] = ::cos( CGT_DEBUG_ANALYSIS_FREQ * mPhase );
+
+    ::usleep( 1000lu * 1000lu * captureSize() / sampleRate() );
 #endif /* CGT_DEBUG_ANALYSIS_FREQ */
 }
