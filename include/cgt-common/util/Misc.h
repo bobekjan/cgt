@@ -69,6 +69,16 @@ double normalize( double value, double period );
  */
 Note noteName( double freq, int& octave, double& cents );
 /**
+ * @brief Genetares a frequency by given note description.
+ *
+ * @param[in] note The note.
+ * @param[in] octave Octave of the note.
+ * @param[in] cents  Additional cents.
+ *
+ * @return The frequency of the note.
+ */
+double noteFreq( Note note, int octave, double cents );
+/**
  * @brief Generates a string for a given note.
  *
  * @param[in]  note   The note.

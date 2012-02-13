@@ -45,6 +45,15 @@ double util::normalize( double value, double period )
     return value -= k * period;
 }
 
+double util::noteFreq( Note note, int octave, double cents )
+{
+    // Calculate index of the note
+    const double index = octave * NOTES_PER_OCTAVE + note + cents / CENTS_PER_NOTE;
+
+    // Compute the frequency
+    return A4_FREQ * ::pow( 2, double( index - A4_INDEX ) / NOTES_PER_OCTAVE );
+}
+
 Note util::noteName( double freq, int& octave, double& cents )
 {
     // Calculate index of the note
