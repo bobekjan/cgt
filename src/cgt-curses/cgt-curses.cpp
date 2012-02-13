@@ -17,10 +17,10 @@ int main( int argc, char* argv[] )
     try
     {
         // Load default configuration
-        sConfigMgr[ "cgt.pcm.device"  ] = "hw:0,0";
+        sConfigMgr[ "cgt.pcm.device"  ] = "plughw:0,0";
         sConfigMgr[ "cgt.pcm.rate"    ] = 48000;
         sConfigMgr[ "cgt.bufferSize"  ] = 16384;
-        sConfigMgr[ "cgt.captureSize" ] = 2048;
+        sConfigMgr[ "cgt.captureSize" ] = 4096;
 
         sConfigMgr[ "cgt.fft.magnitudeCutoff" ]   = -30.0;
         sConfigMgr[ "cgt.fft.harmonicTolerance" ] =  -6.0;
