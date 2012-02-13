@@ -19,6 +19,7 @@
 #include "config/ArgvParser.h"
 #include "config/ConfigMgr.h"
 #include "core/FftAnalyser.h"
+#include "stats/Maximum.h"
 #include "util/Harmonics.h"
 #include "util/Misc.h"
 
@@ -31,6 +32,8 @@
 #define PAIR_FUNDAMENTAL 1
 // Color pair for config
 #define PAIR_CONFIG      2
+// Color pair for magnitude bar
+#define PAIR_MAGBAR      3
 
 using namespace cgt;
 

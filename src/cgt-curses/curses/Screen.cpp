@@ -22,11 +22,14 @@ Screen::Screen( int xpos, int ypos, int width, int height )
   // Carefully positioned elements
   mConfig( xpos, ypos + height - 8,
            width / 3, 8 ),
+  mMagBar( xpos + width / 16, ypos + height / 8,
+           3, 5 * height / 8 ),
   mNotes( xpos + ( width / 3 ) / 2, ypos + height / 2,
           2 * width / 3, height / 4 )
 {
     // Initial print of all windows
     mConfig.refresh();
+    mMagBar.refresh();
     mNotes.refresh();
 }
 
@@ -38,18 +41,24 @@ void Screen::start()
 {
     // Flush harmonics.
     mHarmonics.clear();
+    // Clear magnitude bar.
+    mMagBar.clear();
     // Clear note list
     mNotes.clear();
 }
 
-void Screen::add( double freq, double )
+void Screen::add( double freq, double mag )
 {
+    // Add magnitude to the bar
+    mMagBar.add( mag );
     // Add the note to the list
     mNotes.print( freq, mHarmonics.get( freq ) );
 }
 
 void Screen::end()
 {
+    // Print the magnitude bar
+    mMagBar.refresh();
     // Print the notes
     mNotes.refresh();
 }

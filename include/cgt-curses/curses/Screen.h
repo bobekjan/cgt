@@ -11,6 +11,7 @@
 #define __CGT__CURSES__SCREEN_H__INCL__
 
 #include "curses/ConfigList.h"
+#include "curses/MagnitudeBar.h"
 #include "curses/NoteList.h"
 
 namespace cgt { namespace curses {
@@ -54,10 +55,13 @@ public:
 protected:
     /// Harmonics analyser.
     util::Harmonics mHarmonics;
+
     /// Configuration list.
-    ConfigList      mConfig;
+    ConfigList   mConfig;
+    /// Magnitude bar
+    MagnitudeBar mMagBar;
     /// Note list.
-    NoteList        mNotes;
+    NoteList     mNotes;
 };
 
 }} // cgt::curses
