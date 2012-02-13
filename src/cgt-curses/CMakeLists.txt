@@ -39,13 +39,15 @@ SET( curses_INCLUDE
      "${TARGET_INCLUDE_DIR}/curses/MagnitudeBar.h"
      "${TARGET_INCLUDE_DIR}/curses/NoteList.h"
      "${TARGET_INCLUDE_DIR}/curses/Screen.h"
+     "${TARGET_INCLUDE_DIR}/curses/TunerBar.h"
      "${TARGET_INCLUDE_DIR}/curses/Window.h"
      "${TARGET_INCLUDE_DIR}/curses/Window.inl" )
 SET( curses_SOURCE
      "${TARGET_SOURCE_DIR}/curses/ConfigList.cpp"
      "${TARGET_SOURCE_DIR}/curses/MagnitudeBar.cpp"
      "${TARGET_SOURCE_DIR}/curses/NoteList.cpp"
-     "${TARGET_SOURCE_DIR}/curses/Screen.cpp" )
+     "${TARGET_SOURCE_DIR}/curses/Screen.cpp"
+     "${TARGET_SOURCE_DIR}/curses/TunerBar.cpp" )
 
 ########################
 # Setup the executable #

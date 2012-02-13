@@ -34,6 +34,12 @@
 #define PAIR_CONFIG      2
 // Color pair for magnitude bar
 #define PAIR_MAGBAR      3
+// Color pair for tuner bar, good
+#define PAIR_TUNER_GOOD  4
+// Color pair for tuner bar, bad
+#define PAIR_TUNER_BAD   5
+// Color pair for tuner bar arrows
+#define PAIR_TUNER_ARROW 6
 
 using namespace cgt;
 
