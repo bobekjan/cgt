@@ -32,7 +32,7 @@ public:
     /// Retain result type from base.
     typedef typename Base::Result Result;
     /// Retain target type from base.
-    typedef typename Base::Target  Target;
+    typedef typename Base::Target Target;
 
     /**
      * @brief The primary constructor.
