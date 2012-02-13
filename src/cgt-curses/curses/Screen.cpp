@@ -20,8 +20,10 @@ Screen::Screen( int xpos, int ypos, int width, int height )
   // Pull the value from the config manager
 : mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
   // Carefully positioned elements
-  mConfig( xpos, ypos + height - 8 ),
-  mNotes( xpos + ( width - 36 ) / 2, ypos + height / 2 )
+  mConfig( xpos, ypos + height - 8,
+           width / 3, 8 ),
+  mNotes( xpos + ( width / 3 ) / 2, ypos + height / 2,
+          2 * width / 3, height / 4 )
 {
     // Initial print of all windows
     mConfig.refresh();

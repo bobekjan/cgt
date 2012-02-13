@@ -17,8 +17,8 @@ using namespace cgt::curses;
 /*************************************************************************/
 /* cgt::curses::ConfigList                                               */
 /*************************************************************************/
-ConfigList::ConfigList( int row, int col )
-: Window( row, col, 40, 8 )
+ConfigList::ConfigList( int xpos, int ypos, int width, int height )
+: Window( xpos, ypos, width, height )
 {
     // Init our color pair
     ::init_pair( PAIR_CONFIG, COLOR_YELLOW, -1 );

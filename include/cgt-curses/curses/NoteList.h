@@ -26,10 +26,12 @@ public:
     /**
      * @brief Initializes the note list.
      *
-     * @param[in] xpos Position in X-axis.
-     * @param[in] ypos Position in Y-axis.
+     * @param[in] xpos   Position in X-axis.
+     * @param[in] ypos   Position in Y-axis.
+     * @param[in] width  Size in X-axis.
+     * @param[in] height Size in Y-axis.
      */
-    NoteList( int xpos, int ypos );
+    NoteList( int xpos, int ypos, int width, int height );
 
     /**
      * @brief Adds a note to the list.
