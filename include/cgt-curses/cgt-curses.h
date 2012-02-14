@@ -39,7 +39,7 @@
 // Color pair for tuner bar, bad
 #define PAIR_TUNER_BAD   5
 // Color pair for tuner bar arrows
-#define PAIR_TUNER_ARROW 6
+#define PAIR_TUNER_DESC  6
 
 using namespace cgt;
 

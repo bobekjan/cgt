@@ -20,9 +20,9 @@ TunerBar::TunerBar( int xpos, int ypos, int width, int height )
 : Window( xpos, ypos, width, height )
 {
     // Initialize our color pair
-    ::init_pair( PAIR_TUNER_GOOD,  COLOR_GREEN,  -1 );
-    ::init_pair( PAIR_TUNER_BAD,   COLOR_RED,    -1 );
-    ::init_pair( PAIR_TUNER_ARROW, COLOR_YELLOW, -1 );
+    ::init_pair( PAIR_TUNER_GOOD, COLOR_GREEN,  -1 );
+    ::init_pair( PAIR_TUNER_BAD,  COLOR_RED,    -1 );
+    ::init_pair( PAIR_TUNER_DESC, COLOR_YELLOW, -1 );
 }
 
 void TunerBar::add( double freq )
@@ -31,6 +31,11 @@ void TunerBar::add( double freq )
     int octave;
     double cents;
     util::Note n = util::noteName( freq, octave, cents );
+
+    // Obtain name of the note
+    char name[ 0x20 ];
+    util::noteStr( n, octave, cents,
+                   name, sizeof( name ) );
 
     // Obtain min and max frequencies
     double freqMin = util::noteFreq( n, octave, -50 );
@@ -63,15 +68,18 @@ void TunerBar::add( double freq )
 
     attrOff( COLOR_PAIR( exact ? PAIR_TUNER_GOOD : PAIR_TUNER_BAD ) );
 
-    // Draw arrows
-    attrOn( A_BOLD | COLOR_PAIR( PAIR_TUNER_ARROW ) );
+    attrOn( A_BOLD | COLOR_PAIR( PAIR_TUNER_DESC ) );
 
+    // Draw arrows
     if( 0 > cents )
         mvwhline( mWindow, height / 4, 3 * width / 4 - 2, ACS_RARROW, 4 );
     else
         mvwhline( mWindow, height / 4, 1 * width / 4 - 2, ACS_LARROW, 4 );
 
-    attrOff( A_BOLD | COLOR_PAIR( PAIR_TUNER_ARROW ) );
+    // Print note name
+    mvwaddstr( mWindow, height / 2, ( width - ::strlen( name ) ) / 2, name );
+
+    attrOff( A_BOLD | COLOR_PAIR( PAIR_TUNER_DESC ) );
 }
 
 void TunerBar::refresh()
