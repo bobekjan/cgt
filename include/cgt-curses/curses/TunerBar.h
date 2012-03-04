@@ -26,10 +26,10 @@ public:
     /**
      * @brief Initializes the tuner bar.
      *
-     * @param[in] xpos   Position in X-axis.
-     * @param[in] ypos   Position in Y-axis.
-     * @param[in] width  Size in X-axis.
-     * @param[in] height Size in Y-axis.
+     * @param[in] xpos    Position in X-axis.
+     * @param[in] ypos    Position in Y-axis.
+     * @param[in] width   Size in X-axis.
+     * @param[in] height  Size in Y-axis.
      */
     TunerBar( int xpos, int ypos, int width, int height );
 
@@ -47,6 +47,10 @@ public:
      * @brief Clears the magnitude bar data.
      */
     void clear();
+
+protected:
+    /// Tuning tolerance.
+    double mTuneTolerance;
 };
 
 }} // cgt::curses

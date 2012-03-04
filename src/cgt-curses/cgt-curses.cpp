@@ -23,7 +23,9 @@ int main( int argc, char* argv[] )
         sConfigMgr[ "cgt.captureSize" ] = 4096;
 
         sConfigMgr[ "cgt.fft.magnitudeCutoff" ]   = -30.0;
-        sConfigMgr[ "cgt.fft.harmonicTolerance" ] =  -6.0;
+        sConfigMgr[ "cgt.fft.harmonicTolerance" ] = -6.0;
+
+        sConfigMgr[ "cgt.tune.tolerance" ] = 3.0;
 
         // Load config
         config::ArgvParser argvParser;
@@ -43,6 +45,8 @@ int main( int argc, char* argv[] )
                              "Magnitude cutoff value when using FFT" );
         argvParser.addValue( 'H', "harm-tol", "cgt.fft.harmonicTolerance",
                              "Harmonic tolerance value" );
+        argvParser.addValue( 't', "tune-tol", "cgt.tune.tolerance",
+                             "Tuning tolerance, +/- in cents" );
 
         // Parse arg vector
         unsigned int code = argvParser.parse( argc, argv );

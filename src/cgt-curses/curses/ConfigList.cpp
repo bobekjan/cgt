@@ -33,6 +33,7 @@ void ConfigList::refresh()
     print( 3, "Capture size:       ", sConfigMgr[ "cgt.captureSize" ] );
     print( 4, "Magnitude cutoff:   ", sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
     print( 5, "Harmonic tolerance: ", sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
+    print( 6, "Tune tolerance:     ", sConfigMgr[ "cgt.tune.tolerance" ] );
 
     // Draw a box
     box();

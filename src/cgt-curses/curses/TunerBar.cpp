@@ -17,7 +17,8 @@ using namespace cgt::curses;
 /* cgt::curses::TunerBar                                                 */
 /*************************************************************************/
 TunerBar::TunerBar( int xpos, int ypos, int width, int height )
-: Window( xpos, ypos, width, height )
+: Window( xpos, ypos, width, height ),
+  mTuneTolerance( sConfigMgr[ "cgt.tune.tolerance" ] )
 {
     // Initialize our color pair
     ::init_pair( PAIR_TUNER_GOOD, COLOR_GREEN,  -1 );
@@ -42,7 +43,7 @@ void TunerBar::add( double freq )
     double freqMax = util::noteFreq( n, octave, +50 );
 
     // Determine exactness
-    bool exact = ( 2.0 > ::fabs( cents ) );
+    bool exact = ( ::fabs( cents ) <= mTuneTolerance );
 
     // Get width & height
     int width, height;
