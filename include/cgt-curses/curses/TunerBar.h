@@ -34,11 +34,11 @@ public:
     TunerBar( int xpos, int ypos, int width, int height );
 
     /**
-     * @brief Add a fundamental frequency.
+     * @brief Add a fundamental tone.
      *
-     * @param[in] freq The frequency.
+     * @param[in] tone The tone.
      */
-    void add( double freq );
+    void add( const util::Tone& tone );
     /**
      * @brief Reprints the magnitude bar.
      */

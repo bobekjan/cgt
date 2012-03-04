@@ -43,18 +43,20 @@ void Screen::start()
 
 void Screen::add( double freq, double mag )
 {
+    // Create the tone
+    const util::Tone tone( freq );
     // Obtain harmonic index
-    const int harm = mHarmonics.get( freq );
+    const int harm = mHarmonics.get( tone.frequency() );
 
     // Add magnitude to the bar
     mMagBar.add( mag );
     // Add the note to the list
-    mNotes.print( freq, harm );
+    mNotes.print( tone, harm );
 
     // If it's a fundamental ...
     if( 0 == harm )
         // .. add to tuner
-        mTuner.add( freq );
+        mTuner.add( tone );
 }
 
 void Screen::end()

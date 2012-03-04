@@ -26,24 +26,18 @@ TunerBar::TunerBar( int xpos, int ypos, int width, int height )
     ::init_pair( PAIR_TUNER_DESC, COLOR_YELLOW, -1 );
 }
 
-void TunerBar::add( double freq )
+void TunerBar::add( const util::Tone& tone )
 {
-    // Obtain description of the note
-    int octave;
-    double cents;
-    util::Note n = util::noteName( freq, octave, cents );
-
     // Obtain name of the note
     char name[ 0x20 ];
-    util::noteStr( n, octave, cents,
-                   name, sizeof( name ) );
+    tone.getName( name, sizeof( name ) );
 
     // Obtain min and max frequencies
-    double freqMin = util::noteFreq( n, octave, -50 );
-    double freqMax = util::noteFreq( n, octave, +50 );
+    const util::Tone toneMin( tone.note(), -50, tone.octave() );
+    const util::Tone toneMax( tone.note(), +50, tone.octave() );
 
     // Determine exactness
-    bool exact = ( ::fabs( cents ) <= mTuneTolerance );
+    const bool exact = ( ::fabs( tone.cents() ) <= mTuneTolerance );
 
     // Clear the window
     Window::erase();
@@ -59,7 +53,9 @@ void TunerBar::add( double freq )
     mvwhline( mWindow, height - 3, 1, '-', width - 2 );
 
     // Locate the marker
-    int mark = 1.5 + ( width - 3 ) * ( freq - freqMin ) / ( freqMax - freqMin );
+    int mark = 1.5 + ( width - 3 )
+        * ( tone.frequency()    - toneMin.frequency() )
+        / ( toneMax.frequency() - toneMin.frequency() );
 
     // Draw the colorized markers
     attrOn( COLOR_PAIR( exact ? PAIR_TUNER_GOOD : PAIR_TUNER_BAD ) );
@@ -75,7 +71,7 @@ void TunerBar::add( double freq )
     attrOn( A_BOLD | COLOR_PAIR( PAIR_TUNER_DESC ) );
 
     // Draw arrows
-    if( 0 > cents )
+    if( 0 > tone.cents() )
         mvwhline( mWindow, height / 4, 3 * width / 4 - 2, ACS_RARROW, 4 );
     else
         mvwhline( mWindow, height / 4, 1 * width / 4 - 2, ACS_LARROW, 4 );
@@ -98,4 +94,6 @@ void TunerBar::refresh()
 
     // Refresh content of the window
     Window::noutRefresh();
+    // Clear the window
+    Window::erase();
 }

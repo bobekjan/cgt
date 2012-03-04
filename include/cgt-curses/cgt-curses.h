@@ -21,7 +21,7 @@
 #include "core/FftAnalyser.h"
 #include "stats/Maximum.h"
 #include "util/Harmonics.h"
-#include "util/Misc.h"
+#include "util/Tone.h"
 
 /*************************************************************************/
 /* cgt-curses                                                            */

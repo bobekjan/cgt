@@ -35,6 +35,10 @@ void MagnitudeBar::add( double mag )
 
 void MagnitudeBar::refresh()
 {
+    // Obtain dimensions of the window
+    int width, height;
+    getmaxyx( mWindow, height, width );
+
     // Check if the counter is ready
     if( mMax.ready() )
     {
@@ -42,16 +46,11 @@ void MagnitudeBar::refresh()
         double mag = 10 * ::log10( mMax.result() );
         double span = 12;
 
-        int width, height;
-        getmaxyx( mWindow, height, width );
-
         // Calculate bar
-        int bar = ( height - 2 ) * ( mag - mCutoff ) / span;
-        bar = std::min( bar, height - 2 );
+        int bar = ( height - 2 ) * std::min( ( mag - mCutoff ) / span, 1.0 );
 
         // Print the colorized bar
         attrOn( COLOR_PAIR( PAIR_MAGBAR ) );
-        mvwvline( mWindow,                1, 1, ' ', height - bar - 2 );
         mvwvline( mWindow, height - bar - 1, 1, '*', bar );
         attrOff( COLOR_PAIR( PAIR_MAGBAR ) );
     }
@@ -59,6 +58,8 @@ void MagnitudeBar::refresh()
     // Refresh content of the window
     Window::noutRefresh();
 
+    // Reset bar level
+    mvwvline( mWindow, 1, 1, ' ', height - 2 );
     // Reset the maximum counter.
     mMax.reset();
 }

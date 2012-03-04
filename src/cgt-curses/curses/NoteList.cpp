@@ -24,16 +24,11 @@ NoteList::NoteList( int xpos, int ypos, int width, int height )
     ::init_pair( PAIR_FUNDAMENTAL, COLOR_RED, -1 );
 }
 
-void NoteList::print( double freq, unsigned int harm )
+void NoteList::print( const util::Tone& tone, unsigned int harm )
 {
-    // Obtain name of the note
-    int octave;
-    double cents;
-    util::Note note = util::noteName( freq, octave, cents );
-
     // Generate the name
-    util::noteStr( note, octave, cents,
-                   mName, sizeof( mName ) );
+    char name[ 0x20 ];
+    tone.getName( name, sizeof( name ) );
 
     unsigned int off  = ::log2( harm + 1 ) + 1;
 
@@ -46,21 +41,21 @@ void NoteList::print( double freq, unsigned int harm )
     printw( " [%-*u] ", off, harm );
 
     attrOn( A_BOLD );
-    printw( "%10s ", mName );
+    printw( "%10s ", name );
     attrOff( A_BOLD );
 
-    printw( "(%10.4f Hz)\n", freq );
+    printw( "(%10.4f Hz)\n", tone.frequency() );
 #else /* !CGT_DEBUG_ANALYSIS_FREQ */
     printw( " [%-*u] ", off, harm );
 
     attrOn( A_BOLD );
-    printw( "%10s ", mName );
+    printw( "%10s ", name );
     attrOff( A_BOLD );
 
-    printw( "(%10.4f Hz) = ", freq );
+    printw( "(%10.4f Hz) = ", tone.frequency() );
 
     attrOn( A_BOLD );
-    printw( "%10.4f dB\n", 10 * ::log10( ::fabs( freq - CGT_DEBUG_ANALYSIS_FREQ ) ) );
+    printw( "%10.4f dB\n", 10 * ::log10( ::fabs( tone.frequency() - CGT_DEBUG_ANALYSIS_FREQ ) ) );
     attrOff( A_BOLD );
 #endif /* !CGT_DEBUG_ANALYSIS_FREQ */
 

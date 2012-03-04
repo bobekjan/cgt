@@ -36,18 +36,14 @@ public:
     /**
      * @brief Adds a note to the list.
      *
-     * @param[in] freq Frequency of the note.
-     * @param[in] harm Harmonic index of the note.
+     * @param[in] tone The tone.
+     * @param[in] harm Harmonic index of the tone.
      */
-    void print( double freq, unsigned int harm );
+    void print( const util::Tone& tone, unsigned int harm );
     /**
      * @brief Prints the note list.
      */
     void refresh();
-
-protected:
-    /// A buffer for note name.
-    char mName[ 0x20 ];
 };
 
 }} // cgt::curses
