@@ -22,27 +22,27 @@ ConfigList::ConfigList( int xpos, int ypos, int width, int height )
 {
     // Init our color pair
     ::init_pair( PAIR_CONFIG, COLOR_YELLOW, -1 );
+
+    // Draw a box
+    box();
 }
 
 void ConfigList::refresh()
 {
     // Print all lines
-    print( 0, "Device:             ", sConfigMgr[ "cgt.pcm.device" ] );
-    print( 1, "Rate:               ", sConfigMgr[ "cgt.pcm.rate" ] );
-    print( 2, "Buffer size:        ", sConfigMgr[ "cgt.bufferSize" ] );
-    print( 3, "Capture size:       ", sConfigMgr[ "cgt.captureSize" ] );
-    print( 4, "Magnitude cutoff:   ", sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
-    print( 5, "Harmonic tolerance: ", sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
-    print( 6, "Tune tolerance:     ", sConfigMgr[ "cgt.tune.tolerance" ] );
-
-    // Draw a box
-    box();
+    addLine( 0, "Device:             ", sConfigMgr[ "cgt.pcm.device" ] );
+    addLine( 1, "Rate:               ", sConfigMgr[ "cgt.pcm.rate" ] );
+    addLine( 2, "Buffer size:        ", sConfigMgr[ "cgt.bufferSize" ] );
+    addLine( 3, "Capture size:       ", sConfigMgr[ "cgt.captureSize" ] );
+    addLine( 4, "Magnitude cutoff:   ", sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
+    addLine( 5, "Harmonic tolerance: ", sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
+    addLine( 6, "Tune tolerance:     ", sConfigMgr[ "cgt.tune.tolerance" ] );
 
     // Refresh the window
-    Window::refresh();
+    Window::noutRefresh();
 }
 
-void ConfigList::print( int line, const char* title, const char* value )
+void ConfigList::addLine( int line, const char* title, const char* value )
 {
     // Move the cursor to position (remember our border)
     move( 1 + line, 1 );

@@ -46,7 +46,7 @@ protected:
      * @param[in] title Title of the parameter.
      * @param[in] value Value of the parameter.
      */
-    void print( int line, const char* title, const char* value );
+    void addLine( int line, const char* title, const char* value );
 };
 
 }} // cgt::curses

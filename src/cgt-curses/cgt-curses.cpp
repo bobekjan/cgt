@@ -77,7 +77,7 @@ int main( int argc, char* argv[] )
         curs.setTimeout( 0 );
 
         // Apply configuration
-        ::refresh();
+        ::wnoutrefresh( stdscr );
 
         // Obtain screen parameters
         int width, height;

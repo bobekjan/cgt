@@ -20,7 +20,7 @@ namespace cgt { namespace curses {
  * @author Bloody.Rabbit
  */
 class TunerBar
-: public Window
+: protected Window
 {
 public:
     /**
@@ -43,10 +43,6 @@ public:
      * @brief Reprints the magnitude bar.
      */
     void refresh();
-    /**
-     * @brief Clears the magnitude bar data.
-     */
-    void clear();
 
 protected:
     /// Tuning tolerance.

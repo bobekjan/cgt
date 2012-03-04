@@ -22,6 +22,9 @@ MagnitudeBar::MagnitudeBar( int xpos, int ypos, int width, int height )
 {
     // Init our colors
     ::init_pair( PAIR_MAGBAR, COLOR_WHITE, -1 );
+
+    // Draw a box
+    box();
 }
 
 void MagnitudeBar::add( double mag )
@@ -32,9 +35,6 @@ void MagnitudeBar::add( double mag )
 
 void MagnitudeBar::refresh()
 {
-    // Draw a box
-    box();
-
     // Check if the counter is ready
     if( mMax.ready() )
     {
@@ -51,18 +51,13 @@ void MagnitudeBar::refresh()
 
         // Print the colorized bar
         attrOn( COLOR_PAIR( PAIR_MAGBAR ) );
+        mvwvline( mWindow,                1, 1, ' ', height - bar - 2 );
         mvwvline( mWindow, height - bar - 1, 1, '*', bar );
         attrOff( COLOR_PAIR( PAIR_MAGBAR ) );
     }
 
     // Refresh content of the window
-    Window::refresh();
-}
-
-void MagnitudeBar::clear()
-{
-    // Clear the window
-    Window::clear();
+    Window::noutRefresh();
 
     // Reset the maximum counter.
     mMax.reset();

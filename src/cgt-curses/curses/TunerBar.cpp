@@ -45,6 +45,9 @@ void TunerBar::add( double freq )
     // Determine exactness
     bool exact = ( ::fabs( cents ) <= mTuneTolerance );
 
+    // Clear the window
+    Window::erase();
+
     // Get width & height
     int width, height;
     getmaxyx( mWindow, height, width );
@@ -94,11 +97,5 @@ void TunerBar::refresh()
     mvwvline( mWindow, height - 6, width - 1, ']', 4 );
 
     // Refresh content of the window
-    Window::refresh();
-}
-
-void TunerBar::clear()
-{
-    // Clear the window
-    Window::clear();
+    Window::noutRefresh();
 }

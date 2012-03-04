@@ -42,6 +42,12 @@ public:
      * Implemented by <code>wrefresh</code>.
      */
     void refresh() const;
+    /**
+     * @brief Prepares window for a manual refresh.
+     *
+     * Implemented by <code>wnoutrefresh</code>.
+     */
+    void noutRefresh() const;
 
     /**
      * @brief Moves the cursor within the window.
@@ -104,12 +110,19 @@ public:
      * @param[in] ap  Arguments of the string.
      */
     void vprintw( const char* fmt, va_list ap );
+
     /**
      * @brief Wipes content of the window.
      *
      * Implemented by <code>wclear</code>.
      */
     void clear();
+    /**
+     * @brief Wipes content of the window.
+     *
+     * Implemented by <code>werase</code>.
+     */
+    void erase();
 
 protected:
     /// The wrapped window.

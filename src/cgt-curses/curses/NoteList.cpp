@@ -75,13 +75,9 @@ void NoteList::refresh()
     box();
 
     // Refresh content of the window
-    Window::refresh();
-}
-
-void NoteList::clear()
-{
+    Window::noutRefresh();
     // Clear the window
-    Window::clear();
+    Window::erase();
 
     // Move cursor to the default position (remember our border)
     move( 1, 0 );

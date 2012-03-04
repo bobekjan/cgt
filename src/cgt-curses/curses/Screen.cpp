@@ -29,24 +29,16 @@ Screen::Screen( int xpos, int ypos, int width, int height )
   mTuner( xpos + ( width / 3 ) / 2, ypos + height / 16,
           2 * width / 3, 6 * height / 16 )
 {
-    // Initial print of all windows
+    // Print the config ...
     mConfig.refresh();
-    mMagBar.refresh();
-    mNotes.refresh();
-    mTuner.refresh();
+    // ... and the rest of the windows
+    end();
 }
 
 void Screen::start()
 {
     // Flush harmonics.
     mHarmonics.clear();
-
-    // Clear magnitude bar.
-    mMagBar.clear();
-    // Clear note list
-    mNotes.clear();
-    // Clear tuner
-    mTuner.clear();
 }
 
 void Screen::add( double freq, double mag )
@@ -73,4 +65,7 @@ void Screen::end()
     mNotes.refresh();
     // Print the tuner
     mTuner.refresh();
+
+    // Do the update
+    ::doupdate();
 }

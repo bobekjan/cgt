@@ -25,6 +25,11 @@ inline void Window::refresh() const
     ::wrefresh( mWindow );
 }
 
+inline void Window::noutRefresh() const
+{
+    ::wnoutrefresh( mWindow );
+}
+
 inline void Window::move( int xpos, int ypos )
 {
     ::wmove( mWindow, xpos, ypos );
@@ -71,4 +76,9 @@ inline void Window::vprintw( const char* fmt, va_list ap )
 inline void Window::clear()
 {
     ::wclear( mWindow );
+}
+
+inline void Window::erase()
+{
+    ::werase( mWindow );
 }

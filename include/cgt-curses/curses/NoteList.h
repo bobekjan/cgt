@@ -44,10 +44,6 @@ public:
      * @brief Prints the note list.
      */
     void refresh();
-    /**
-     * @brief Clears the note list.
-     */
-    void clear();
 
 protected:
     /// A buffer for note name.

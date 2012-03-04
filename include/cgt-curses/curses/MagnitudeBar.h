@@ -43,10 +43,6 @@ public:
      * @brief Reprints the magnitude bar.
      */
     void refresh();
-    /**
-     * @brief Clears the magnitude bar data.
-     */
-    void clear();
 
 protected:
     /// The configured cutoff.
