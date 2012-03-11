@@ -47,6 +47,8 @@ public:
 protected:
     /// The configured cutoff.
     double mCutoff;
+    /// The configured span.
+    double mSpan;
 
     /// The maximum magnitude.
     stats::Maximum< double, double > mMax;

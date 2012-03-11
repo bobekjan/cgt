@@ -37,21 +37,15 @@ void NoteList::print( const util::Tone& tone, unsigned int harm )
         attrOn( COLOR_PAIR( PAIR_FUNDAMENTAL ) );
 
     // Print it
-#ifndef CGT_DEBUG_ANALYSIS_FREQ
     printw( " [%-*u] ", off, harm );
 
     attrOn( A_BOLD );
     printw( "%10s ", name );
     attrOff( A_BOLD );
 
+#ifndef CGT_DEBUG_ANALYSIS_FREQ
     printw( "(%10.4f Hz)\n", tone.frequency() );
 #else /* !CGT_DEBUG_ANALYSIS_FREQ */
-    printw( " [%-*u] ", off, harm );
-
-    attrOn( A_BOLD );
-    printw( "%10s ", name );
-    attrOff( A_BOLD );
-
     printw( "(%10.4f Hz) = ", tone.frequency() );
 
     attrOn( A_BOLD );

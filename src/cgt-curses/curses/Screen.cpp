@@ -20,8 +20,8 @@ Screen::Screen( int xpos, int ypos, int width, int height )
   // Pull the value from the config manager
 : mHarmonics( sConfigMgr[ "cgt.fft.harmonicTolerance" ] ),
   // Carefully positioned elements
-  mConfig( xpos, ypos + height - 9,
-           width / 2, 9 ),
+  mConfig( xpos, ypos + height - 10,
+           2 * width / 5, 10 ),
   mMagBar( xpos + width / 16, ypos + height / 8,
            3, 5 * height / 8 ),
   mNotes( xpos + ( width / 3 ) / 2, ypos + height / 2,

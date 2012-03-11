@@ -18,7 +18,8 @@ using namespace cgt::curses;
 /*************************************************************************/
 MagnitudeBar::MagnitudeBar( int xpos, int ypos, int width, int height )
 : Window( xpos, ypos, width, height ),
-  mCutoff( sConfigMgr[ "cgt.fft.magnitudeCutoff" ] )
+  mCutoff( sConfigMgr[ "cgt.fft.magnitudeCutoff" ] ),
+  mSpan( sConfigMgr[ "cgt.tune.magSpan" ] )
 {
     // Init our colors
     ::init_pair( PAIR_MAGBAR, COLOR_WHITE, -1 );
@@ -44,10 +45,9 @@ void MagnitudeBar::refresh()
     {
         // Obtain the maximum
         double mag = 10 * ::log10( mMax.result() );
-        double span = 12;
 
         // Calculate bar
-        int bar = ( height - 2 ) * std::min( ( mag - mCutoff ) / span, 1.0 );
+        int bar = ( height - 2 ) * std::min( ( mag - mCutoff ) / mSpan, 1.0 );
 
         // Print the colorized bar
         attrOn( COLOR_PAIR( PAIR_MAGBAR ) );

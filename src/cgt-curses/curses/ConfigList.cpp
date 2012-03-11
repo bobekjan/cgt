@@ -30,13 +30,14 @@ ConfigList::ConfigList( int xpos, int ypos, int width, int height )
 void ConfigList::refresh()
 {
     // Print all lines
-    addLine( 0, "Device:             ", sConfigMgr[ "cgt.pcm.device" ] );
-    addLine( 1, "Rate:               ", sConfigMgr[ "cgt.pcm.rate" ] );
-    addLine( 2, "Buffer size:        ", sConfigMgr[ "cgt.bufferSize" ] );
-    addLine( 3, "Capture size:       ", sConfigMgr[ "cgt.captureSize" ] );
-    addLine( 4, "Magnitude cutoff:   ", sConfigMgr[ "cgt.fft.magnitudeCutoff" ] );
+    addLine( 0, "Device:             ", sConfigMgr[ "cgt.pcm.device"            ] );
+    addLine( 1, "Rate:               ", sConfigMgr[ "cgt.pcm.rate"              ] );
+    addLine( 2, "Buffer size:        ", sConfigMgr[ "cgt.bufferSize"            ] );
+    addLine( 3, "Capture size:       ", sConfigMgr[ "cgt.captureSize"           ] );
+    addLine( 4, "Magnitude cutoff:   ", sConfigMgr[ "cgt.fft.magnitudeCutoff"   ] );
     addLine( 5, "Harmonic tolerance: ", sConfigMgr[ "cgt.fft.harmonicTolerance" ] );
-    addLine( 6, "Tune tolerance:     ", sConfigMgr[ "cgt.tune.tolerance" ] );
+    addLine( 6, "Tune tolerance:     ", sConfigMgr[ "cgt.tune.tolerance"        ] );
+    addLine( 7, "Magnitude bar span: ", sConfigMgr[ "cgt.tune.magSpan"          ] );
 
     // Refresh the window
     Window::noutRefresh();
@@ -48,12 +49,11 @@ void ConfigList::addLine( int line, const char* title, const char* value )
     move( 1 + line, 1 );
 
     // Turn on the color
-    attrOn( COLOR_PAIR( PAIR_CONFIG ) );
+    attrOn( A_BOLD | COLOR_PAIR( PAIR_CONFIG ) );
 
-    // Turn on bold
-    attrOn( A_BOLD );
     // Print title
     addStr( title );
+
     // Turn off bold
     attrOff( A_BOLD );
 
