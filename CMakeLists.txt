@@ -13,7 +13,6 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.6 FATAL_ERROR )
 PROJECT( "cgt" )
 SET( PROJECT_DESCRIPTION_SUMMARY "A console-based guitar tuner" )
 SET( PROJECT_VENDOR              "Bloody.Rabbit" )
-SET( PROJECT_VERSION             "0.0.0" )
 
 SET( CMAKE_MODULE_PATH
      "${PROJECT_SOURCE_DIR}/cmake"
@@ -23,10 +22,14 @@ SET( CMAKE_MODULE_PATH
 # Pre-target #
 ##############
 INCLUDE( "CheckIncludeFile" )
+INCLUDE( "GitTreeInfo" )
 INCLUDE( "TargetBuildPCH" )
 
 ADD_DEFINITIONS( "-DHAVE_CONFIG_H=1" )
 INCLUDE_DIRECTORIES( "${PROJECT_BINARY_DIR}" )
+
+GIT_TREE_INFO( "${cgt_SOURCE_DIR}" CGT_GIT )
+SET( PROJECT_VERSION "${CGT_GIT_VERSION}" )
 
 ###########
 # Targets #
