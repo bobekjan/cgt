@@ -20,6 +20,10 @@
 /* Configuration                                                         */
 /*************************************************************************/
 
+// PROJECT_VERSION
+// Version string of the build.
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+
 // TIXML_USE_STL
 // Define this if tinyxml should use native STL.
 #cmakedefine TIXML_USE_STL 1
